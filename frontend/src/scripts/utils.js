@@ -72,10 +72,12 @@ export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
  * @param {number} fileIndex The file index of the square.
  * @param {number} rankIndex The rank index of the square.
  *
- * @returns {"light" | "dark"} The color of the square.
+ * @returns {"dark" | "light"} The color of the square.
+ *
+ * @example getSquareColor(0, 0) // "dark", bottom left-most
  */
 export function getSquareColor(fileIndex, rankIndex) {
-  return (fileIndex + rankIndex) % 2 == 0 ? "light" : "dark";
+  return (fileIndex + rankIndex) % 2 == 0 ? "dark" : "light";
 }
 
 /**
