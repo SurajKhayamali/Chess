@@ -1,0 +1,14 @@
+@mixin container-defaults {
+    padding: 0 $padding-medium;
+    @include respond-to("medium") {
+        padding: 0 $padding-large;
+    }
+    @include respond-to("large") {
+        padding: 0 $padding-xlarge;
+        margin: 0 auto;
+    }
+}
+
+.container {
+    @include container-defaults;
+}

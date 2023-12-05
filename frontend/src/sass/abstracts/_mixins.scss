@@ -1,0 +1,90 @@
+// Referenced from:
+// https://css-tricks.com/snippets/sass/bem-mixins/
+/// Block Element
+/// @access public
+/// @param {String} $element - Element's name
+@mixin element($element) {
+    &__#{$element} {
+        @content;
+    }
+}
+
+/// Block Modifier
+/// @access public
+/// @param {String} $modifier - Modifier's name
+@mixin modifier($modifier) {
+    &--#{$modifier} {
+        @content;
+    }
+}
+
+/// @alias element
+@mixin e($element) {
+    @include element($element) {
+        @content;
+    }
+}
+
+/// @alias modifier
+@mixin m($modifier) {
+    @include modifier($modifier) {
+        @content;
+    }
+}
+
+// Referenced from:
+// https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/
+$breakpoints: (
+    "small": (
+        min-width: $breakpoint-small
+    ),
+    "medium": (
+        min-width: $breakpoint-medium
+    ),
+    "large": (
+        min-width: $breakpoint-large
+    )
+) !default;
+
+/// Mixin to manage responsive breakpoints
+/// @author Kitty Giraudel
+/// @param {String} $breakpoint - Breakpoint name
+/// @require $breakpoints
+@mixin respond-to($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $breakpoint) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+}
+
+// reset list styles
+@mixin resetListStyles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+// display flex
+@mixin d-flex($direction: row, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+// background image
+@mixin bg-image($image, $size: cover, $position: center, $repeat: no-repeat) {
+    background-image: url($image);
+    background-size: $size;
+    background-position: $position;
+    background-repeat: $repeat;
+}

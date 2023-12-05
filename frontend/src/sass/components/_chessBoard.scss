@@ -1,0 +1,27 @@
+.chess-board {
+    @include e("container") {
+        height: calc(100vh - 2 * $padding-medium);
+        width: max-content;
+
+        padding: $padding-medium;
+        margin: 0 auto;
+    }
+
+    @include e("row") {
+        display: flex;
+        height: calc(100% / 8);
+    }
+
+    @include e("square") {
+        height: 100%;
+        aspect-ratio: 1;
+
+        @include m("dark") {
+            background-color: $dark-square-color;
+        }
+
+        @include m("light") {
+            background-color: $light-square-color;
+        }
+    }
+}
