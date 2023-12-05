@@ -329,6 +329,10 @@ template {
 .chess-board__square--light {
   background-color: #f0d9b5;
 }
+.chess-board__piece {
+  height: 100%;
+  width: 100%;
+}
 
 .container {
   padding: 0 25px;
