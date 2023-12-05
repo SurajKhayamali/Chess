@@ -52,8 +52,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
+        working-directory: ./frontend
         run: pnpm install
       - name: Build
+        working-directory: ./frontend
         run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v4
