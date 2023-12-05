@@ -1,4 +1,6 @@
-class Board {
+import { INITIAL_BOARD } from "../constants";
+
+export class Board {
   constructor(isWhitesTurn) {
     this.board = [];
     this.initializeBoard();

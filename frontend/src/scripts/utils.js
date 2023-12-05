@@ -6,7 +6,7 @@
  * @param {number} rankIndex
  * @returns
  */
-function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
+export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
   if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7) return;
 
   possibleMoves.push([fileIndex, rankIndex]);

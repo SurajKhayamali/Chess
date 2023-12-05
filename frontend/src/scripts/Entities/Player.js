@@ -1,4 +1,4 @@
-class Player {
+export class Player {
   constructor(isWhite) {
     this.isWhite = isWhite;
     this.pieces = [];

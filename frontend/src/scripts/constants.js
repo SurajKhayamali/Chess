@@ -16,7 +16,7 @@ const REPRESENTATION = {
   null: "Empty",
 };
 
-const INITIAL_BOARD = [
+export const INITIAL_BOARD = [
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
   ["P", "P", "P", "P", "P", "P", "P", "P"],
   [null, null, null, null, null, null, null, null],

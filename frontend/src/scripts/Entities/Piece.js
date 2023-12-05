@@ -1,3 +1,5 @@
+import { addToPossibleMoves } from "../utils";
+
 // Abstract class for all pieces
 class Piece {
   /**
@@ -24,7 +26,7 @@ class Piece {
   getPossibleMoves() {}
 }
 
-class Pawn extends Piece {
+export class Pawn extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("Pawn", isWhite, fileIndex, rankIndex);
   }
@@ -47,7 +49,7 @@ class Pawn extends Piece {
   }
 }
 
-class Rook extends Piece {
+export class Rook extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("Rook", isWhite, fileIndex, rankIndex);
   }
@@ -55,7 +57,7 @@ class Rook extends Piece {
   getPossibleMoves() {}
 }
 
-class Knight extends Piece {
+export class Knight extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("Knight", isWhite, fileIndex, rankIndex);
   }
@@ -87,7 +89,7 @@ class Knight extends Piece {
   }
 }
 
-class Bishop extends Piece {
+export class Bishop extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("Bishop", isWhite, fileIndex, rankIndex);
   }
@@ -95,7 +97,7 @@ class Bishop extends Piece {
   getPossibleMoves() {}
 }
 
-class Queen extends Piece {
+export class Queen extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("Queen", isWhite, fileIndex, rankIndex);
   }
@@ -103,7 +105,7 @@ class Queen extends Piece {
   getPossibleMoves() {}
 }
 
-class King extends Piece {
+export class King extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("King", isWhite, fileIndex, rankIndex);
   }
