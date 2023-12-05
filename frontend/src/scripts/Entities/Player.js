@@ -1,10 +1,20 @@
+import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece";
+
 export class Player {
+  /**
+   * Creates a new player.
+   *
+   * @param {boolean} isWhite - Whether the player is white or black.
+   */
   constructor(isWhite) {
     this.isWhite = isWhite;
     this.pieces = [];
     this.initializePieces();
   }
 
+  /**
+   * Initializes the player's pieces.
+   */
   initializePieces() {
     let rankIndex = this.isWhite ? 0 : 7;
     let pawnRankIndex = this.isWhite ? 1 : 6;

@@ -1,5 +1,5 @@
-const RANKS = ["a", "b", "c", "d", "e", "f", "g", "h"]; // vertical columns of squares
-const FILES = ["1", "2", "3", "4", "5", "6", "7", "8"]; // horizontal rows of squares
+export const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"]; // horizontal rows of squares
+export const RANKS = ["1", "2", "3", "4", "5", "6", "7", "8"]; // vertical columns of squares
 const PIECE_NAMES = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"];
 const PIECE_ABBREVIATIONS = ["P", "N", "B", "R", "Q", "K"];
 const PIECE_COLORS = ["White", "Black"];
@@ -16,7 +16,7 @@ const REPRESENTATION = {
   null: "Empty",
 };
 
-export const INITIAL_BOARD = [
+const INITIAL_BOARD = [
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
   ["P", "P", "P", "P", "P", "P", "P", "P"],
   [null, null, null, null, null, null, null, null],
@@ -26,3 +26,5 @@ export const INITIAL_BOARD = [
   ["P", "P", "P", "P", "P", "P", "P", "P"],
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
 ];
+
+export const BOARD_ID = "board";

@@ -12,7 +12,7 @@ class Piece {
    */
   constructor(name, isWhite, fileIndex, rankIndex) {
     this.name = name;
-    this.abbreviation = name[0].toUpperCase();
+    this.abbreviation = name?.[0]?.toUpperCase();
     this.isWhite = isWhite;
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
@@ -24,6 +24,20 @@ class Piece {
    * @returns {number[][]} - array of all possible moves for the piece
    */
   getPossibleMoves() {}
+
+  /**
+   * Returns the piece's html element
+   * @returns {HTMLElement} - the piece's html element
+   */
+  getHtmlElement() {
+    const piece = document.createElement("img");
+    const fileName = `${this.isWhite ? "w" : "b"}${this.abbreviation}`;
+    piece.src = `/images/${fileName}.png`;
+    piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
+    piece.classList.add("chess-board__piece");
+    piece.setAttribute("data-piece", fileName);
+    return piece;
+  }
 }
 
 export class Pawn extends Piece {
@@ -47,6 +61,16 @@ export class Pawn extends Piece {
     }
     return possibleMoves;
   }
+
+  // getHtmlElement() {
+  //   const piece = document.createElement("img");
+  //   const fileName = `${this.isWhite ? "w" : "b"}P`;
+  //   piece.src = `/images/${fileName}.png`;
+  //   piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
+  //   piece.classList.add("chess-board__piece");
+  //   piece.setAttribute("data-piece", fileName);
+  //   return piece;
+  // }
 }
 
 export class Rook extends Piece {
