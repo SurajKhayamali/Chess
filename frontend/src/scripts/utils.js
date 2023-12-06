@@ -1,4 +1,4 @@
-import { FILES, RANKS } from "./constants";
+import { FILES, RANKS } from "./constants.js";
 
 /**
  * Returns if the file index is out of bounds.

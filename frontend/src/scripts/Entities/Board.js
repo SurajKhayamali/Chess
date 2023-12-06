@@ -1,6 +1,6 @@
-import { getSquareColor, getSquareId } from "../utils";
+import { getSquareColor, getSquareId } from "../utils.js";
 // import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece";
-import { Player } from "./Player";
+import { Player } from "./Player.js";
 
 export class Board {
   /**

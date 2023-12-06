@@ -1,4 +1,4 @@
-import { addToPossibleMoves } from "../utils";
+import { addToPossibleMoves } from "../utils.js";
 
 // Abstract class for all pieces
 class Piece {
@@ -33,7 +33,7 @@ class Piece {
   getHtmlElement() {
     const piece = document.createElement("img");
     const fileName = `${this.isWhite ? "w" : "b"}${this.abbreviation}`;
-    piece.src = `/images/${fileName}.png`;
+    piece.src = `./public/images/${fileName}.png`;
     piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
     piece.classList.add("chess-board__piece");
     piece.setAttribute("data-piece", fileName);

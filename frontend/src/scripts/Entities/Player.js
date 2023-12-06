@@ -1,4 +1,4 @@
-import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece";
+import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece.js";
 
 export class Player {
   /**
