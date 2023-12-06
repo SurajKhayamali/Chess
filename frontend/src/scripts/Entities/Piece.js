@@ -9,10 +9,11 @@ class Piece {
    * @param {boolean} isWhite - true if the piece is white, false if black
    * @param {number} fileIndex - index of the file the piece is on
    * @param {number} rankIndex - index of the rank the piece is on
+   * @param {string} [abbreviation] - abbreviation of the piece, optional
    */
-  constructor(name, isWhite, fileIndex, rankIndex) {
+  constructor(name, isWhite, fileIndex, rankIndex, abbreviation) {
     this.name = name;
-    this.abbreviation = name?.[0]?.toUpperCase();
+    this.abbreviation = abbreviation || name?.[0]?.toUpperCase();
     this.isWhite = isWhite;
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
@@ -61,16 +62,6 @@ export class Pawn extends Piece {
     }
     return possibleMoves;
   }
-
-  // getHtmlElement() {
-  //   const piece = document.createElement("img");
-  //   const fileName = `${this.isWhite ? "w" : "b"}P`;
-  //   piece.src = `/images/${fileName}.png`;
-  //   piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
-  //   piece.classList.add("chess-board__piece");
-  //   piece.setAttribute("data-piece", fileName);
-  //   return piece;
-  // }
 }
 
 export class Rook extends Piece {
@@ -83,7 +74,7 @@ export class Rook extends Piece {
 
 export class Knight extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
-    super("Knight", isWhite, fileIndex, rankIndex);
+    super("Knight", isWhite, fileIndex, rankIndex, "N");
   }
 
   getPossibleMoves() {
