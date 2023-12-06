@@ -69,7 +69,19 @@ export class Rook extends Piece {
     super("Rook", isWhite, fileIndex, rankIndex);
   }
 
-  getPossibleMoves() {}
+  getPossibleMoves() {
+    const possibleMoves = [];
+
+    for (let i = 0; i < 8; i++) {
+      if (i !== this.fileIndex)
+        addToPossibleMoves(possibleMoves, i, this.rankIndex);
+
+      if (i !== this.rankIndex)
+        addToPossibleMoves(possibleMoves, this.fileIndex, i);
+    }
+
+    return possibleMoves;
+  }
 }
 
 export class Knight extends Piece {
@@ -109,7 +121,64 @@ export class Bishop extends Piece {
     super("Bishop", isWhite, fileIndex, rankIndex);
   }
 
-  getPossibleMoves() {}
+  /**
+   *
+   * @param {number} i itteration index
+   * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
+   * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
+   */
+  getPossibleMovesAcrossDiagonals(possibleMoves, i, x, y) {
+    const fileOffset = this.fileIndex + i * x;
+    const rankOffset = this.rankIndex + i * y;
+
+    if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+
+    return possibleMoves;
+  }
+
+  getPossibleMoves() {
+    const possibleMoves = [];
+
+    for (let i = 0; i < 8; i++) {
+      // if (i !== this.fileIndex && i !== this.rankIndex) {
+      console.log(i, this.fileIndex, this.rankIndex);
+
+      // Across xy diagonal
+      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, 1, 1);
+      // let fileOffset = this.fileIndex + i;
+      // let rankOffset = this.rankIndex + i;
+      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+
+      // Across x-y diagonal
+      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, 1, -1);
+      // fileOffset = this.fileIndex + i;
+      // rankOffset = this.rankIndex - i;
+      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+
+      // Across -x-y diagonal
+      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, -1, -1);
+      // fileOffset = this.fileIndex - i;
+      // rankOffset = this.rankIndex - i;
+      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+
+      // Across -xy diagonal
+      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, -1, 1);
+      // fileOffset = this.fileIndex - i;
+      // rankOffset = this.rankIndex + i;
+      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+      // addToPossibleMoves(possibleMoves, this.fileIndex - i, this.rankIndex + i);
+      // addToPossibleMoves(possibleMoves, this.fileIndex + i, this.rankIndex - i);
+      // addToPossibleMoves(possibleMoves, this.fileIndex - i, this.rankIndex - i);
+      // }
+    }
+
+    return possibleMoves;
+  }
 }
 
 export class Queen extends Piece {
