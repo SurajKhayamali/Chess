@@ -20,6 +20,70 @@ class Piece {
   }
 
   /**
+   * Returns possible moves across both axes
+   *
+   * @returns {number[][]} - array of all possible moves for the piece
+   */
+  getPossibleMovesAcrossAxes() {
+    const possibleMoves = [];
+
+    for (let i = 0; i < 8; i++) {
+      if (i !== this.fileIndex)
+        addToPossibleMoves(possibleMoves, i, this.rankIndex);
+
+      if (i !== this.rankIndex)
+        addToPossibleMoves(possibleMoves, this.fileIndex, i);
+    }
+
+    return possibleMoves;
+  }
+
+  /**
+   * Returns possible moves across a diagonals
+   *
+   * @param {number} i itteration index
+   * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
+   * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
+   *
+   * @returns {number[][]} - array of all possible moves for the piece
+   */
+  getPossibleMovesAcrossDiagonals(i, x, y) {
+    const possibleMoves = [];
+    const fileOffset = this.fileIndex + i * x;
+    const rankOffset = this.rankIndex + i * y;
+
+    if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
+      addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+
+    return possibleMoves;
+  }
+
+  /**
+   * Returns possible moves across all diagonals
+   *
+   * @returns {number[][]} - array of all possible moves for the piece
+   */
+  getPossibleMovesAcrossAllDiagonals() {
+    const possibleMoves = [];
+
+    for (let i = 0; i < 8; i++) {
+      // Across xy diagonal
+      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, 1, 1));
+
+      // Across x-y diagonal
+      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, 1, -1));
+
+      // Across -x-y diagonal
+      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, -1, -1));
+
+      // Across -xy diagonal
+      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, -1, 1));
+    }
+
+    return possibleMoves;
+  }
+
+  /**
    * Returns all possible moves for the piece
    *
    * @returns {number[][]} - array of all possible moves for the piece
@@ -70,17 +134,7 @@ export class Rook extends Piece {
   }
 
   getPossibleMoves() {
-    const possibleMoves = [];
-
-    for (let i = 0; i < 8; i++) {
-      if (i !== this.fileIndex)
-        addToPossibleMoves(possibleMoves, i, this.rankIndex);
-
-      if (i !== this.rankIndex)
-        addToPossibleMoves(possibleMoves, this.fileIndex, i);
-    }
-
-    return possibleMoves;
+    return this.getPossibleMovesAcrossAxes();
   }
 }
 
@@ -121,63 +175,8 @@ export class Bishop extends Piece {
     super("Bishop", isWhite, fileIndex, rankIndex);
   }
 
-  /**
-   *
-   * @param {number} i itteration index
-   * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
-   * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
-   */
-  getPossibleMovesAcrossDiagonals(possibleMoves, i, x, y) {
-    const fileOffset = this.fileIndex + i * x;
-    const rankOffset = this.rankIndex + i * y;
-
-    if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
-
-    return possibleMoves;
-  }
-
   getPossibleMoves() {
-    const possibleMoves = [];
-
-    for (let i = 0; i < 8; i++) {
-      // if (i !== this.fileIndex && i !== this.rankIndex) {
-      console.log(i, this.fileIndex, this.rankIndex);
-
-      // Across xy diagonal
-      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, 1, 1);
-      // let fileOffset = this.fileIndex + i;
-      // let rankOffset = this.rankIndex + i;
-      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
-
-      // Across x-y diagonal
-      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, 1, -1);
-      // fileOffset = this.fileIndex + i;
-      // rankOffset = this.rankIndex - i;
-      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
-
-      // Across -x-y diagonal
-      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, -1, -1);
-      // fileOffset = this.fileIndex - i;
-      // rankOffset = this.rankIndex - i;
-      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
-
-      // Across -xy diagonal
-      this.getPossibleMovesAcrossDiagonals(possibleMoves, i, -1, 1);
-      // fileOffset = this.fileIndex - i;
-      // rankOffset = this.rankIndex + i;
-      // if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      //   addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
-      // addToPossibleMoves(possibleMoves, this.fileIndex - i, this.rankIndex + i);
-      // addToPossibleMoves(possibleMoves, this.fileIndex + i, this.rankIndex - i);
-      // addToPossibleMoves(possibleMoves, this.fileIndex - i, this.rankIndex - i);
-      // }
-    }
-
-    return possibleMoves;
+    return this.getPossibleMovesAcrossAllDiagonals();
   }
 }
 
@@ -186,7 +185,13 @@ export class Queen extends Piece {
     super("Queen", isWhite, fileIndex, rankIndex);
   }
 
-  getPossibleMoves() {}
+  getPossibleMoves() {
+    const possibleMoves = [];
+
+    possibleMoves.push(...this.getPossibleMovesAcrossAxes());
+    possibleMoves.push(...this.getPossibleMovesAcrossAllDiagonals());
+    return possibleMoves;
+  }
 }
 
 export class King extends Piece {
@@ -194,5 +199,18 @@ export class King extends Piece {
     super("King", isWhite, fileIndex, rankIndex);
   }
 
-  getPossibleMoves() {}
+  getPossibleMoves() {
+    const possibleMoves = [];
+
+    addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex + 1);
+    addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex - 1);
+    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex);
+    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex);
+    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex + 1);
+    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex - 1);
+    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex - 1);
+    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex + 1);
+
+    return possibleMoves;
+  }
 }
