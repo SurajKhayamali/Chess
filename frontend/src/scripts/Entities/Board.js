@@ -57,6 +57,10 @@ export class Board {
           // console.log("drop at ", square);
           const { fileIndex, rankIndex } = square;
           this.moveSelectedPieceTo(fileIndex, rankIndex);
+
+          if (!this.highlightedSquares.valid?.includes(square)) return;
+
+          square.removeHighlight("hover");
         });
         squareElement.addEventListener("dragover", (event) => {
           event.preventDefault();
@@ -235,6 +239,7 @@ export class Board {
     this.board[oldRankIndex][oldFileIndex] = null;
 
     // this.reorganizeBoard();
+    this.isWhitesTurn = !this.isWhitesTurn;
     this.render();
     this.selectedPiece = null;
   }
@@ -250,8 +255,19 @@ export class Board {
 
     boardHtml.innerHTML = "";
 
+    if (this.isWhitesTurn) {
+      boardHtml.classList.remove("chess-board__container--reverse");
+    } else {
+      boardHtml.classList.add("chess-board__container--reverse");
+    }
+
     for (let rankIndex = this.board.length - 1; rankIndex >= 0; rankIndex--) {
       const rowHtml = this.generateRow();
+      if (this.isWhitesTurn) {
+        rowHtml.classList.remove("chess-board__row--reverse");
+      } else {
+        rowHtml.classList.add("chess-board__row--reverse");
+      }
 
       for (let fileIndex = 0; fileIndex < this.board.length; fileIndex++) {
         const square = this.squares[rankIndex][fileIndex];
