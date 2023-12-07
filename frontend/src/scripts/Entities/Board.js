@@ -1,6 +1,8 @@
+import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../constants";
 import { getSquareColor, getSquareId } from "../utils";
 // import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece";
 import { Player } from "./Player";
+import { Square } from "./Square";
 
 export class Board {
   /**
@@ -11,13 +13,47 @@ export class Board {
    */
   constructor(boardId, isWhitesTurn) {
     this.boardId = boardId;
-    this.board = [];
     this.isWhitesTurn = isWhitesTurn;
+    this.board = [];
+    this.squares = [];
+    this.highlightedSquares = SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.reduce(
+      (accumulator, modifier) => {
+        accumulator[modifier] = [];
+        return accumulator;
+      },
+      {}
+    );
 
     this.player1 = new Player(true);
     this.player2 = new Player(false);
+    this.initializeSquares();
     // this.initializeBoard();
     this.reorganizeBoard();
+  }
+
+  initializeSquares() {
+    this.squares = [];
+    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
+      this.squares.push([]);
+
+      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+        const square = new Square(fileIndex, rankIndex);
+        const squareElement = square.getHtmlElement();
+
+        squareElement.addEventListener("dragenter", (event) => {
+          if (!this.highlightedSquares.valid?.includes(square)) return;
+
+          square.highlight("hover");
+        });
+        squareElement.addEventListener("dragleave", (event) => {
+          if (!this.highlightedSquares.valid?.includes(square)) return;
+
+          square.removeHighlight("hover");
+        });
+
+        this.squares[rankIndex].push(square);
+      }
+    }
   }
 
   /**
@@ -100,74 +136,32 @@ export class Board {
   }
 
   /**
-   * Generates a square for the chess board.
-   * @param {boolean} isLight Whether the square is light or dark.
-   * @param {number} fileIndex The file index of the square.
-   * @param {number} rankIndex The rank index of the square.
-   *
-   * @returns {HTMLDivElement} The square element.
-   * @throws {Error} If the rank or file index is not a number between 0 and 7 or out of bounds.
-   */
-  generateSquare(fileIndex, rankIndex) {
-    const squareId = getSquareId(fileIndex, rankIndex);
-
-    const square = document.createElement("div");
-
-    square.classList.add("chess-board__square");
-    square.classList.add(
-      `chess-board__square--${getSquareColor(fileIndex, rankIndex)}`
-    );
-    square.setAttribute("data-square", squareId);
-
-    return square;
-  }
-
-  /**
-   * Removes all previously highlighted squares.
-   */
-  removePreviouslyHighlightedSquares() {
-    const previouslySelectedSquare = document.querySelector(
-      ".chess-board__square--selected"
-    );
-    if (previouslySelectedSquare)
-      previouslySelectedSquare.classList.remove(
-        "chess-board__square--selected"
-      );
-
-    const previouslyHighlightedSquares = document.querySelectorAll(
-      ".chess-board__square--valid"
-    );
-    for (const square of previouslyHighlightedSquares) {
-      square.classList.remove("chess-board__square--valid");
-    }
-  }
-
-  /**
    * Highlights a square on the board.
    *
-   * @param {number} fileIndex The file index of the square.
-   * @param {number} rankIndex The rank index of the square.
+   * @param {number} fileIndex The file index of the square to highlight.
+   * @param {number} rankIndex The rank index of the square to highlight.
    * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
    */
   highlightSquare(fileIndex, rankIndex, modifier) {
-    const square = document.querySelector(
-      `[data-square="${getSquareId(fileIndex, rankIndex)}"]`
-    );
-    if (!square) return;
+    if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
 
-    square.classList.add(`chess-board__square--${modifier}`);
+    const square = this.squares[rankIndex][fileIndex];
+    square.highlight(modifier);
+    this.highlightedSquares[modifier].push(square);
   }
 
   /**
-   * Highlights multiple squares on the board. used for highlighting possible moves.
+   * Removes a highlight styling from all square for a given modifier on the board.
    *
-   * @param {number[][]} squares The squares to highlight.
    * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
    */
-  highlightSquares(squares, modifier) {
-    for (const square of squares) {
-      this.highlightSquare(square[0], square[1], modifier);
+  removeHighlightFromSquare(modifier) {
+    if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
+
+    for (const square of this.highlightedSquares[modifier]) {
+      square.removeHighlight(modifier);
     }
+    this.highlightedSquares[modifier] = [];
   }
 
   /**
@@ -178,11 +172,18 @@ export class Board {
   handlePieceClickOrDrag(piece) {
     if (piece.isWhite !== this.isWhitesTurn) return;
 
-    const possibleMoves = piece.getPossibleMoves();
+    this.removeHighlightFromSquare("selected");
 
-    this.removePreviouslyHighlightedSquares();
+    this.squares[piece.rankIndex][piece.fileIndex].highlight("selected");
     this.highlightSquare(piece.fileIndex, piece.rankIndex, "selected");
-    this.highlightSquares(possibleMoves, "valid");
+
+    this.removeHighlightFromSquare("valid");
+
+    const possibleMoves = piece.getPossibleMoves();
+    for (const [fileIndex, rankIndex] of possibleMoves) {
+      this.squares[rankIndex][fileIndex].highlight("valid");
+      this.highlightSquare(fileIndex, rankIndex, "valid");
+    }
   }
 
   /**
@@ -214,7 +215,8 @@ export class Board {
       const rowHtml = this.generateRow();
 
       for (let fileIndex = 0; fileIndex < this.board.length; fileIndex++) {
-        const squareHtml = this.generateSquare(fileIndex, rankIndex);
+        const square = this.squares[rankIndex][fileIndex];
+        const squareHtml = square.getHtmlElement();
 
         const piece = this.board[rankIndex][fileIndex];
 

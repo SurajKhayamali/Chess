@@ -28,3 +28,9 @@ const INITIAL_BOARD = [
 ];
 
 export const BOARD_ID = "board";
+
+export const SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS = [
+  "selected",
+  "valid",
+  "hover",
+];

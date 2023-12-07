@@ -30,6 +30,10 @@
 
         @include m("valid") {
             @include box-shadow-valid;
+
+            &:hover {
+                @include box-shadow-hover;
+            }
         }
 
         @include m("hover") {
