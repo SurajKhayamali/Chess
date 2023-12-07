@@ -29,6 +29,9 @@ export class Board {
     this.initializeSquares();
     // this.initializeBoard();
     this.reorganizeBoard();
+
+    this.selectedPiece = null;
+    this.moves = [];
   }
 
   initializeSquares() {
@@ -49,6 +52,14 @@ export class Board {
           if (!this.highlightedSquares.valid?.includes(square)) return;
 
           square.removeHighlight("hover");
+        });
+        squareElement.addEventListener("drop", (event) => {
+          // console.log("drop at ", square);
+          const { fileIndex, rankIndex } = square;
+          this.moveSelectedPieceTo(fileIndex, rankIndex);
+        });
+        squareElement.addEventListener("dragover", (event) => {
+          event.preventDefault();
         });
 
         this.squares[rankIndex].push(square);
@@ -172,6 +183,8 @@ export class Board {
   handlePieceClickOrDrag(piece) {
     if (piece.isWhite !== this.isWhitesTurn) return;
 
+    this.selectedPiece = piece;
+
     this.removeHighlightFromSquare("selected");
 
     this.squares[piece.rankIndex][piece.fileIndex].highlight("selected");
@@ -198,6 +211,32 @@ export class Board {
     piece.getHtmlElement().addEventListener("dragstart", () => {
       this.handlePieceClickOrDrag(piece);
     });
+  }
+
+  moveSelectedPieceTo(fileIndex, rankIndex) {
+    const wasTargetSquareHighlighted = this.highlightedSquares.valid.some(
+      (square) =>
+        square.fileIndex === fileIndex && square.rankIndex === rankIndex
+    );
+    if (!this.selectedPiece || !wasTargetSquareHighlighted) return;
+
+    const oldFileIndex = this.selectedPiece.fileIndex;
+    const oldRankIndex = this.selectedPiece.rankIndex;
+    this.moves.push({
+      piece: this.selectedPiece,
+      oldFileIndex,
+      oldRankIndex,
+      fileIndex,
+      rankIndex,
+    });
+
+    this.selectedPiece.moveTo(fileIndex, rankIndex);
+    this.board[rankIndex][fileIndex] = this.selectedPiece;
+    this.board[oldRankIndex][oldFileIndex] = null;
+
+    // this.reorganizeBoard();
+    this.render();
+    this.selectedPiece = null;
   }
 
   /**

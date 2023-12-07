@@ -106,6 +106,7 @@ class Piece {
     piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
     piece.classList.add("chess-board__piece");
     piece.setAttribute("data-piece", fileName);
+
     return piece;
   }
 
@@ -116,6 +117,17 @@ class Piece {
    */
   getHtmlElement() {
     return this.htmlElement;
+  }
+
+  /**
+   * Moves the piece to the specified square
+   *
+   * @param {number} fileIndex - index of the file to move to
+   * @param {number} rankIndex - index of the rank to move to
+   */
+  moveTo(fileIndex, rankIndex) {
+    this.fileIndex = fileIndex;
+    this.rankIndex = rankIndex;
   }
 }
 
