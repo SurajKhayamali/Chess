@@ -17,6 +17,8 @@ class Piece {
     this.isWhite = isWhite;
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
+
+    this.htmlElement = this.generateHtmlElement();
   }
 
   /**
@@ -91,10 +93,13 @@ class Piece {
   getPossibleMoves() {}
 
   /**
-   * Returns the piece's html element
+   * Generate the piece's html element
+   *
    * @returns {HTMLElement} - the piece's html element
    */
-  getHtmlElement() {
+  generateHtmlElement() {
+    if (this.htmlElement) return this.htmlElement;
+
     const piece = document.createElement("img");
     const fileName = `${this.isWhite ? "w" : "b"}${this.abbreviation}`;
     piece.src = `/images/${fileName}.png`;
@@ -102,6 +107,15 @@ class Piece {
     piece.classList.add("chess-board__piece");
     piece.setAttribute("data-piece", fileName);
     return piece;
+  }
+
+  /**
+   * Returns the piece's html element
+   *
+   * @returns {HTMLElement} - the piece's html element
+   */
+  getHtmlElement() {
+    return this.htmlElement;
   }
 }
 

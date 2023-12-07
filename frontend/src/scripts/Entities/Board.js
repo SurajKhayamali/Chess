@@ -123,6 +123,83 @@ export class Board {
   }
 
   /**
+   * Removes all previously highlighted squares.
+   */
+  removePreviouslyHighlightedSquares() {
+    const previouslySelectedSquare = document.querySelector(
+      ".chess-board__square--selected"
+    );
+    if (previouslySelectedSquare)
+      previouslySelectedSquare.classList.remove(
+        "chess-board__square--selected"
+      );
+
+    const previouslyHighlightedSquares = document.querySelectorAll(
+      ".chess-board__square--valid"
+    );
+    for (const square of previouslyHighlightedSquares) {
+      square.classList.remove("chess-board__square--valid");
+    }
+  }
+
+  /**
+   * Highlights a square on the board.
+   *
+   * @param {number} fileIndex The file index of the square.
+   * @param {number} rankIndex The rank index of the square.
+   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   */
+  highlightSquare(fileIndex, rankIndex, modifier) {
+    const square = document.querySelector(
+      `[data-square="${getSquareId(fileIndex, rankIndex)}"]`
+    );
+    if (!square) return;
+
+    square.classList.add(`chess-board__square--${modifier}`);
+  }
+
+  /**
+   * Highlights multiple squares on the board. used for highlighting possible moves.
+   *
+   * @param {number[][]} squares The squares to highlight.
+   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   */
+  highlightSquares(squares, modifier) {
+    for (const square of squares) {
+      this.highlightSquare(square[0], square[1], modifier);
+    }
+  }
+
+  /**
+   * Handles a piece being clicked or dragged.
+   *
+   * @param {Piece} piece The piece that was clicked.
+   */
+  handlePieceClickOrDrag(piece) {
+    if (piece.isWhite !== this.isWhitesTurn) return;
+
+    const possibleMoves = piece.getPossibleMoves();
+
+    this.removePreviouslyHighlightedSquares();
+    this.highlightSquare(piece.fileIndex, piece.rankIndex, "selected");
+    this.highlightSquares(possibleMoves, "valid");
+  }
+
+  /**
+   * Initializes event listeners for a piece.
+   *
+   * @param {Piece} piece The piece to initialize event listeners for.
+   */
+  initializeEventListnersForPiece(piece) {
+    piece.getHtmlElement().addEventListener("click", () => {
+      this.handlePieceClickOrDrag(piece);
+    });
+    piece.getHtmlElement().addEventListener("dragstart", () => {
+      this.handlePieceClickOrDrag(piece);
+    });
+  }
+
+  /**
    * Renders the board along with the pieces.
    *
    * @returns {HTMLDivElement} The board element.
@@ -142,6 +219,7 @@ export class Board {
         const piece = this.board[rankIndex][fileIndex];
 
         if (piece) {
+          this.initializeEventListnersForPiece(piece);
           squareHtml.appendChild(piece.getHtmlElement());
         }
 
