@@ -15,6 +15,13 @@
     @include e("square") {
         height: 100%;
         aspect-ratio: 1;
+        /* disable any native browser highlighting */
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
         @include m("dark") {
             background-color: $color-dark;
