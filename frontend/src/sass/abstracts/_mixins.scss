@@ -88,3 +88,25 @@ $breakpoints: (
     background-position: $position;
     background-repeat: $repeat;
 }
+
+// box shadow
+@mixin box-shadow(
+    $inset: false,
+    $x: 0,
+    $y: 0,
+    $blur: $border-radius-default,
+    $spread: $border-radius-default,
+    $color: $color-primary
+) {
+    // forInnerShadow offset-x offset-y blur-radius spread-radius color
+    box-shadow: if($inset, inset, "") $x $y $blur $spread $color;
+}
+@mixin box-shadow-selected {
+    @include box-shadow(true, 0, 0, $border-radius-default, $border-radius-default, $color-selected);
+}
+@mixin box-shadow-valid {
+    @include box-shadow(true, 0, 0, $border-radius-medium, $border-radius-default, $color-valid);
+}
+@mixin box-shadow-hover {
+    @include box-shadow(true, 0, 0, $border-radius-medium, $border-radius-default, $color-hover);
+}

@@ -17,11 +17,23 @@
         aspect-ratio: 1;
 
         @include m("dark") {
-            background-color: $dark-square-color;
+            background-color: $color-dark;
         }
 
         @include m("light") {
-            background-color: $light-square-color;
+            background-color: $color-light;
+        }
+
+        @include m("selected") {
+            @include box-shadow-selected;
+        }
+
+        @include m("valid") {
+            @include box-shadow-valid;
+        }
+
+        @include m("hover") {
+            @include box-shadow-hover;
         }
     }
 
