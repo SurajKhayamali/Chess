@@ -51,5 +51,11 @@
     @include e("piece") {
         height: 100%;
         width: 100%;
+
+        @include cursor-grab;
+
+        &:active {
+            @include cursor-grabbing;
+        }
     }
 }
