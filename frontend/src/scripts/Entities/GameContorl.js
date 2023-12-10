@@ -51,7 +51,7 @@ export class GameControl {
    * Is square included in the modifier's highlighted squares.
    *
    * @param {Square} square
-   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    *
    * @returns {boolean}
    */
@@ -66,7 +66,7 @@ export class GameControl {
    *
    * @param {number} fileIndex The file index of the square to highlight.
    * @param {number} rankIndex The rank index of the square to highlight.
-   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    */
   highlightSquare(fileIndex, rankIndex, modifier) {
     if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
@@ -79,7 +79,7 @@ export class GameControl {
   /**
    * Removes a highlight styling from all square for a given modifier on the board.
    *
-   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    */
   removeHighlightFromSquare(modifier) {
     if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;

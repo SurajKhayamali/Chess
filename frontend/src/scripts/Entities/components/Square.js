@@ -1,4 +1,7 @@
-import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../../constants/constants";
+import {
+  HIGHLIGHT_MODIFIERS,
+  SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
+} from "../../constants/constants";
 import { getSquareColor, getSquareId } from "../../utils";
 
 export class Square {
@@ -53,7 +56,7 @@ export class Square {
   /**
    * Highlights a square on the board.
    *
-   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    */
   highlight(modifier) {
     if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
@@ -64,7 +67,7 @@ export class Square {
   /**
    * Removes a highlight styling from a square on the board.
    *
-   * @param {"selected" | "valid" | "hover"} modifier The modifier to add to the class name.
+   * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    */
   removeHighlight(modifier) {
     if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
@@ -114,22 +117,25 @@ export class Square {
     const squareElement = this.getHtmlElement();
 
     squareElement.addEventListener("dragenter", (event) => {
-      if (!this.control?.isSquareHighlighted(this)) return;
+      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
+        return;
 
-      this.highlight("hover");
+      this.highlight(HIGHLIGHT_MODIFIERS.HOVER);
     });
     squareElement.addEventListener("dragleave", (event) => {
-      if (!this.control?.isSquareHighlighted(this)) return;
+      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
+        return;
 
-      this.removeHighlight("hover");
+      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
     });
     squareElement.addEventListener("drop", (event) => {
       const { fileIndex, rankIndex } = this;
       this.control?.moveSelectedPieceTo(fileIndex, rankIndex);
 
-      if (!this.control?.isSquareHighlighted(this)) return;
+      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
+        return;
 
-      this.removeHighlight("hover");
+      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
     });
     squareElement.addEventListener("dragover", (event) => {
       event.preventDefault();
