@@ -73,9 +73,6 @@ export class Square {
     if (!SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.includes(modifier)) return;
 
     this.htmlElement.classList.remove(`chess-board__square--${modifier}`);
-    // for (const modifier of SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS) {
-    //   this.htmlElement.classList.remove(`chess-board__square--${modifier}`);
-    // }
   }
 
   /**

@@ -12,6 +12,7 @@ $color-selected: $color-primary;
 $color-valid: transparentize($color-primary, 0.11);
 $color-capturable: transparentize($color-primary, 0.22);
 $color-last-move: transparentize($color-primary, 0.33);
+$color-checked: red;
 $color-hover: darken($color-primary, 5%);
 
 // padding

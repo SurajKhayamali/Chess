@@ -82,5 +82,9 @@
         @include m("reverse") {
             transform: rotate(180deg);
         }
+
+        @include m("checked") {
+            @include background-checked;
+        }
     }
 }

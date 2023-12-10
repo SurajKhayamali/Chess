@@ -1,4 +1,8 @@
-import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
+import {
+  FILES_LENGTH,
+  PIECE_HIGHILIGHT_MODIFIERS,
+  RANKS_LENGTH,
+} from "../constants/constants";
 import { log } from "../utils";
 import { King, Piece } from "./components/Piece";
 import { Square } from "./components/Square";
@@ -181,6 +185,9 @@ export class GameState {
         move[0] === oponentsKingFileIndex && move[1] === oponentsKingRankIndex
     );
     log("isCheck:", isCheck);
+    isCheck
+      ? oponentsKing.highlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED)
+      : oponentsKing.removeHighlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED);
 
     // Record the move
     this.recordMove(movedPiece, fileIndex, rankIndex, capturedPiece, isCheck);

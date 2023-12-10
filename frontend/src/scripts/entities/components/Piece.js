@@ -1,4 +1,8 @@
-import { FILES_LENGTH, RANKS_LENGTH } from "../../constants/constants";
+import {
+  FILES_LENGTH,
+  RANKS_LENGTH,
+  SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS,
+} from "../../constants/constants";
 import { addToPossibleMoves } from "../../utils";
 
 /**
@@ -247,6 +251,28 @@ export class Piece {
    */
   flip() {
     this.htmlElement.classList.toggle("chess-board__piece--reverse");
+  }
+
+  /**
+   * Highlights a piece on the board.
+   *
+   * @param {"checked"} modifier The modifier to add to the class name.
+   */
+  highlight(modifier) {
+    if (!SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS.includes(modifier)) return;
+
+    this.htmlElement.classList.add(`chess-board__piece--${modifier}`);
+  }
+
+  /**
+   * Removes a highlight styling from a piece on the board.
+   *
+   * @param {"checked"} modifier The modifier to add to the class name.
+   */
+  removeHighlight(modifier) {
+    if (!SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS.includes(modifier)) return;
+
+    this.htmlElement.classList.remove(`chess-board__piece--${modifier}`);
   }
 
   /**
