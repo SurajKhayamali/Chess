@@ -241,17 +241,40 @@ export class Pawn extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
+    const capturablePiece = [];
 
     if (this.isWhite) {
       if (this.rankIndex == 1) {
-        addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex + 2);
+        this._addToPossibleAndCapturableMoves(
+          possibleMoves,
+          capturablePiece,
+          this.fileIndex,
+          this.rankIndex + 2
+        );
       }
-      addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex + 1);
+
+      this._addToPossibleAndCapturableMoves(
+        possibleMoves,
+        capturablePiece,
+        this.fileIndex,
+        this.rankIndex + 1
+      );
     } else {
       if (this.rankIndex == 6) {
-        addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex - 2);
+        this._addToPossibleAndCapturableMoves(
+          possibleMoves,
+          capturablePiece,
+          this.fileIndex,
+          this.rankIndex - 2
+        );
       }
-      addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex - 1);
+
+      this._addToPossibleAndCapturableMoves(
+        possibleMoves,
+        capturablePiece,
+        this.fileIndex,
+        this.rankIndex - 1
+      );
     }
     return possibleMoves;
   }
@@ -274,6 +297,7 @@ export class Knight extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
+    const capturablePiece = [];
     const moveOffsets = [
       [-2, -1],
       [-2, 1],
@@ -288,8 +312,9 @@ export class Knight extends Piece {
     for (const moveOffset of moveOffsets) {
       const [fileOffset, rankOffset] = moveOffset;
 
-      addToPossibleMoves(
+      this._addToPossibleAndCapturableMoves(
         possibleMoves,
+        capturablePiece,
         this.fileIndex + fileOffset,
         this.rankIndex + rankOffset
       );
@@ -330,15 +355,63 @@ export class King extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
+    const capturablePiece = [];
 
-    addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex + 1);
-    addToPossibleMoves(possibleMoves, this.fileIndex, this.rankIndex - 1);
-    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex);
-    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex);
-    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex + 1);
-    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex - 1);
-    addToPossibleMoves(possibleMoves, this.fileIndex + 1, this.rankIndex - 1);
-    addToPossibleMoves(possibleMoves, this.fileIndex - 1, this.rankIndex + 1);
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex,
+      this.rankIndex + 1
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex,
+      this.rankIndex - 1
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex + 1,
+      this.rankIndex
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex - 1,
+      this.rankIndex
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex + 1,
+      this.rankIndex + 1
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex - 1,
+      this.rankIndex - 1
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex + 1,
+      this.rankIndex - 1
+    );
+
+    this._addToPossibleAndCapturableMoves(
+      possibleMoves,
+      capturablePiece,
+      this.fileIndex - 1,
+      this.rankIndex + 1
+    );
 
     return possibleMoves;
   }
