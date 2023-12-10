@@ -11,15 +11,11 @@
 
         @include m("reverse") {
             transform: rotate(180deg);
-            // flex-direction: column-reverse;
         }
     }
 
     @include e("row") {
         display: flex;
-        @include m("reverse") {
-            // flex-direction: row-reverse;
-        }
         height: calc(100% / 8);
     }
 

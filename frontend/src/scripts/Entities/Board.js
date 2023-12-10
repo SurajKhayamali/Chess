@@ -1,6 +1,4 @@
 import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../constants";
-import { getSquareColor, getSquareId } from "../utils";
-// import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Piece";
 import { Player } from "./Player";
 import { Square } from "./Square";
 
@@ -26,6 +24,7 @@ export class Board {
 
     this.player1 = new Player(true);
     this.player2 = new Player(false);
+    this.isPvP = true;
     this.initializeSquares();
     // this.initializeBoard();
     this.reorganizeBoard();
@@ -255,19 +254,16 @@ export class Board {
 
     boardHtml.innerHTML = "";
 
-    if (this.isWhitesTurn) {
-      boardHtml.classList.remove("chess-board__container--reverse");
-    } else {
-      boardHtml.classList.add("chess-board__container--reverse");
+    if (this.isPvP) {
+      if (this.isWhitesTurn) {
+        boardHtml.classList.remove("chess-board__container--reverse");
+      } else {
+        boardHtml.classList.add("chess-board__container--reverse");
+      }
     }
 
     for (let rankIndex = this.board.length - 1; rankIndex >= 0; rankIndex--) {
       const rowHtml = this.generateRow();
-      if (this.isWhitesTurn) {
-        rowHtml.classList.remove("chess-board__row--reverse");
-      } else {
-        rowHtml.classList.add("chess-board__row--reverse");
-      }
 
       for (let fileIndex = 0; fileIndex < this.board.length; fileIndex++) {
         const square = this.squares[rankIndex][fileIndex];
@@ -278,6 +274,14 @@ export class Board {
         if (piece) {
           this.initializeEventListnersForPiece(piece);
           squareHtml.appendChild(piece.getHtmlElement());
+
+          if (this.isPvP) {
+            if (this.isWhitesTurn) {
+              squareHtml.classList.remove("chess-board__square--reverse");
+            } else {
+              squareHtml.classList.add("chess-board__square--reverse");
+            }
+          }
         }
 
         rowHtml.appendChild(squareHtml);
