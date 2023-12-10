@@ -125,7 +125,7 @@ export class GameState {
    * @returns {boolean} Whether the move is legal.
    */
   checkIfMoveIsLegal(piece, fileIndex, rankIndex) {
-    const possibleMoves = piece.getPossibleMoves();
+    const { possibleMoves } = piece.getPossibleMoves();
     const isMoveLegal = possibleMoves.some(
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
@@ -172,7 +172,7 @@ export class GameState {
     } = oponentsKing;
 
     // Check if the moved piece can attack the oponent's king
-    const possibleMoves = movedPiece.getPossibleMoves();
+    const { possibleMoves } = movedPiece.getPossibleMoves();
     const isCheck = possibleMoves.some(
       (move) =>
         move[0] === oponentsKingFileIndex && move[1] === oponentsKingRankIndex

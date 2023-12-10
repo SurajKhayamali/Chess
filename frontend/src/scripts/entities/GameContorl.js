@@ -109,7 +109,7 @@ export class GameControl {
     );
 
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
-    const possibleMoves = piece.getPossibleMoves();
+    const { possibleMoves } = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {
       this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
     }

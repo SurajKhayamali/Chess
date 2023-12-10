@@ -1,6 +1,15 @@
 import { FILES_LENGTH, RANKS_LENGTH } from "../../constants/constants";
 import { addToPossibleMoves } from "../../utils";
 
+/**
+ * object containing possible moves and capturable pieces
+ *
+ * @typedef {Object} PossibleMovesResult
+ *
+ * @property {number[][]} possibleMoves
+ * @property {number[][]} capturablePiece
+ */
+
 // Abstract class for all pieces
 class Piece {
   /**
@@ -60,13 +69,13 @@ class Piece {
    * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
    * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
    *
-   * @returns {number[][]} - array of all possible moves for the piece
+   * @returns {PossibleMovesResult} - object containing possible moves and capturable pieces
    */
   getPossibleMovesAcrossAxis(x, y) {
     const possibleMoves = [];
     const capturablePiece = [];
 
-    if (x === 0 && y === 0) return possibleMoves;
+    if (x === 0 && y === 0) return { possibleMoves, capturablePiece };
 
     if (x === 0) {
       for (let i = this.rankIndex + y; i < RANKS_LENGTH && i >= 0; i += y) {
@@ -78,7 +87,7 @@ class Piece {
         );
         if (!shouldContinue) break;
       }
-      return possibleMoves;
+      return { possibleMoves, capturablePiece };
     } else if (y === 0) {
       for (let i = this.fileIndex + x; i < FILES_LENGTH && i >= 0; i += x) {
         const shouldContinue = this._addToPossibleAndCapturableMoves(
@@ -89,7 +98,7 @@ class Piece {
         );
         if (!shouldContinue) break;
       }
-      return possibleMoves;
+      return { possibleMoves, capturablePiece };
     } else {
       for (
         let i = this.fileIndex + x, j = this.rankIndex + y;
@@ -104,54 +113,102 @@ class Piece {
         );
         if (!shouldContinue) break;
       }
-      return possibleMoves;
+      return { possibleMoves, capturablePiece };
     }
   }
 
   /**
    * Returns possible moves across both axes, i.e. x and y
    *
-   * @returns {number[][]} - array of all possible moves for the piece
+   * @returns {PossibleMovesResult} - object containing possible moves and capturable pieces
    */
   getPossibleMovesAcrossAxes() {
     const possibleMoves = [];
+    const capturablePiece = [];
 
     // Across +x axis
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, 0));
-    // Across -x axis
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, 0));
-    // Across +y axis
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(0, 1));
-    // Across -y axis
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(0, -1));
+    const {
+      possibleMoves: possibleMovesAcrossPXAxis,
+      capturablePiece: capturablePieceAcrossPXAxis,
+    } = this.getPossibleMovesAcrossAxis(1, 0);
+    possibleMoves.push(...possibleMovesAcrossPXAxis);
+    capturablePiece.push(...capturablePieceAcrossPXAxis);
 
-    return possibleMoves;
+    // Across -x axis
+    const {
+      possibleMoves: possibleMovesAcrossNXAxis,
+      capturablePiece: capturablePieceAcrossNXAxis,
+    } = this.getPossibleMovesAcrossAxis(-1, 0);
+    possibleMoves.push(...possibleMovesAcrossNXAxis);
+    capturablePiece.push(...capturablePieceAcrossNXAxis);
+
+    // Across +y axis
+    const {
+      possibleMoves: possibleMovesAcrossPYAxis,
+      capturablePiece: capturablePieceAcrossPYAxis,
+    } = this.getPossibleMovesAcrossAxis(0, 1);
+    possibleMoves.push(...possibleMovesAcrossPYAxis);
+    capturablePiece.push(...capturablePieceAcrossPYAxis);
+
+    // Across -y axis
+    const {
+      possibleMoves: possibleMovesAcrossPNAxis,
+      capturablePiece: capturablePieceAcrossPNAxis,
+    } = this.getPossibleMovesAcrossAxis(0, -1);
+    possibleMoves.push(...possibleMovesAcrossPNAxis);
+    capturablePiece.push(...capturablePieceAcrossPNAxis);
+
+    return { possibleMoves, capturablePiece };
   }
 
   /**
    * Returns possible moves across all diagonals, i.e. xy, x-y, -x-y, -xy
    *
-   * @returns {number[][]} - array of all possible moves for the piece
+   * @returns {PossibleMovesResult} - object containing possible moves and capturable pieces
    */
   getPossibleMovesAcrossAllDiagonals() {
     const possibleMoves = [];
+    const capturablePiece = [];
 
     // Across xy diagonal
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, 1));
-    // Across x-y diagonal
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, -1));
-    // Across -x-y diagonal
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, -1));
-    // Across -xy diagonal
-    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, 1));
+    const {
+      possibleMoves: possibleMovesAcrossPXPYDiagonal,
+      capturablePiece: capturablePieceAcrossPXPYDiagonal,
+    } = this.getPossibleMovesAcrossAxis(1, 1);
+    possibleMoves.push(...possibleMovesAcrossPXPYDiagonal);
+    capturablePiece.push(...capturablePieceAcrossPXPYDiagonal);
 
-    return possibleMoves;
+    // Across x-y diagonal
+    const {
+      possibleMoves: possibleMovesAcrossPXNYDiagonal,
+      capturablePiece: capturablePieceAcrossPXNYDiagonal,
+    } = this.getPossibleMovesAcrossAxis(1, -1);
+    possibleMoves.push(...possibleMovesAcrossPXNYDiagonal);
+    capturablePiece.push(...capturablePieceAcrossPXNYDiagonal);
+
+    // Across -x-y diagonal
+    const {
+      possibleMoves: possibleMovesAcrossNXNYDiagonal,
+      capturablePiece: capturablePieceAcrossNXNYDiagonal,
+    } = this.getPossibleMovesAcrossAxis(-1, -1);
+    possibleMoves.push(...possibleMovesAcrossNXNYDiagonal);
+    capturablePiece.push(...capturablePieceAcrossNXNYDiagonal);
+
+    // Across -xy diagonal
+    const {
+      possibleMoves: possibleMovesAcrossNXPYDiagonal,
+      capturablePiece: capturablePieceAcrossNXPYDiagonal,
+    } = this.getPossibleMovesAcrossAxis(-1, 1);
+    possibleMoves.push(...possibleMovesAcrossNXPYDiagonal);
+    capturablePiece.push(...capturablePieceAcrossNXPYDiagonal);
+
+    return { possibleMoves, capturablePiece };
   }
 
   /**
    * Returns all possible moves for the piece
    *
-   * @returns {number[][]} - array of all possible moves for the piece
+   * @returns {PossibleMovesResult} - object containing possible moves and capturable pieces
    */
   getPossibleMoves() {}
 
@@ -276,7 +333,7 @@ export class Pawn extends Piece {
         this.rankIndex - 1
       );
     }
-    return possibleMoves;
+    return { possibleMoves, capturablePiece };
   }
 }
 
@@ -320,7 +377,7 @@ export class Knight extends Piece {
       );
     }
 
-    return possibleMoves;
+    return { possibleMoves, capturablePiece };
   }
 }
 
@@ -341,10 +398,23 @@ export class Queen extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
+    const capturablePiece = [];
 
-    possibleMoves.push(...this.getPossibleMovesAcrossAxes());
-    possibleMoves.push(...this.getPossibleMovesAcrossAllDiagonals());
-    return possibleMoves;
+    const {
+      possibleMoves: possibleMovesAcrossAxes,
+      capturablePiece: capturablePieceAcrossAxes,
+    } = this.getPossibleMovesAcrossAxes();
+    possibleMoves.push(...possibleMovesAcrossAxes);
+    capturablePiece.push(...capturablePieceAcrossAxes);
+
+    const {
+      possibleMoves: possibleMovesAcrossAllDiagonals,
+      capturablePiece: capturablePieceAcrossAllDiagonals,
+    } = this.getPossibleMovesAcrossAllDiagonals();
+    possibleMoves.push(...possibleMovesAcrossAllDiagonals);
+    capturablePiece.push(...capturablePieceAcrossAllDiagonals);
+
+    return { possibleMoves, capturablePiece };
   }
 }
 
@@ -413,6 +483,6 @@ export class King extends Piece {
       this.rankIndex + 1
     );
 
-    return possibleMoves;
+    return { possibleMoves, capturablePiece };
   }
 }
