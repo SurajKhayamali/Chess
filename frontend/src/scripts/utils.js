@@ -1,4 +1,4 @@
-import { FILES, RANKS } from "./constants";
+import { DEBUG, FILES, RANKS } from "./constants";
 
 /**
  * Returns if the file index is out of bounds.
@@ -100,4 +100,10 @@ export function getSquareId(fileIndex, rankIndex) {
   if (!rank) throw new Error(`Rank index ${rankIndex} out of bounds`);
 
   return `${file}${rank}`;
+}
+
+export function log(...args) {
+  if (!DEBUG) return;
+
+  console.log(...args);
 }

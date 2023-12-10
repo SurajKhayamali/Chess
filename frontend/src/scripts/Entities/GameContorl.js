@@ -7,12 +7,10 @@ export class GameControl {
    *
    * @param {HTMLDivElement} boardElement
    * @param {GameState} state
-   * @param {boolean} isWhitesTurn
    */
-  constructor(boardElement, state, isWhitesTurn) {
+  constructor(boardElement, state) {
     this.boardElement = boardElement;
     this.state = state;
-    this.isWhitesTurn = isWhitesTurn;
 
     this.highlightedSquares = SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS.reduce(
       (accumulator, modifier) => {
@@ -22,6 +20,15 @@ export class GameControl {
       {}
     );
     this.selectedPiece = null;
+  }
+
+  /**
+   * Returns whether it is white's turn.
+   *
+   * @returns {boolean}
+   */
+  get isWhitesTurn() {
+    return this.state.isWhitesTurn;
   }
 
   /**
@@ -119,26 +126,13 @@ export class GameControl {
     );
     if (!this.selectedPiece || !wasTargetSquareHighlighted) return;
 
-    const oldFileIndex = this.selectedPiece.fileIndex;
-    const oldRankIndex = this.selectedPiece.rankIndex;
-    this.state.moves.push({
-      piece: this.selectedPiece,
-      oldFileIndex,
-      oldRankIndex,
+    const moveExecuted = this.state.executeMove(
+      this.selectedPiece,
       fileIndex,
-      rankIndex,
-    });
+      rankIndex
+    );
+    if (!moveExecuted) return;
 
-    this.selectedPiece.moveTo(fileIndex, rankIndex);
-    const targetSquare = this.state.getSquare(fileIndex, rankIndex);
-    if (targetSquare.piece !== null) {
-      targetSquare.piece.remove();
-    }
-    targetSquare.setPiece(this.selectedPiece);
-    const oldSquare = this.state.getSquare(oldFileIndex, oldRankIndex);
-    oldSquare.removePiece();
-
-    this.isWhitesTurn = !this.isWhitesTurn;
     this.flipBoard();
     this.selectedPiece = null;
   }

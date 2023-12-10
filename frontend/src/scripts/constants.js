@@ -36,3 +36,5 @@ export const SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS = [
   "valid",
   "hover",
 ];
+
+export const DEBUG = false;
