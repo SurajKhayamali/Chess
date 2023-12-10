@@ -29,11 +29,6 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        transition: transform 2s ease-in-out;
-
-        @include m("reverse") {
-            transform: rotate(180deg);
-        }
 
         @include m("dark") {
             background-color: $color-dark;
@@ -68,6 +63,12 @@
 
         &:active {
             @include cursor-grabbing;
+        }
+
+        // transition: transform 2s ease-in-out;
+
+        @include m("reverse") {
+            transform: rotate(180deg);
         }
     }
 }

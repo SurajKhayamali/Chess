@@ -19,6 +19,9 @@ class Piece {
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
 
     this.htmlElement = this.generateHtmlElement();
+    this.control = null;
+
+    this.initializeEventListners();
   }
 
   /**
@@ -120,6 +123,13 @@ class Piece {
   }
 
   /**
+   * Flips the piece
+   */
+  flip() {
+    this.htmlElement.classList.toggle("chess-board__piece--reverse");
+  }
+
+  /**
    * Moves the piece to the specified square
    *
    * @param {number} fileIndex - index of the file to move to
@@ -128,6 +138,39 @@ class Piece {
   moveTo(fileIndex, rankIndex) {
     this.fileIndex = fileIndex;
     this.rankIndex = rankIndex;
+  }
+
+  /**
+   * Removes the piece from the board
+   *
+   * @returns {Piece} - the piece that was removed
+   */
+  remove() {
+    this.htmlElement.remove();
+    return this;
+  }
+
+  /**
+   * Sets the piece's control
+   *
+   * @param {GameControl} control - the piece's control
+   */
+  setControl(control) {
+    this.control = control;
+  }
+
+  /**
+   * Initializes event listeners for a piece.
+   */
+  initializeEventListners() {
+    const pieceElement = this.getHtmlElement();
+
+    pieceElement.addEventListener("click", () => {
+      this.control.handlePieceClickOrDrag(this);
+    });
+    pieceElement.addEventListener("dragstart", () => {
+      this.control.handlePieceClickOrDrag(this);
+    });
   }
 }
 

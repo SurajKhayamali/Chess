@@ -1,5 +1,7 @@
 export const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"]; // horizontal rows of squares
 export const RANKS = ["1", "2", "3", "4", "5", "6", "7", "8"]; // vertical columns of squares
+export const FILES_LENGTH = FILES.length;
+export const RANKS_LENGTH = RANKS.length;
 const PIECE_NAMES = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"];
 const PIECE_ABBREVIATIONS = ["P", "N", "B", "R", "Q", "K"];
 const PIECE_COLORS = ["White", "Black"];
