@@ -7,16 +7,18 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
+        transition: transform 2s ease-in-out;
 
         @include m("reverse") {
-            flex-direction: column-reverse;
+            transform: rotate(180deg);
+            // flex-direction: column-reverse;
         }
     }
 
     @include e("row") {
         display: flex;
         @include m("reverse") {
-            flex-direction: row-reverse;
+            // flex-direction: row-reverse;
         }
         height: calc(100% / 8);
     }
@@ -31,6 +33,11 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        transition: transform 2s ease-in-out;
+
+        @include m("reverse") {
+            transform: rotate(180deg);
+        }
 
         @include m("dark") {
             background-color: $color-dark;
