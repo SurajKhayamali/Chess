@@ -50,6 +50,10 @@
             }
         }
 
+        @include m("last-move") {
+            @include box-shadow-last-move;
+        }
+
         @include m("hover") {
             @include box-shadow-hover;
         }

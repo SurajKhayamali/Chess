@@ -31,10 +31,18 @@ const INITIAL_BOARD = [
 
 export const BOARD_ID = "board";
 
+export const HIGHLIGHT_MODIFIERS = {
+  SELECTED: "selected",
+  VALID: "valid",
+  LAST_MOVE: "last-move",
+  HOVER: "hover",
+};
+
 export const SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS = [
-  "selected",
-  "valid",
-  "hover",
+  HIGHLIGHT_MODIFIERS.SELECTED,
+  HIGHLIGHT_MODIFIERS.VALID,
+  HIGHLIGHT_MODIFIERS.LAST_MOVE,
+  HIGHLIGHT_MODIFIERS.HOVER,
 ];
 
 export const DEBUG = false;

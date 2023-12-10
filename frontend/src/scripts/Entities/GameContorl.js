@@ -1,4 +1,7 @@
-import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../constants";
+import {
+  HIGHLIGHT_MODIFIERS,
+  SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
+} from "../constants";
 import { Square } from "./Square";
 
 export class GameControl {
@@ -97,19 +100,15 @@ export class GameControl {
 
     this.selectedPiece = piece;
 
-    this.removeHighlightFromSquare("selected");
-
-    this.state
-      .getSquare(piece.fileIndex, piece.rankIndex)
-      .highlight("selected");
-    this.highlightSquare(piece.fileIndex, piece.rankIndex, "selected");
-
-    this.removeHighlightFromSquare("valid");
+    this.highlightSquare(
+      piece.fileIndex,
+      piece.rankIndex,
+      HIGHLIGHT_MODIFIERS.SELECTED
+    );
 
     const possibleMoves = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {
-      this.state.getSquare(fileIndex, rankIndex).highlight("valid");
-      this.highlightSquare(fileIndex, rankIndex, "valid");
+      this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
     }
   }
 
@@ -126,6 +125,17 @@ export class GameControl {
     );
     if (!this.selectedPiece || !wasTargetSquareHighlighted) return;
 
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.LAST_MOVE);
+
+    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } =
+      this.selectedPiece;
+    this.highlightSquare(
+      oldFileIndex,
+      oldRankIndex,
+      HIGHLIGHT_MODIFIERS.LAST_MOVE
+    );
+    this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.LAST_MOVE);
+
     const moveExecuted = this.state.executeMove(
       this.selectedPiece,
       fileIndex,
@@ -133,6 +143,8 @@ export class GameControl {
     );
     if (!moveExecuted) return;
 
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.SELECTED);
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     this.flipBoard();
     this.selectedPiece = null;
   }
