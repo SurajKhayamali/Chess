@@ -1,5 +1,5 @@
-import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../constants";
-import { getSquareColor, getSquareId } from "../utils";
+import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../../constants/constants";
+import { getSquareColor, getSquareId } from "../../utils";
 
 export class Square {
   /**

@@ -1,4 +1,4 @@
-import { addToPossibleMoves } from "../utils";
+import { addToPossibleMoves } from "../../utils";
 
 // Abstract class for all pieces
 class Piece {

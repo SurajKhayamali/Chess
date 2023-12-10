@@ -1,8 +1,8 @@
 import {
   HIGHLIGHT_MODIFIERS,
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
-} from "../constants";
-import { Square } from "./Square";
+} from "../constants/constants";
+import { Square } from "./components/Square";
 
 export class GameControl {
   /**

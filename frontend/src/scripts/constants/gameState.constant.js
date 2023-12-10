@@ -1,4 +1,11 @@
-import { Bishop, King, Knight, Pawn, Queen, Rook } from "./Entities/Piece";
+import {
+  Bishop,
+  King,
+  Knight,
+  Pawn,
+  Queen,
+  Rook,
+} from "../entities/components/Piece";
 
 export const INITIAL_BOARD_STATE = [
   [

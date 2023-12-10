@@ -1,7 +1,7 @@
 import { log } from "../utils";
-import { King } from "./Piece";
+import { King } from "./components/Piece";
+import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
-import { Square } from "./Square";
 
 /**
  * @typedef {Object} Move

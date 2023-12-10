@@ -1,4 +1,4 @@
-import { DEBUG, FILES, RANKS } from "./constants";
+import { DEBUG, FILES, RANKS } from "./constants/constants";
 
 /**
  * Returns if the file index is out of bounds.

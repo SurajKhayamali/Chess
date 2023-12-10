@@ -1,7 +1,7 @@
-import { FILES_LENGTH, RANKS_LENGTH } from "../constants";
-import { INITIAL_BOARD_STATE } from "../gameState.constant";
-import { GameControl } from "./GameContorl";
-import { GameState } from "./GameState";
+import { FILES_LENGTH, RANKS_LENGTH } from "../../constants/constants";
+import { INITIAL_BOARD_STATE } from "../../constants/gameState.constant";
+import { GameControl } from "../GameContorl";
+import { GameState } from "../GameState";
 
 export class Board {
   /**
