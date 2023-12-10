@@ -132,9 +132,6 @@ export class Square {
       const { fileIndex, rankIndex } = this;
       this.control?.moveSelectedPieceTo(fileIndex, rankIndex);
 
-      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
-        return;
-
       this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
     });
     squareElement.addEventListener("dragover", (event) => {

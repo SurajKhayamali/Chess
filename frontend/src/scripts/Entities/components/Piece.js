@@ -1,3 +1,4 @@
+import { FILES_LENGTH, RANKS_LENGTH } from "../../constants/constants";
 import { addToPossibleMoves } from "../../utils";
 
 // Abstract class for all pieces
@@ -25,65 +26,124 @@ class Piece {
   }
 
   /**
-   * Returns possible moves across both axes
+   * Adds a move to the possible moves array if it is within the bounds of the board.
+   * Also adds the move to the capturable moves array if there is an oponent's piece on the square.
+   *
+   * @param {number[][]} possibleMoves
+   * @param {number[][]} capturablePiece
+   * @param {number} fileIndex
+   * @param {number} rankIndex
+   *
+   * @returns {boolean} - true if should continue, false if should break
+   */
+  _addToPossibleAndCapturableMoves(
+    possibleMoves,
+    capturablePiece,
+    fileIndex,
+    rankIndex
+  ) {
+    const existingPiece = this.control.getPiecesOnSquare(fileIndex, rankIndex);
+    if (!existingPiece) {
+      addToPossibleMoves(possibleMoves, fileIndex, rankIndex);
+      return true;
+    }
+
+    if (existingPiece.isWhite !== this.isWhite)
+      addToPossibleMoves(capturablePiece, fileIndex, rankIndex);
+
+    return false;
+  }
+
+  /**
+   * Returns possible moves across an axis
+   *
+   * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
+   * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
+   *
+   * @returns {number[][]} - array of all possible moves for the piece
+   */
+  getPossibleMovesAcrossAxis(x, y) {
+    const possibleMoves = [];
+    const capturablePiece = [];
+
+    if (x === 0 && y === 0) return possibleMoves;
+
+    if (x === 0) {
+      for (let i = this.rankIndex + y; i < RANKS_LENGTH && i >= 0; i += y) {
+        const shouldContinue = this._addToPossibleAndCapturableMoves(
+          possibleMoves,
+          capturablePiece,
+          this.fileIndex,
+          i
+        );
+        if (!shouldContinue) break;
+      }
+      return possibleMoves;
+    } else if (y === 0) {
+      for (let i = this.fileIndex + x; i < FILES_LENGTH && i >= 0; i += x) {
+        const shouldContinue = this._addToPossibleAndCapturableMoves(
+          possibleMoves,
+          capturablePiece,
+          i,
+          this.rankIndex
+        );
+        if (!shouldContinue) break;
+      }
+      return possibleMoves;
+    } else {
+      for (
+        let i = this.fileIndex + x, j = this.rankIndex + y;
+        i < FILES_LENGTH && i >= 0 && j < RANKS_LENGTH && j >= 0;
+        i += x, j += y
+      ) {
+        const shouldContinue = this._addToPossibleAndCapturableMoves(
+          possibleMoves,
+          capturablePiece,
+          i,
+          j
+        );
+        if (!shouldContinue) break;
+      }
+      return possibleMoves;
+    }
+  }
+
+  /**
+   * Returns possible moves across both axes, i.e. x and y
    *
    * @returns {number[][]} - array of all possible moves for the piece
    */
   getPossibleMovesAcrossAxes() {
     const possibleMoves = [];
 
-    for (let i = 0; i < 8; i++) {
-      if (i !== this.fileIndex)
-        addToPossibleMoves(possibleMoves, i, this.rankIndex);
-
-      if (i !== this.rankIndex)
-        addToPossibleMoves(possibleMoves, this.fileIndex, i);
-    }
-
-    return possibleMoves;
-  }
-
-  /**
-   * Returns possible moves across a diagonals
-   *
-   * @param {number} i itteration index
-   * @param {1 | -1} x x-axis direction, 1 for positive, -1 for negative
-   * @param {1 | -1} y y-axis direction, 1 for positive, -1 for negative
-   *
-   * @returns {number[][]} - array of all possible moves for the piece
-   */
-  getPossibleMovesAcrossDiagonals(i, x, y) {
-    const possibleMoves = [];
-    const fileOffset = this.fileIndex + i * x;
-    const rankOffset = this.rankIndex + i * y;
-
-    if (fileOffset !== this.fileIndex && rankOffset !== this.rankIndex)
-      addToPossibleMoves(possibleMoves, fileOffset, rankOffset);
+    // Across +x axis
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, 0));
+    // Across -x axis
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, 0));
+    // Across +y axis
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(0, 1));
+    // Across -y axis
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(0, -1));
 
     return possibleMoves;
   }
 
   /**
-   * Returns possible moves across all diagonals
+   * Returns possible moves across all diagonals, i.e. xy, x-y, -x-y, -xy
    *
    * @returns {number[][]} - array of all possible moves for the piece
    */
   getPossibleMovesAcrossAllDiagonals() {
     const possibleMoves = [];
 
-    for (let i = 0; i < 8; i++) {
-      // Across xy diagonal
-      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, 1, 1));
-
-      // Across x-y diagonal
-      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, 1, -1));
-
-      // Across -x-y diagonal
-      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, -1, -1));
-
-      // Across -xy diagonal
-      possibleMoves.push(...this.getPossibleMovesAcrossDiagonals(i, -1, 1));
-    }
+    // Across xy diagonal
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, 1));
+    // Across x-y diagonal
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(1, -1));
+    // Across -x-y diagonal
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, -1));
+    // Across -xy diagonal
+    possibleMoves.push(...this.getPossibleMovesAcrossAxis(-1, 1));
 
     return possibleMoves;
   }

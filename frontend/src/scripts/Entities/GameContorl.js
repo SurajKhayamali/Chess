@@ -100,12 +100,15 @@ export class GameControl {
 
     this.selectedPiece = piece;
 
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.SELECTED);
+
     this.highlightSquare(
       piece.fileIndex,
       piece.rankIndex,
       HIGHLIGHT_MODIFIERS.SELECTED
     );
 
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     const possibleMoves = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {
       this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
@@ -147,5 +150,17 @@ export class GameControl {
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     this.flipBoard();
     this.selectedPiece = null;
+  }
+
+  /**
+   * Returns the pieces on a square.
+   *
+   * @param {number} fileIndex The file index of the square.
+   * @param {number} rankIndex The rank index of the square.
+   *
+   * @returns {Piece?} The pieces on the square or null if there are no pieces on the square.
+   */
+  getPiecesOnSquare(fileIndex, rankIndex) {
+    return this.state.getPiece(fileIndex, rankIndex);
   }
 }

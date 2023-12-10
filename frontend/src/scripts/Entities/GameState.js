@@ -1,3 +1,4 @@
+import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
 import { log } from "../utils";
 import { King } from "./components/Piece";
 import { Square } from "./components/Square";
@@ -70,6 +71,14 @@ export class GameState {
    * @returns {Piece} The piece at the specified square.
    */
   getPiece(fileIndex, rankIndex) {
+    if (
+      fileIndex < 0 ||
+      fileIndex > FILES_LENGTH - 1 ||
+      rankIndex < 0 ||
+      rankIndex > RANKS_LENGTH - 1
+    )
+      return null;
+
     return this.currentBoardState[rankIndex][fileIndex] ?? null;
   }
 
@@ -82,6 +91,14 @@ export class GameState {
    * @returns {Square?} The square at the specified coordinates.
    */
   getSquare(fileIndex, rankIndex) {
+    if (
+      fileIndex < 0 ||
+      fileIndex > FILES_LENGTH - 1 ||
+      rankIndex < 0 ||
+      rankIndex > RANKS_LENGTH - 1
+    )
+      return null;
+
     return this.squares[rankIndex][fileIndex] ?? null;
   }
 
