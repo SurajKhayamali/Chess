@@ -1,6 +1,6 @@
 import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
 import { log } from "../utils";
-import { King } from "./components/Piece";
+import { King, Piece } from "./components/Piece";
 import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
 
@@ -125,11 +125,14 @@ export class GameState {
    * @returns {boolean} Whether the move is legal.
    */
   checkIfMoveIsLegal(piece, fileIndex, rankIndex) {
-    const { possibleMoves } = piece.getPossibleMoves();
-    const isMoveLegal = possibleMoves.some(
+    const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+    const isMovePossible = possibleMoves.some(
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
-    return isMoveLegal;
+    const isCaptureLegal = capturablePieces.some(
+      (piece) => piece.fileIndex === fileIndex && piece.rankIndex === rankIndex
+    );
+    return isMovePossible || isCaptureLegal;
   }
 
   /**
@@ -172,8 +175,8 @@ export class GameState {
     } = oponentsKing;
 
     // Check if the moved piece can attack the oponent's king
-    const { possibleMoves } = movedPiece.getPossibleMoves();
-    const isCheck = possibleMoves.some(
+    const { capturablePieces } = movedPiece.getPossibleMoves();
+    const isCheck = capturablePieces.some(
       (move) =>
         move[0] === oponentsKingFileIndex && move[1] === oponentsKingRankIndex
     );

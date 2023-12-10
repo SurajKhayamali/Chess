@@ -2,6 +2,7 @@ import {
   HIGHLIGHT_MODIFIERS,
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
+import { Piece } from "./components/Piece";
 import { Square } from "./components/Square";
 
 export class GameControl {
@@ -109,9 +110,18 @@ export class GameControl {
     );
 
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
-    const { possibleMoves } = piece.getPossibleMoves();
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.CAPTURABLE);
+
+    const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {
       this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
+    }
+    for (const [fileIndex, rankIndex] of capturablePieces) {
+      this.highlightSquare(
+        fileIndex,
+        rankIndex,
+        HIGHLIGHT_MODIFIERS.CAPTURABLE
+      );
     }
   }
 
@@ -148,6 +158,7 @@ export class GameControl {
 
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.SELECTED);
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
+    this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.CAPTURABLE);
     this.flipBoard();
     this.selectedPiece = null;
   }

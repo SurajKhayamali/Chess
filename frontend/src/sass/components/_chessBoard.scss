@@ -50,6 +50,14 @@
             }
         }
 
+        @include m("capturable") {
+            @include box-shadow-capturable;
+
+            &:hover {
+                @include box-shadow-hover;
+            }
+        }
+
         @include m("last-move") {
             @include box-shadow-last-move;
         }

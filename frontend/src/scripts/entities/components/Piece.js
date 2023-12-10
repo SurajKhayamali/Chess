@@ -7,11 +7,14 @@ import { addToPossibleMoves } from "../../utils";
  * @typedef {Object} PossibleMovesResult
  *
  * @property {number[][]} possibleMoves
- * @property {number[][]} capturablePiece
+ * @property {number[][]} capturablePieces
  */
 
-// Abstract class for all pieces
-class Piece {
+/**
+ * Abstract class for all pieces
+ * @abstract exporting for type annotation in jsdoc only
+ */
+export class Piece {
   /**
    * Creates a piece
    *
@@ -39,7 +42,7 @@ class Piece {
    * Also adds the move to the capturable moves array if there is an oponent's piece on the square.
    *
    * @param {number[][]} possibleMoves
-   * @param {number[][]} capturablePiece
+   * @param {number[][]} capturablePieces
    * @param {number} fileIndex
    * @param {number} rankIndex
    *
@@ -47,7 +50,7 @@ class Piece {
    */
   _addToPossibleAndCapturableMoves(
     possibleMoves,
-    capturablePiece,
+    capturablePieces,
     fileIndex,
     rankIndex
   ) {
@@ -58,7 +61,7 @@ class Piece {
     }
 
     if (existingPiece.isWhite !== this.isWhite)
-      addToPossibleMoves(capturablePiece, fileIndex, rankIndex);
+      addToPossibleMoves(capturablePieces, fileIndex, rankIndex);
 
     return false;
   }
@@ -73,32 +76,32 @@ class Piece {
    */
   getPossibleMovesAcrossAxis(x, y) {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
-    if (x === 0 && y === 0) return { possibleMoves, capturablePiece };
+    if (x === 0 && y === 0) return { possibleMoves, capturablePieces };
 
     if (x === 0) {
       for (let i = this.rankIndex + y; i < RANKS_LENGTH && i >= 0; i += y) {
         const shouldContinue = this._addToPossibleAndCapturableMoves(
           possibleMoves,
-          capturablePiece,
+          capturablePieces,
           this.fileIndex,
           i
         );
         if (!shouldContinue) break;
       }
-      return { possibleMoves, capturablePiece };
+      return { possibleMoves, capturablePieces };
     } else if (y === 0) {
       for (let i = this.fileIndex + x; i < FILES_LENGTH && i >= 0; i += x) {
         const shouldContinue = this._addToPossibleAndCapturableMoves(
           possibleMoves,
-          capturablePiece,
+          capturablePieces,
           i,
           this.rankIndex
         );
         if (!shouldContinue) break;
       }
-      return { possibleMoves, capturablePiece };
+      return { possibleMoves, capturablePieces };
     } else {
       for (
         let i = this.fileIndex + x, j = this.rankIndex + y;
@@ -107,13 +110,13 @@ class Piece {
       ) {
         const shouldContinue = this._addToPossibleAndCapturableMoves(
           possibleMoves,
-          capturablePiece,
+          capturablePieces,
           i,
           j
         );
         if (!shouldContinue) break;
       }
-      return { possibleMoves, capturablePiece };
+      return { possibleMoves, capturablePieces };
     }
   }
 
@@ -124,41 +127,41 @@ class Piece {
    */
   getPossibleMovesAcrossAxes() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
     // Across +x axis
     const {
       possibleMoves: possibleMovesAcrossPXAxis,
-      capturablePiece: capturablePieceAcrossPXAxis,
+      capturablePieces: capturablePiecesAcrossPXAxis,
     } = this.getPossibleMovesAcrossAxis(1, 0);
     possibleMoves.push(...possibleMovesAcrossPXAxis);
-    capturablePiece.push(...capturablePieceAcrossPXAxis);
+    capturablePieces.push(...capturablePiecesAcrossPXAxis);
 
     // Across -x axis
     const {
       possibleMoves: possibleMovesAcrossNXAxis,
-      capturablePiece: capturablePieceAcrossNXAxis,
+      capturablePieces: capturablePiecesAcrossNXAxis,
     } = this.getPossibleMovesAcrossAxis(-1, 0);
     possibleMoves.push(...possibleMovesAcrossNXAxis);
-    capturablePiece.push(...capturablePieceAcrossNXAxis);
+    capturablePieces.push(...capturablePiecesAcrossNXAxis);
 
     // Across +y axis
     const {
       possibleMoves: possibleMovesAcrossPYAxis,
-      capturablePiece: capturablePieceAcrossPYAxis,
+      capturablePieces: capturablePiecesAcrossPYAxis,
     } = this.getPossibleMovesAcrossAxis(0, 1);
     possibleMoves.push(...possibleMovesAcrossPYAxis);
-    capturablePiece.push(...capturablePieceAcrossPYAxis);
+    capturablePieces.push(...capturablePiecesAcrossPYAxis);
 
     // Across -y axis
     const {
       possibleMoves: possibleMovesAcrossPNAxis,
-      capturablePiece: capturablePieceAcrossPNAxis,
+      capturablePieces: capturablePiecesAcrossPNAxis,
     } = this.getPossibleMovesAcrossAxis(0, -1);
     possibleMoves.push(...possibleMovesAcrossPNAxis);
-    capturablePiece.push(...capturablePieceAcrossPNAxis);
+    capturablePieces.push(...capturablePiecesAcrossPNAxis);
 
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 
   /**
@@ -168,41 +171,41 @@ class Piece {
    */
   getPossibleMovesAcrossAllDiagonals() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
     // Across xy diagonal
     const {
       possibleMoves: possibleMovesAcrossPXPYDiagonal,
-      capturablePiece: capturablePieceAcrossPXPYDiagonal,
+      capturablePieces: capturablePiecesAcrossPXPYDiagonal,
     } = this.getPossibleMovesAcrossAxis(1, 1);
     possibleMoves.push(...possibleMovesAcrossPXPYDiagonal);
-    capturablePiece.push(...capturablePieceAcrossPXPYDiagonal);
+    capturablePieces.push(...capturablePiecesAcrossPXPYDiagonal);
 
     // Across x-y diagonal
     const {
       possibleMoves: possibleMovesAcrossPXNYDiagonal,
-      capturablePiece: capturablePieceAcrossPXNYDiagonal,
+      capturablePieces: capturablePiecesAcrossPXNYDiagonal,
     } = this.getPossibleMovesAcrossAxis(1, -1);
     possibleMoves.push(...possibleMovesAcrossPXNYDiagonal);
-    capturablePiece.push(...capturablePieceAcrossPXNYDiagonal);
+    capturablePieces.push(...capturablePiecesAcrossPXNYDiagonal);
 
     // Across -x-y diagonal
     const {
       possibleMoves: possibleMovesAcrossNXNYDiagonal,
-      capturablePiece: capturablePieceAcrossNXNYDiagonal,
+      capturablePieces: capturablePiecesAcrossNXNYDiagonal,
     } = this.getPossibleMovesAcrossAxis(-1, -1);
     possibleMoves.push(...possibleMovesAcrossNXNYDiagonal);
-    capturablePiece.push(...capturablePieceAcrossNXNYDiagonal);
+    capturablePieces.push(...capturablePiecesAcrossNXNYDiagonal);
 
     // Across -xy diagonal
     const {
       possibleMoves: possibleMovesAcrossNXPYDiagonal,
-      capturablePiece: capturablePieceAcrossNXPYDiagonal,
+      capturablePieces: capturablePiecesAcrossNXPYDiagonal,
     } = this.getPossibleMovesAcrossAxis(-1, 1);
     possibleMoves.push(...possibleMovesAcrossNXPYDiagonal);
-    capturablePiece.push(...capturablePieceAcrossNXPYDiagonal);
+    capturablePieces.push(...capturablePiecesAcrossNXPYDiagonal);
 
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 
   /**
@@ -298,13 +301,13 @@ export class Pawn extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
     if (this.isWhite) {
       if (this.rankIndex == 1) {
         this._addToPossibleAndCapturableMoves(
           possibleMoves,
-          capturablePiece,
+          capturablePieces,
           this.fileIndex,
           this.rankIndex + 2
         );
@@ -312,7 +315,7 @@ export class Pawn extends Piece {
 
       this._addToPossibleAndCapturableMoves(
         possibleMoves,
-        capturablePiece,
+        capturablePieces,
         this.fileIndex,
         this.rankIndex + 1
       );
@@ -320,7 +323,7 @@ export class Pawn extends Piece {
       if (this.rankIndex == 6) {
         this._addToPossibleAndCapturableMoves(
           possibleMoves,
-          capturablePiece,
+          capturablePieces,
           this.fileIndex,
           this.rankIndex - 2
         );
@@ -328,12 +331,12 @@ export class Pawn extends Piece {
 
       this._addToPossibleAndCapturableMoves(
         possibleMoves,
-        capturablePiece,
+        capturablePieces,
         this.fileIndex,
         this.rankIndex - 1
       );
     }
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 }
 
@@ -354,7 +357,7 @@ export class Knight extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
     const moveOffsets = [
       [-2, -1],
       [-2, 1],
@@ -371,13 +374,13 @@ export class Knight extends Piece {
 
       this._addToPossibleAndCapturableMoves(
         possibleMoves,
-        capturablePiece,
+        capturablePieces,
         this.fileIndex + fileOffset,
         this.rankIndex + rankOffset
       );
     }
 
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 }
 
@@ -398,23 +401,23 @@ export class Queen extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
     const {
       possibleMoves: possibleMovesAcrossAxes,
-      capturablePiece: capturablePieceAcrossAxes,
+      capturablePieces: capturablePieceAcrossAxes,
     } = this.getPossibleMovesAcrossAxes();
     possibleMoves.push(...possibleMovesAcrossAxes);
-    capturablePiece.push(...capturablePieceAcrossAxes);
+    capturablePieces.push(...capturablePieceAcrossAxes);
 
     const {
       possibleMoves: possibleMovesAcrossAllDiagonals,
-      capturablePiece: capturablePieceAcrossAllDiagonals,
+      capturablePieces: capturablePieceAcrossAllDiagonals,
     } = this.getPossibleMovesAcrossAllDiagonals();
     possibleMoves.push(...possibleMovesAcrossAllDiagonals);
-    capturablePiece.push(...capturablePieceAcrossAllDiagonals);
+    capturablePieces.push(...capturablePieceAcrossAllDiagonals);
 
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 }
 
@@ -425,64 +428,64 @@ export class King extends Piece {
 
   getPossibleMoves() {
     const possibleMoves = [];
-    const capturablePiece = [];
+    const capturablePieces = [];
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex,
       this.rankIndex + 1
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex,
       this.rankIndex - 1
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex + 1,
       this.rankIndex
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex - 1,
       this.rankIndex
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex + 1,
       this.rankIndex + 1
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex - 1,
       this.rankIndex - 1
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex + 1,
       this.rankIndex - 1
     );
 
     this._addToPossibleAndCapturableMoves(
       possibleMoves,
-      capturablePiece,
+      capturablePieces,
       this.fileIndex - 1,
       this.rankIndex + 1
     );
 
-    return { possibleMoves, capturablePiece };
+    return { possibleMoves, capturablePieces };
   }
 }

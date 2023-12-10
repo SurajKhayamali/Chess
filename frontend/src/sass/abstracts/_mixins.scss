@@ -107,6 +107,9 @@ $breakpoints: (
 @mixin box-shadow-valid {
     @include box-shadow(true, 0, 0, $border-radius-medium, $border-radius-default, $color-valid);
 }
+@mixin box-shadow-capturable {
+    @include box-shadow(true, 0, 0, $border-radius-medium, $border-radius-large, $color-capturable);
+}
 @mixin box-shadow-last-move {
     @include box-shadow(true, 0, 0, $border-radius-medium, $border-radius-default, $color-last-move);
 }
