@@ -450,6 +450,7 @@ export class Queen extends Piece {
 export class King extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("King", isWhite, fileIndex, rankIndex);
+    this.isInCheck = false;
   }
 
   getPossibleMoves() {
@@ -513,5 +514,9 @@ export class King extends Piece {
     );
 
     return { possibleMoves, capturablePieces };
+  }
+
+  updateIsInCheck(isInCheck) {
+    this.isInCheck = isInCheck;
   }
 }

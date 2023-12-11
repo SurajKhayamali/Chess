@@ -32,14 +32,25 @@ export class GameState {
 
     this.currentBoardState = initialBoardState; // 2D array of pieces
     this.isPvP = isPvP;
-    this.player1 = new Player(true);
-    this.player2 = isPvP ? new Player(false) : new ComputerPlayer(false);
+    this.player1 = new Player(true, this);
+    this.player2 = isPvP
+      ? new Player(false, this)
+      : new ComputerPlayer(false, this);
     this.isWhitesTurn = isWhitesTurn;
 
     this.selectedPiece = null;
     this.moves = [];
 
     this.initializeSquaresAndPieces();
+  }
+
+  /**
+   * Returns the current player whose turn it is.
+   *
+   * @returns {Player}
+   */
+  get currentPlayer() {
+    return this.isWhitesTurn ? this.player1 : this.player2;
   }
 
   /**
@@ -140,6 +151,32 @@ export class GameState {
   }
 
   /**
+   * Checks if the king is in check
+   *
+   * @param {Piece} movedPiece The piece that was moved.
+   * @param {boolean} isWhiteKingToBeChecked Whether the white king is to be checked.
+   *
+   * @returns {{isInCheck: boolean, oponentsKing: Piece}} Whether the king is in check and the king piece.
+   */
+  checkIfKingIsInCheck(movedPiece, isWhiteKingToBeChecked) {
+    // Find the king to be checked
+    const king = this.getPieces().find(
+      (piece) =>
+        piece instanceof King && piece.isWhite === isWhiteKingToBeChecked
+    );
+    const { fileIndex: kingFileIndex, rankIndex: kingRankIndex } = king;
+
+    // Check if the moved piece can attack the oponent's king
+    const { capturablePieces } = movedPiece.getPossibleMoves();
+    const isInCheck = capturablePieces.some(
+      (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
+    );
+    log("isInCheck:", isInCheck);
+
+    return { isInCheck, king };
+  }
+
+  /**
    * Executes a move.
    * @param {Piece} movedPiece The piece to move.
    * @param {number} fileIndex The file index to move to.
@@ -154,11 +191,7 @@ export class GameState {
     }
 
     // Save old position to remove the piece from old square later
-    const {
-      fileIndex: oldFileIndex,
-      rankIndex: oldRankIndex,
-      isWhite,
-    } = movedPiece;
+    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = movedPiece;
 
     // Check and get if there is a piece on the target square
     const capturedPiece = this.getPiece(fileIndex, rankIndex);
@@ -168,29 +201,23 @@ export class GameState {
     this._movePiece(movedPiece, fileIndex, rankIndex);
     log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
 
-    // Check if the move resulted in a check
-    // Find the oponent's king
-    const oponentsKing = this.getPieces().find(
-      (piece) => piece.isWhite !== isWhite && piece instanceof King
-    );
-    const {
-      fileIndex: oponentsKingFileIndex,
-      rankIndex: oponentsKingRankIndex,
-    } = oponentsKing;
+    const { isInCheck: isOponentsKingInCheck, king: oponentsKing } =
+      this.checkIfKingIsInCheck(movedPiece, !movedPiece.isWhite);
 
-    // Check if the moved piece can attack the oponent's king
-    const { capturablePieces } = movedPiece.getPossibleMoves();
-    const isCheck = capturablePieces.some(
-      (move) =>
-        move[0] === oponentsKingFileIndex && move[1] === oponentsKingRankIndex
-    );
-    log("isCheck:", isCheck);
-    isCheck
+    oponentsKing.updateIsInCheck(isOponentsKingInCheck);
+
+    isOponentsKingInCheck
       ? oponentsKing.highlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED)
       : oponentsKing.removeHighlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED);
 
     // Record the move
-    this.recordMove(movedPiece, fileIndex, rankIndex, capturedPiece, isCheck);
+    this.recordMove(
+      movedPiece,
+      fileIndex,
+      rankIndex,
+      capturedPiece,
+      isOponentsKingInCheck
+    );
 
     // Capture piece if there is one
     const targetSquare = this.getSquare(fileIndex, rankIndex);
