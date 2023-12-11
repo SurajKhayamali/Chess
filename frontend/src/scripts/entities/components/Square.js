@@ -134,5 +134,11 @@ export class Square {
     squareElement.addEventListener("dragover", (event) => {
       event.preventDefault();
     });
+    squareElement.addEventListener("click", (event) => {
+      const { fileIndex, rankIndex } = this;
+      this.control?.moveSelectedPieceTo(fileIndex, rankIndex);
+
+      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
+    });
   }
 }
