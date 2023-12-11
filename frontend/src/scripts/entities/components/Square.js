@@ -1,7 +1,4 @@
-import {
-  HIGHLIGHT_MODIFIERS,
-  SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
-} from "../../constants/constants";
+import { SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS } from "../../constants/constants";
 import { getSquareColor, getSquareId } from "../../utils";
 
 export class Square {
@@ -18,9 +15,6 @@ export class Square {
     this.piece = piece;
 
     this.htmlElement = this.generateHtmlElement();
-    this.control = null;
-
-    this.initializeEventListners();
   }
 
   /**
@@ -96,49 +90,5 @@ export class Square {
   removePiece() {
     this.piece = null;
     this.htmlElement.innerHTML = "";
-  }
-
-  /**
-   * Sets the square's control
-   *
-   * @param {GameControl} control - the square's control
-   */
-  setControl(control) {
-    this.control = control;
-  }
-
-  /**
-   * Initializes event listeners for a square.
-   */
-  initializeEventListners() {
-    const squareElement = this.getHtmlElement();
-
-    squareElement.addEventListener("dragenter", (event) => {
-      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
-        return;
-
-      this.highlight(HIGHLIGHT_MODIFIERS.HOVER);
-    });
-    squareElement.addEventListener("dragleave", (event) => {
-      if (!this.control?.isSquareHighlighted(this, HIGHLIGHT_MODIFIERS.VALID))
-        return;
-
-      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
-    });
-    squareElement.addEventListener("drop", (event) => {
-      const { fileIndex, rankIndex } = this;
-      this.control?.moveSelectedPieceTo(fileIndex, rankIndex);
-
-      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
-    });
-    squareElement.addEventListener("dragover", (event) => {
-      event.preventDefault();
-    });
-    squareElement.addEventListener("click", (event) => {
-      const { fileIndex, rankIndex } = this;
-      this.control?.moveSelectedPieceTo(fileIndex, rankIndex);
-
-      this.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
-    });
   }
 }

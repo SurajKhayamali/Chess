@@ -1,4 +1,21 @@
-import { DEBUG, FILES, RANKS } from "./constants/constants";
+import {
+  DEBUG,
+  FILES,
+  MAX_INDEX,
+  MIN_INDEX,
+  RANKS,
+} from "./constants/constants";
+
+/**
+ * Returns if the index is out of bounds.
+ *
+ * @param {number} index The index to check.
+ *
+ * @returns {boolean} Whether the index is out of bounds.
+ */
+export function checkIndexOutOfBounds(index) {
+  return index < MIN_INDEX || index > MAX_INDEX;
+}
 
 /**
  * Returns if the file index is out of bounds.
@@ -8,7 +25,7 @@ import { DEBUG, FILES, RANKS } from "./constants/constants";
  * @returns {boolean} Whether the file index is out of bounds.
  */
 export function checkFileIndexOutOfBounds(fileIndex) {
-  return fileIndex < 0 || fileIndex > 7;
+  return checkIndexOutOfBounds(fileIndex);
 }
 
 /**
@@ -19,7 +36,7 @@ export function checkFileIndexOutOfBounds(fileIndex) {
  * @returns {boolean} Whether the rank index is out of bounds.
  */
 export function checkRankIndexOutOfBounds(rankIndex) {
-  return rankIndex < 0 || rankIndex > 7;
+  return checkIndexOutOfBounds(rankIndex);
 }
 
 /**

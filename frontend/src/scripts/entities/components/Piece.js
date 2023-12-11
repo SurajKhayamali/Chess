@@ -1,7 +1,7 @@
 import {
   FILES_LENGTH,
   RANKS_LENGTH,
-  SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS,
+  SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
 } from "../../constants/constants";
 import { addToPossibleMoves } from "../../utils";
 
@@ -59,11 +59,14 @@ export class Piece {
     rankIndex
   ) {
     const existingPiece = this.control.getPiecesOnSquare(fileIndex, rankIndex);
+
+    // If there is a piece on the square
     if (!existingPiece) {
       addToPossibleMoves(possibleMoves, fileIndex, rankIndex);
       return true;
     }
 
+    // If it is different color, add to capturable pieces
     if (existingPiece.isWhite !== this.isWhite)
       addToPossibleMoves(capturablePieces, fileIndex, rankIndex);
 
@@ -259,7 +262,7 @@ export class Piece {
    * @param {"checked"} modifier The modifier to add to the class name.
    */
   highlight(modifier) {
-    if (!SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS.includes(modifier)) return;
+    if (!SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS.includes(modifier)) return;
 
     this.htmlElement.classList.add(`chess-board__piece--${modifier}`);
   }
@@ -270,7 +273,7 @@ export class Piece {
    * @param {"checked"} modifier The modifier to add to the class name.
    */
   removeHighlight(modifier) {
-    if (!SUPPORTED_PIECE_HIGHILIGHT_MODIFIERS.includes(modifier)) return;
+    if (!SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS.includes(modifier)) return;
 
     this.htmlElement.classList.remove(`chess-board__piece--${modifier}`);
   }

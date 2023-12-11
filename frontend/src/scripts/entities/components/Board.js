@@ -1,7 +1,12 @@
-import { FILES_LENGTH, RANKS_LENGTH } from "../../constants/constants";
+import {
+  FILES_LENGTH,
+  HIGHLIGHT_MODIFIERS,
+  RANKS_LENGTH,
+} from "../../constants/constants";
 import { INITIAL_BOARD_STATE } from "../../constants/gameState.constant";
-import { GameControl } from "../GameContorl";
+import { GameControl } from "../GameControl";
 import { GameState } from "../GameState";
+import { Square } from "./Square";
 
 export class Board {
   /**
@@ -23,6 +28,43 @@ export class Board {
       this.gameState,
       isWhitesTurn
     );
+  }
+
+  /**
+   * Initializes event listeners for a square.
+   *
+   * @param {Square} square The square to initialize event listeners for.
+   */
+  initializeEventListnersForSquare(square) {
+    const squareElement = square.getHtmlElement();
+
+    squareElement.addEventListener("dragenter", (event) => {
+      if (!this.control.isSquareHighlighted(square, HIGHLIGHT_MODIFIERS.VALID))
+        return;
+
+      square.highlight(HIGHLIGHT_MODIFIERS.HOVER);
+    });
+    squareElement.addEventListener("dragleave", (event) => {
+      if (!this.control.isSquareHighlighted(square, HIGHLIGHT_MODIFIERS.VALID))
+        return;
+
+      square.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
+    });
+    squareElement.addEventListener("drop", (event) => {
+      const { fileIndex, rankIndex } = square;
+      this.control.moveSelectedPieceTo(fileIndex, rankIndex);
+
+      square.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
+    });
+    squareElement.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+    squareElement.addEventListener("click", (event) => {
+      const { fileIndex, rankIndex } = square;
+      this.control.moveSelectedPieceTo(fileIndex, rankIndex);
+
+      square.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
+    });
   }
 
   /**
@@ -52,7 +94,7 @@ export class Board {
         const square = this.gameState.getSquare(fileIndex, rankIndex);
         const squareHtml = square.getHtmlElement();
 
-        square.setControl(this.control);
+        this.initializeEventListnersForSquare(square);
 
         const piece = this.gameState.getPiece(fileIndex, rankIndex);
 

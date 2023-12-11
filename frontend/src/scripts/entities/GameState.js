@@ -1,6 +1,6 @@
 import {
   FILES_LENGTH,
-  PIECE_HIGHILIGHT_MODIFIERS,
+  PIECE_HIGHLIGHT_MODIFIERS,
   RANKS_LENGTH,
 } from "../constants/constants";
 import { log } from "../utils";
@@ -168,6 +168,7 @@ export class GameState {
 
     // Check if the moved piece can attack the oponent's king
     const { capturablePieces } = movedPiece.getPossibleMoves();
+    // log("capturablePieces:", capturablePieces, "king:", king);
     const isInCheck = capturablePieces.some(
       (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
     );
@@ -203,12 +204,18 @@ export class GameState {
 
     const { isInCheck: isOponentsKingInCheck, king: oponentsKing } =
       this.checkIfKingIsInCheck(movedPiece, !movedPiece.isWhite);
+    // log(
+    //   "isOponentsKingInCheck:",
+    //   isOponentsKingInCheck,
+    //   "oponentsKing:",
+    //   oponentsKing
+    // );
 
     oponentsKing.updateIsInCheck(isOponentsKingInCheck);
 
     isOponentsKingInCheck
-      ? oponentsKing.highlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED)
-      : oponentsKing.removeHighlight(PIECE_HIGHILIGHT_MODIFIERS.CHECKED);
+      ? oponentsKing.highlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED)
+      : oponentsKing.removeHighlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED);
 
     // Record the move
     this.recordMove(
