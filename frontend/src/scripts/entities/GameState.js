@@ -19,6 +19,18 @@ import { ComputerPlayer, Player } from "./Player";
  * @property {boolean} isCheck Whether the move resulted in a check.
  */
 
+/**
+ * @typedef {Object} GameStateSnapshot
+ * @property {Piece[][]} squares The squares on the board.
+ * @property {Piece[][]} currentBoardState The current board state.
+ * @property {boolean} isPvP Whether the game is player vs player.
+ * @property {Player} player1 The first player.
+ * @property {Player} player2 The second player.
+ * @property {boolean} isWhitesTurn Whether it is white's turn.
+ * @property {Piece?} selectedPiece The selected piece.
+ * @property {Move[]} moves The moves that were executed.
+ */
+
 export class GameState {
   /**
    * Creates a new game state.
@@ -267,5 +279,59 @@ export class GameState {
       capturedPiece: capturedPiece,
       isCheck: isCheck,
     });
+  }
+
+  doesMoveBlockOrEscapeCheck(movedPiece, fileIndex, rankIndex) {
+    const snapshot = this.snapshot();
+
+    const isMoveLegal = this.executeMove(movedPiece, fileIndex, rankIndex);
+
+    if (!isMoveLegal) {
+      this.restore(snapshot);
+      return false;
+    }
+
+    const lastMovedPiece = this.moves[this.moves.length - 2].piece;
+    const { isInCheck } = this.checkIfKingIsInCheck(
+      lastMovedPiece,
+      movedPiece.isWhite
+    );
+
+    this.restore(snapshot);
+    return !isInCheck;
+  }
+
+  /**
+   * Saves the current state of the game.
+   *
+   * @returns {GameStateSnapshot} The current state of the game.
+   */
+  snapshot() {
+    return {
+      squares: this.squares,
+      currentBoardState: this.currentBoardState,
+      isPvP: this.isPvP,
+      player1: this.player1,
+      player2: this.player2,
+      isWhitesTurn: this.isWhitesTurn,
+      selectedPiece: this.selectedPiece,
+      moves: this.moves,
+    };
+  }
+
+  /**
+   * Restores the game state from a snapshot.
+   *
+   * @param {GameStateSnapshot} snapshot The snapshot to restore from.
+   */
+  restore(snapshot) {
+    this.squares = snapshot.squares;
+    this.currentBoardState = snapshot.currentBoardState;
+    this.isPvP = snapshot.isPvP;
+    this.player1 = snapshot.player1;
+    this.player2 = snapshot.player2;
+    this.isWhitesTurn = snapshot.isWhitesTurn;
+    this.selectedPiece = snapshot.selectedPiece;
+    this.moves = snapshot.moves;
   }
 }

@@ -113,16 +113,21 @@ export class GameControl {
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.CAPTURABLE);
 
-    const currentPlayer = this.state.currentPlayer;
-    // log("currentPlayer:", currentPlayer);
-    if (currentPlayer.king.isInCheck) {
-      log("currentPlayer.king.isInCheck:", currentPlayer.king.isInCheck);
-      // TODO: Check if the king can move out of check or if a piece can block the check
-    }
+    const currentPlayersKing = this.state.currentPlayer.king;
+    // log("currentPlayersKing:", currentPlayersKing);
+    log("currentPlayersKing.isInCheck:", currentPlayersKing.isInCheck);
 
     const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {
-      this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
+      if (!currentPlayersKing.isInCheck) {
+        this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
+        continue;
+      }
+      // TODO: Check if the king can move out of check or if a piece can block the check
+      log(
+        "doesMoveBlockOrEscapeCheck",
+        this.state.doesMoveBlockOrEscapeCheck(piece, fileIndex, rankIndex)
+      );
     }
     for (const [fileIndex, rankIndex] of capturablePieces) {
       this.highlightSquare(
