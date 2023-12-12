@@ -119,19 +119,31 @@ export class GameControl {
 
     // console.log("state")
     const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
-    console.log("possibleMoves", possibleMoves);
+    // console.log("possibleMoves", possibleMoves);
     for (const [fileIndex, rankIndex] of possibleMoves) {
-      console.log("currentPlayersKing", currentPlayersKing);
+      // console.log("currentPlayersKing", currentPlayersKing);
+      // this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
       if (!currentPlayersKing.isInCheck) {
         this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
         continue;
       }
       // TODO: Check if the king can move out of check or if a piece can block the check;
-      console.log("if king in check, state:", this.state);
+      // console.log("if king in check, state:", this.state);
+      const doesMoveBlockOrEscapeCheck = this.state.doesMoveBlockOrEscapeCheck(
+        piece,
+        fileIndex,
+        rankIndex
+      );
       log(
         "doesMoveBlockOrEscapeCheck",
-        this.state.doesMoveBlockOrEscapeCheck(piece, fileIndex, rankIndex)
+        doesMoveBlockOrEscapeCheck,
+        piece.name,
+        fileIndex,
+        rankIndex
       );
+      if (doesMoveBlockOrEscapeCheck) {
+        this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
+      }
     }
     for (const [fileIndex, rankIndex] of capturablePieces) {
       this.highlightSquare(

@@ -54,6 +54,8 @@ export class GameState {
     this.moves = [];
 
     this.initializeSquaresAndPieces();
+
+    window.undoLastMove = () => this.undoLastMove();
   }
 
   /**
@@ -194,7 +196,7 @@ export class GameState {
     const isInCheck = capturablePieces.some(
       (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
     );
-    log("isInCheck:", isInCheck);
+    // log("isInCheck:", isInCheck);
 
     return { isInCheck, king };
   }
@@ -305,27 +307,30 @@ export class GameState {
   }
 
   doesMoveBlockOrEscapeCheck(movedPiece, fileIndex, rankIndex) {
-    console.log("Before snapshot", this, movedPiece, fileIndex, rankIndex);
+    // console.log("Before snapshot", this, movedPiece, fileIndex, rankIndex);
     const snapshot = this.snapshot();
 
     log("Checking:", movedPiece.name, "at", fileIndex, rankIndex);
     const isMoveLegal = this.executeMove(movedPiece, fileIndex, rankIndex);
 
     if (!isMoveLegal) {
+      this.undoLastMove();
       this.restore(snapshot);
       // this.undoMock();
       return false;
     }
 
-    const lastMovedPiece = this.moves[this.moves.length - 1].piece; // Oponent's piece
+    const lastMovedPiece = this.moves[this.moves.length - 2].piece; // Oponent's piece
     const { isInCheck } = this.checkIfKingIsInCheck(
       lastMovedPiece,
       movedPiece.isWhite // Current player's piece color
     );
+    console.log("isInCheck:", isInCheck);
 
-    console.log("Before restore", this);
+    this.undoLastMove();
+    // console.log("Before restore", this);
     this.restore(snapshot);
-    console.log("After restore", this);
+    // console.log("After restore", this);
     // this.undoMock();
     return !isInCheck;
   }
@@ -350,7 +355,7 @@ export class GameState {
     }
   }
 
-  undoMove() {
+  undoLastMove() {
     const lastMove = this.moves.pop();
     if (!lastMove) return;
 
@@ -382,14 +387,14 @@ export class GameState {
    */
   snapshot() {
     return {
-      squares: cloneDeep(this.squares),
-      currentBoardState: cloneDeep(this.currentBoardState),
+      squares: this.squares.map((item) => [...item]),
+      currentBoardState: this.currentBoardState.map((item) => [...item]),
       isPvP: this.isPvP,
-      player1: this.player1,
-      player2: this.player2,
+      player1: this.player1.clone(),
+      player2: this.player2.clone(),
       isWhitesTurn: this.isWhitesTurn,
-      selectedPiece: this.selectedPiece,
-      moves: cloneDeep(this.moves),
+      selectedPiece: this.selectedPiece?.clone(),
+      moves: this.moves.map((item) => ({ ...item })),
     };
   }
 
@@ -399,7 +404,6 @@ export class GameState {
    * @param {GameStateSnapshot} snapshot The snapshot to restore from.
    */
   restore(snapshot) {
-    console.log("Restoring snapshot", snapshot);
     this.squares = snapshot.squares;
     this.currentBoardState = snapshot.currentBoardState;
     this.isPvP = snapshot.isPvP;

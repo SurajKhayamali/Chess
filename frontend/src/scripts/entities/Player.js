@@ -34,6 +34,10 @@ export class Player {
       .getPieces()
       .find((piece) => piece instanceof King && piece.isWhite === this.isWhite);
   }
+
+  clone() {
+    return new Player(this.isWhite, this.state, this.isComputer);
+  }
 }
 
 export class ComputerPlayer extends Player {

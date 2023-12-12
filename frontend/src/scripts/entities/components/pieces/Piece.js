@@ -315,14 +315,23 @@ export class Piece {
     const pieceElement = this.getHtmlElement();
 
     pieceElement.addEventListener("click", () => {
-      console.log(
-        "piece clicked",
-        cloneDeep(this.control?.state?.currentBoardState)
-      );
       this.control.handlePieceClickOrDrag(this);
     });
     pieceElement.addEventListener("dragstart", () => {
       this.control.handlePieceClickOrDrag(this);
     });
+  }
+
+  clone() {
+    const clonePiece = new Piece(
+      this.name,
+      this.isWhite,
+      this.fileIndex,
+      this.rankIndex,
+      this.abbreviation
+    );
+
+    // clonePiece.htmlElement = this.htmlElement;
+    clonePiece.control = this.control;
   }
 }
