@@ -3,7 +3,7 @@ import {
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
 import { log } from "../utils";
-import { Piece } from "./components/Piece";
+import { Piece } from "./components/pieces";
 import { Square } from "./components/Square";
 
 export class GameControl {
@@ -113,12 +113,9 @@ export class GameControl {
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.CAPTURABLE);
 
-    const currentPlayer = this.state.currentPlayer;
-    // log("currentPlayer:", currentPlayer);
-    if (currentPlayer.king.isInCheck) {
-      log("currentPlayer.king.isInCheck:", currentPlayer.king.isInCheck);
-      // TODO: Check if the king can move out of check or if a piece can block the check
-    }
+    // const currentPlayersKing = this.state.currentPlayer.king;
+    // log("currentPlayersKing.isInCheck:", currentPlayersKing.isInCheck);
+    // TODO: Check if the king can move out of check or if a piece can block the check;
 
     const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
     for (const [fileIndex, rankIndex] of possibleMoves) {

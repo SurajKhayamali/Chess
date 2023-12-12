@@ -4,7 +4,7 @@ import {
   RANKS_LENGTH,
 } from "../constants/constants";
 import { log } from "../utils";
-import { King, Piece } from "./components/Piece";
+import { King, Piece } from "./components/pieces";
 import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
 
