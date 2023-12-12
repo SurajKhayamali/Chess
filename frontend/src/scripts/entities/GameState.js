@@ -3,8 +3,8 @@ import {
   PIECE_HIGHLIGHT_MODIFIERS,
   RANKS_LENGTH,
 } from "../constants/constants";
-import { log } from "../utils";
-import { King, Piece } from "./components/Piece";
+import { cloneDeep, log } from "../utils";
+import { King, Piece } from "./components/pieces";
 import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
 
@@ -137,6 +137,7 @@ export class GameState {
    * @param {number} rankIndex The rank index to move to.
    */
   _movePiece(piece, fileIndex, rankIndex) {
+    console.log("Moving piece", piece, "to", fileIndex, rankIndex);
     this.currentBoardState[piece.rankIndex][piece.fileIndex] = null;
     this.currentBoardState[rankIndex][fileIndex] = piece;
     piece.moveTo(fileIndex, rankIndex);
@@ -153,6 +154,15 @@ export class GameState {
    */
   checkIfMoveIsLegal(piece, fileIndex, rankIndex) {
     const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+    log(
+      "Checking if move is legal for:",
+      piece.name,
+      "from",
+      piece.fileIndex,
+      piece.rankIndex,
+      possibleMoves,
+      capturablePieces
+    );
     const isMovePossible = possibleMoves.some(
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
@@ -187,6 +197,19 @@ export class GameState {
     log("isInCheck:", isInCheck);
 
     return { isInCheck, king };
+  }
+
+  mockMove(movedPiece, fileIndex, rankIndex) {
+    if (!this.checkIfMoveIsLegal(movedPiece, fileIndex, rankIndex)) {
+      log("Illegal move", movedPiece, fileIndex, rankIndex);
+      return false;
+    }
+
+    // Move the piece to new square
+    this._movePiece(movedPiece, fileIndex, rankIndex);
+    log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
+
+    return true;
   }
 
   /**
@@ -282,23 +305,74 @@ export class GameState {
   }
 
   doesMoveBlockOrEscapeCheck(movedPiece, fileIndex, rankIndex) {
+    console.log("Before snapshot", this, movedPiece, fileIndex, rankIndex);
     const snapshot = this.snapshot();
 
+    log("Checking:", movedPiece.name, "at", fileIndex, rankIndex);
     const isMoveLegal = this.executeMove(movedPiece, fileIndex, rankIndex);
 
     if (!isMoveLegal) {
       this.restore(snapshot);
+      // this.undoMock();
       return false;
     }
 
-    const lastMovedPiece = this.moves[this.moves.length - 2].piece;
+    const lastMovedPiece = this.moves[this.moves.length - 1].piece; // Oponent's piece
     const { isInCheck } = this.checkIfKingIsInCheck(
       lastMovedPiece,
-      movedPiece.isWhite
+      movedPiece.isWhite // Current player's piece color
     );
 
+    console.log("Before restore", this);
     this.restore(snapshot);
+    console.log("After restore", this);
+    // this.undoMock();
     return !isInCheck;
+  }
+
+  undoMock() {
+    const lastMove = this.moves.pop();
+    if (!lastMove) return;
+
+    const {
+      piece,
+      oldFileIndex,
+      oldRankIndex,
+      fileIndex,
+      rankIndex,
+      capturedPiece,
+    } = lastMove;
+
+    this._movePiece(piece, oldFileIndex, oldRankIndex);
+
+    if (capturedPiece) {
+      this._movePiece(capturedPiece, fileIndex, rankIndex);
+    }
+  }
+
+  undoMove() {
+    const lastMove = this.moves.pop();
+    if (!lastMove) return;
+
+    const {
+      piece,
+      oldFileIndex,
+      oldRankIndex,
+      fileIndex,
+      rankIndex,
+      capturedPiece,
+    } = lastMove;
+
+    this._movePiece(piece, oldFileIndex, oldRankIndex);
+
+    if (capturedPiece) {
+      this._movePiece(capturedPiece, fileIndex, rankIndex);
+
+      const targetSquare = this.getSquare(fileIndex, rankIndex);
+      targetSquare.setPiece(capturedPiece);
+    }
+
+    this.isWhitesTurn = !this.isWhitesTurn;
   }
 
   /**
@@ -308,14 +382,14 @@ export class GameState {
    */
   snapshot() {
     return {
-      squares: this.squares,
-      currentBoardState: this.currentBoardState,
+      squares: cloneDeep(this.squares),
+      currentBoardState: cloneDeep(this.currentBoardState),
       isPvP: this.isPvP,
       player1: this.player1,
       player2: this.player2,
       isWhitesTurn: this.isWhitesTurn,
       selectedPiece: this.selectedPiece,
-      moves: this.moves,
+      moves: cloneDeep(this.moves),
     };
   }
 
@@ -325,6 +399,7 @@ export class GameState {
    * @param {GameStateSnapshot} snapshot The snapshot to restore from.
    */
   restore(snapshot) {
+    console.log("Restoring snapshot", snapshot);
     this.squares = snapshot.squares;
     this.currentBoardState = snapshot.currentBoardState;
     this.isPvP = snapshot.isPvP;

@@ -3,7 +3,7 @@ import {
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
 import { log } from "../utils";
-import { Piece } from "./components/Piece";
+import { Piece } from "./components/pieces";
 import { Square } from "./components/Square";
 
 export class GameControl {
@@ -117,13 +117,17 @@ export class GameControl {
     // log("currentPlayersKing:", currentPlayersKing);
     log("currentPlayersKing.isInCheck:", currentPlayersKing.isInCheck);
 
+    // console.log("state")
     const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+    console.log("possibleMoves", possibleMoves);
     for (const [fileIndex, rankIndex] of possibleMoves) {
+      console.log("currentPlayersKing", currentPlayersKing);
       if (!currentPlayersKing.isInCheck) {
         this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
         continue;
       }
-      // TODO: Check if the king can move out of check or if a piece can block the check
+      // TODO: Check if the king can move out of check or if a piece can block the check;
+      console.log("if king in check, state:", this.state);
       log(
         "doesMoveBlockOrEscapeCheck",
         this.state.doesMoveBlockOrEscapeCheck(piece, fileIndex, rankIndex)

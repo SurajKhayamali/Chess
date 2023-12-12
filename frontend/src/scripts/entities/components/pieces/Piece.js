@@ -2,8 +2,8 @@ import {
   FILES_LENGTH,
   RANKS_LENGTH,
   SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
-} from "../../constants/constants";
-import { addToPossibleMoves } from "../../utils";
+} from "../../../constants/constants";
+import { addToPossibleMoves, cloneDeep } from "../../../utils";
 
 /**
  * object containing possible moves and capturable pieces
@@ -315,211 +315,14 @@ export class Piece {
     const pieceElement = this.getHtmlElement();
 
     pieceElement.addEventListener("click", () => {
+      console.log(
+        "piece clicked",
+        cloneDeep(this.control?.state?.currentBoardState)
+      );
       this.control.handlePieceClickOrDrag(this);
     });
     pieceElement.addEventListener("dragstart", () => {
       this.control.handlePieceClickOrDrag(this);
     });
-  }
-}
-
-export class Pawn extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Pawn", isWhite, fileIndex, rankIndex);
-  }
-
-  getPossibleMoves() {
-    const possibleMoves = [];
-    const capturablePieces = [];
-
-    if (this.isWhite) {
-      if (this.rankIndex == 1) {
-        this._addToPossibleAndCapturableMoves(
-          possibleMoves,
-          capturablePieces,
-          this.fileIndex,
-          this.rankIndex + 2
-        );
-      }
-
-      this._addToPossibleAndCapturableMoves(
-        possibleMoves,
-        capturablePieces,
-        this.fileIndex,
-        this.rankIndex + 1
-      );
-    } else {
-      if (this.rankIndex == 6) {
-        this._addToPossibleAndCapturableMoves(
-          possibleMoves,
-          capturablePieces,
-          this.fileIndex,
-          this.rankIndex - 2
-        );
-      }
-
-      this._addToPossibleAndCapturableMoves(
-        possibleMoves,
-        capturablePieces,
-        this.fileIndex,
-        this.rankIndex - 1
-      );
-    }
-    return { possibleMoves, capturablePieces };
-  }
-}
-
-export class Rook extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Rook", isWhite, fileIndex, rankIndex);
-  }
-
-  getPossibleMoves() {
-    return this.getPossibleMovesAcrossAxes();
-  }
-}
-
-export class Knight extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Knight", isWhite, fileIndex, rankIndex, "N");
-  }
-
-  getPossibleMoves() {
-    const possibleMoves = [];
-    const capturablePieces = [];
-    const moveOffsets = [
-      [-2, -1],
-      [-2, 1],
-      [-1, -2],
-      [-1, 2],
-      [1, -2],
-      [1, 2],
-      [2, -1],
-      [2, 1],
-    ];
-
-    for (const moveOffset of moveOffsets) {
-      const [fileOffset, rankOffset] = moveOffset;
-
-      this._addToPossibleAndCapturableMoves(
-        possibleMoves,
-        capturablePieces,
-        this.fileIndex + fileOffset,
-        this.rankIndex + rankOffset
-      );
-    }
-
-    return { possibleMoves, capturablePieces };
-  }
-}
-
-export class Bishop extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Bishop", isWhite, fileIndex, rankIndex);
-  }
-
-  getPossibleMoves() {
-    return this.getPossibleMovesAcrossAllDiagonals();
-  }
-}
-
-export class Queen extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Queen", isWhite, fileIndex, rankIndex);
-  }
-
-  getPossibleMoves() {
-    const possibleMoves = [];
-    const capturablePieces = [];
-
-    const {
-      possibleMoves: possibleMovesAcrossAxes,
-      capturablePieces: capturablePieceAcrossAxes,
-    } = this.getPossibleMovesAcrossAxes();
-    possibleMoves.push(...possibleMovesAcrossAxes);
-    capturablePieces.push(...capturablePieceAcrossAxes);
-
-    const {
-      possibleMoves: possibleMovesAcrossAllDiagonals,
-      capturablePieces: capturablePieceAcrossAllDiagonals,
-    } = this.getPossibleMovesAcrossAllDiagonals();
-    possibleMoves.push(...possibleMovesAcrossAllDiagonals);
-    capturablePieces.push(...capturablePieceAcrossAllDiagonals);
-
-    return { possibleMoves, capturablePieces };
-  }
-}
-
-export class King extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("King", isWhite, fileIndex, rankIndex);
-    this.isInCheck = false;
-  }
-
-  getPossibleMoves() {
-    const possibleMoves = [];
-    const capturablePieces = [];
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex,
-      this.rankIndex + 1
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex,
-      this.rankIndex - 1
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex + 1,
-      this.rankIndex
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex - 1,
-      this.rankIndex
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex + 1,
-      this.rankIndex + 1
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex - 1,
-      this.rankIndex - 1
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex + 1,
-      this.rankIndex - 1
-    );
-
-    this._addToPossibleAndCapturableMoves(
-      possibleMoves,
-      capturablePieces,
-      this.fileIndex - 1,
-      this.rankIndex + 1
-    );
-
-    return { possibleMoves, capturablePieces };
-  }
-
-  updateIsInCheck(isInCheck) {
-    this.isInCheck = isInCheck;
   }
 }

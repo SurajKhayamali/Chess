@@ -5,7 +5,7 @@ import {
   Pawn,
   Queen,
   Rook,
-} from "../entities/components/Piece";
+} from "../entities/components/pieces";
 
 export const INITIAL_BOARD_STATE = [
   [

@@ -124,3 +124,33 @@ export function log(...args) {
 
   console.log(...args);
 }
+
+const PRIMITIVE_TYPES = [Number, String, Boolean];
+export function cloneDeep(obj) {
+  log("cloning obj:", obj);
+  if (typeof obj !== "object") return obj;
+  // if (obj === null) return obj;
+  if (!obj) return obj;
+  const isNotPrimitiveType = PRIMITIVE_TYPES.some(
+    (type) => obj instanceof type
+  );
+  log("isNotPrimitiveType:", isNotPrimitiveType);
+  if (!isNotPrimitiveType) return obj;
+
+  if (Array.isArray(obj)) {
+    const arrayClone = [];
+
+    for (const item of obj) {
+      arrayClone.push(cloneDeep(item));
+    }
+
+    return arrayClone;
+  }
+
+  const objClone = {};
+  for (const [key, value] of Object.entries(obj)) {
+    objClone[key] = cloneDeep(value);
+  }
+
+  return objClone;
+}

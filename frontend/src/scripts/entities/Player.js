@@ -1,5 +1,5 @@
 import { GameState } from "./GameState";
-import { King } from "./components/Piece";
+import { King } from "./components/pieces";
 
 export class Player {
   /**
