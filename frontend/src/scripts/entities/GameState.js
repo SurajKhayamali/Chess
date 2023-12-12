@@ -98,6 +98,23 @@ export class GameState {
   }
 
   /**
+   * Returns all pieces of the specified type and color.
+   *
+   * @param {string} type The type of the pieces to get.
+   * @param {boolean} isWhite Whether the pieces to get are white.
+   *
+   * @returns {Piece[]} The pieces of the specified type and color.
+   *
+   * @example getPiecesOfType("Pawn", true) // returns all white pawns
+   * @example getPiecesOfType("Knight", false) // returns all black knights
+   */
+  getPiecesOfType(type, isWhite) {
+    return this.getPieces().filter(
+      (piece) => piece.name === type && piece.isWhite === isWhite
+    );
+  }
+
+  /**
    * Returns the square at the specified coordinates.
    *
    * @param {number} fileIndex The file index of the square to get.
@@ -172,7 +189,7 @@ export class GameState {
     const isInCheck = capturablePieces.some(
       (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
     );
-    log("isInCheck:", isInCheck);
+    // log("isInCheck:", isInCheck);
 
     return { isInCheck, king };
   }
@@ -267,5 +284,35 @@ export class GameState {
       capturedPiece: capturedPiece,
       isCheck: isCheck,
     });
+  }
+
+  /**
+   * Returns if the square is under attack by the oponent.
+   *
+   * @param {number} fileIndex The file index of the square to check.
+   * @param {number} rankIndex The rank index of the square to check.
+   * @param {boolean} isWhite Whether the square is white.
+   *
+   * @returns {boolean} Whether the square is under attack.
+   */
+  isSquareUnderAttack(fileIndex, rankIndex, isWhite) {
+    const pieces = this.getPieces().filter(
+      (piece) => piece.isWhite !== isWhite
+    );
+
+    for (const piece of pieces) {
+      const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+      if (
+        possibleMoves.some(
+          (move) => move[0] === fileIndex && move[1] === rankIndex
+        ) ||
+        capturablePieces.some(
+          (move) => move[0] === fileIndex && move[1] === rankIndex
+        )
+      )
+        return true;
+    }
+
+    return false;
   }
 }

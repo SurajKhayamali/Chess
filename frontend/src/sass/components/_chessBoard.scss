@@ -7,7 +7,7 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        transition: transform 2s ease-in-out;
+        // transition: transform 2s ease-in-out;
 
         @include m("reverse") {
             transform: rotate(180deg);

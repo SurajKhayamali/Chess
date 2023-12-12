@@ -6,6 +6,15 @@ export const RANKS_LENGTH = RANKS.length;
 export const MIN_INDEX = 0;
 export const MAX_INDEX = 7;
 
+export const PIECES = {
+  PAWN: "Pawn",
+  KNIGHT: "Knight",
+  BISHOP: "Bishop",
+  ROOK: "Rook",
+  QUEEN: "Queen",
+  KING: "King",
+};
+
 export const BOARD_ID = "board";
 
 export const HIGHLIGHT_MODIFIERS = {
@@ -31,4 +40,4 @@ export const SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS = [
   PIECE_HIGHLIGHT_MODIFIERS.CHECKED,
 ];
 
-export const DEBUG = false;
+export const DEBUG = true;
