@@ -42,6 +42,10 @@
             @include box-shadow-selected;
         }
 
+        @include m("last-move") {
+            @include box-shadow-last-move;
+        }
+
         @include m("valid") {
             @include box-shadow-valid;
 
@@ -56,10 +60,6 @@
             &:hover {
                 @include box-shadow-hover;
             }
-        }
-
-        @include m("last-move") {
-            @include box-shadow-last-move;
         }
 
         @include m("hover") {
