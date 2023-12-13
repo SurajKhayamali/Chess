@@ -143,6 +143,9 @@ export class GameControl {
     );
     if (!this.selectedPiece || !wasTargetSquareHighlighted) return;
 
+    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } =
+      this.selectedPiece;
+
     const moveExecuted = this.state.executeMove(
       this.selectedPiece,
       fileIndex,
@@ -152,8 +155,6 @@ export class GameControl {
 
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.LAST_MOVE);
 
-    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } =
-      this.selectedPiece;
     this.highlightSquare(
       oldFileIndex,
       oldRankIndex,
