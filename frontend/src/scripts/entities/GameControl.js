@@ -3,7 +3,12 @@ import {
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
 import { log } from "../utils";
-import { Piece } from "./components/pieces";
+import { Pawn, Piece } from "./components/pieces";
+import { getRankIndexIncrement } from "./components/pieces/helpers/common.helper";
+import {
+  checkIfEnPassantShouldBeAvailable,
+  setEnPassantAvailableAt,
+} from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
 
 export class GameControl {
@@ -158,8 +163,11 @@ export class GameControl {
     )
       return;
 
-    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } =
-      this.selectedPiece;
+    const {
+      fileIndex: oldFileIndex,
+      rankIndex: oldRankIndex,
+      isWhite,
+    } = this.selectedPiece;
 
     const moveExecuted = this.state.executeMove(
       this.selectedPiece,
@@ -167,6 +175,26 @@ export class GameControl {
       rankIndex
     );
     if (!moveExecuted) return;
+
+    const wasMovedPiecePawn = this.selectedPiece instanceof Pawn;
+    if (wasMovedPiecePawn && Math.abs(rankIndex - oldRankIndex) === 2) {
+      const shouldEnPassantBeAvailableForNextMove =
+        checkIfEnPassantShouldBeAvailable(
+          this.state,
+          fileIndex,
+          rankIndex,
+          isWhite
+        );
+
+      if (shouldEnPassantBeAvailableForNextMove) {
+        const rankIndexIncrement = getRankIndexIncrement(isWhite);
+        setEnPassantAvailableAt(
+          this.state,
+          fileIndex,
+          rankIndex - rankIndexIncrement * 1
+        );
+      }
+    }
 
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.LAST_MOVE);
 
@@ -194,5 +222,14 @@ export class GameControl {
    */
   getPiecesOnSquare(fileIndex, rankIndex) {
     return this.state.getPiece(fileIndex, rankIndex);
+  }
+
+  /**
+   * Returns the en passant square if it is available.
+   *
+   * @returns {Square?} The en passant square or null if it is not available.
+   */
+  getEnPassantAvailableAt() {
+    return this.state.enPassantAvailableAt;
   }
 }

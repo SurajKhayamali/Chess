@@ -41,6 +41,8 @@ export class GameState {
     this.selectedPiece = null;
     this.moves = [];
 
+    this.enPassantAvailableAt = null;
+
     this.initializeSquaresAndPieces();
   }
 
@@ -338,5 +340,21 @@ export class GameState {
       this.isSquareOccupied(fileIndex, rankIndex) ||
       this.isSquareUnderAttack(fileIndex, rankIndex, isWhite)
     );
+  }
+
+  /**
+   * Sets the en passant available at the specified square.
+   *
+   * @param {Square} square The square to set the en passant available at.
+   */
+  setEnPassantAvailableAt(square) {
+    this.enPassantAvailableAt = square;
+  }
+
+  /**
+   * Removes the en passant available at square.
+   */
+  removeEnPassantAvailableAt() {
+    this.enPassantAvailableAt = null;
   }
 }

@@ -84,3 +84,14 @@ export function addToPossibleAndCapturableMovesForPawn(
 
   return false;
 }
+
+/**
+ * Returns whether rank index should be incremented or decremented based on the color of the piece.
+ *
+ * @param {boolean} isWhite
+ *
+ * @returns {number} 1 if white, -1 if black
+ */
+export function getRankIndexIncrement(isWhite) {
+  return isWhite ? 1 : -1;
+}

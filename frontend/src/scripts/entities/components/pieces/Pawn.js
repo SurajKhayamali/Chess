@@ -2,6 +2,7 @@ import { Piece } from "./Piece";
 import {
   addToPossibleAndCapturableMoves,
   addToPossibleAndCapturableMovesForPawn,
+  getRankIndexIncrement,
 } from "./helpers/common.helper";
 
 export class Pawn extends Piece {
@@ -13,7 +14,7 @@ export class Pawn extends Piece {
     const possibleMoves = [];
     const capturablePieces = [];
 
-    const rankIndexIncrement = this.isWhite ? 1 : -1;
+    const rankIndexIncrement = getRankIndexIncrement(this.isWhite);
 
     const shouldContinue = addToPossibleAndCapturableMovesForPawn(
       this.control,
@@ -33,6 +34,15 @@ export class Pawn extends Piece {
         this.rankIndex + rankIndexIncrement * 2,
         this.isWhite
       );
+    }
+
+    // Detect if en passant is possible in the current move
+    const enPassantAvailableAt = this.control.getEnPassantAvailableAt();
+    if (enPassantAvailableAt) {
+      capturablePieces.push([
+        enPassantAvailableAt.fileIndex,
+        enPassantAvailableAt.rankIndex,
+      ]);
     }
 
     return { possibleMoves, capturablePieces };
