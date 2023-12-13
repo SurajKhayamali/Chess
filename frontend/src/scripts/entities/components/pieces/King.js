@@ -6,8 +6,6 @@ export class King extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
     super("King", isWhite, fileIndex, rankIndex);
     this.isInCheck = false;
-
-    this.hasMoved = false; // for castling
   }
 
   getPossibleMoves() {
@@ -84,10 +82,6 @@ export class King extends Piece {
 
   updateIsInCheck(isInCheck) {
     this.isInCheck = isInCheck;
-  }
-
-  updateHasMoved() {
-    this.hasMoved = true;
   }
 
   /**

@@ -287,6 +287,8 @@ export class Piece {
   moveTo(fileIndex, rankIndex) {
     this.fileIndex = fileIndex;
     this.rankIndex = rankIndex;
+
+    if (!this.hasMoved) this.hasMoved = true;
   }
 
   /**

@@ -1,4 +1,8 @@
 import { Piece } from "./Piece";
+import {
+  addToPossibleAndCapturableMoves,
+  addToPossibleAndCapturableMovesForPawn,
+} from "./helpers/common.helper";
 
 export class Pawn extends Piece {
   constructor(isWhite, fileIndex, rankIndex) {
@@ -9,39 +13,28 @@ export class Pawn extends Piece {
     const possibleMoves = [];
     const capturablePieces = [];
 
-    if (this.isWhite) {
-      if (this.rankIndex == 1) {
-        this._addToPossibleAndCapturableMoves(
-          possibleMoves,
-          capturablePieces,
-          this.fileIndex,
-          this.rankIndex + 2
-        );
-      }
+    const rankIndexIncrement = this.isWhite ? 1 : -1;
 
-      this._addToPossibleAndCapturableMoves(
-        possibleMoves,
-        capturablePieces,
-        this.fileIndex,
-        this.rankIndex + 1
-      );
-    } else {
-      if (this.rankIndex == 6) {
-        this._addToPossibleAndCapturableMoves(
-          possibleMoves,
-          capturablePieces,
-          this.fileIndex,
-          this.rankIndex - 2
-        );
-      }
+    const shouldContinue = addToPossibleAndCapturableMovesForPawn(
+      this.control,
+      possibleMoves,
+      capturablePieces,
+      this.fileIndex,
+      this.rankIndex + rankIndexIncrement,
+      this.isWhite
+    );
 
-      this._addToPossibleAndCapturableMoves(
+    if (shouldContinue && !this.hasMoved) {
+      addToPossibleAndCapturableMoves(
+        this.control,
         possibleMoves,
-        capturablePieces,
+        [], // pieces should not be capturable when moving two squares ahead
         this.fileIndex,
-        this.rankIndex - 1
+        this.rankIndex + rankIndexIncrement * 2,
+        this.isWhite
       );
     }
+
     return { possibleMoves, capturablePieces };
   }
 }
