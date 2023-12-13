@@ -98,6 +98,23 @@ export class GameState {
   }
 
   /**
+   * Returns all pieces of the specified type and color.
+   *
+   * @param {string} type The type of the pieces to get.
+   * @param {boolean} isWhite Whether the pieces to get are white.
+   *
+   * @returns {Piece[]} The pieces of the specified type and color.
+   *
+   * @example getPiecesOfType("Pawn", true) // returns all white pawns
+   * @example getPiecesOfType("Knight", false) // returns all black knights
+   */
+  getPiecesOfType(type, isWhite) {
+    return this.getPieces().filter(
+      (piece) => piece.name === type && piece.isWhite === isWhite
+    );
+  }
+
+  /**
    * Returns the square at the specified coordinates.
    *
    * @param {number} fileIndex The file index of the square to get.
@@ -172,7 +189,7 @@ export class GameState {
     const isInCheck = capturablePieces.some(
       (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
     );
-    log("isInCheck:", isInCheck);
+    // log("isInCheck:", isInCheck);
 
     return { isInCheck, king };
   }
@@ -267,5 +284,59 @@ export class GameState {
       capturedPiece: capturedPiece,
       isCheck: isCheck,
     });
+  }
+
+  /**
+   * Returns if the square is under attack by the oponent.
+   *
+   * @param {number} fileIndex The file index of the square to check.
+   * @param {number} rankIndex The rank index of the square to check.
+   * @param {boolean} isWhite Whether the square is white.
+   *
+   * @returns {boolean} Whether the square is under attack.
+   */
+  isSquareUnderAttack(fileIndex, rankIndex, isWhite) {
+    // For this case, we are not considering oponent's king if it has not moved as it is not possible to attack current player's castling squares from the initial position
+    // Also it solves the maximum call stack size exceeded error as breaks the loop on checking each other kings castling possibility squares
+    const oponentsPieces = this.getPieces().filter((piece) => {
+      const isOponentColor = piece.isWhite !== isWhite; // If the piece is of oponent's color
+      const ifOponentsKingHasMoved = piece instanceof King && piece.hasMoved; // If the piece is the king and it has moved
+
+      return isOponentColor && ifOponentsKingHasMoved;
+    });
+
+    for (const piece of oponentsPieces) {
+      const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+      if (
+        possibleMoves.some(
+          (move) => move[0] === fileIndex && move[1] === rankIndex
+        ) ||
+        capturablePieces.some(
+          (move) => move[0] === fileIndex && move[1] === rankIndex
+        )
+      )
+        return true;
+    }
+
+    return false;
+  }
+
+  isSquareOccupied(fileIndex, rankIndex) {
+    return this.getPiece(fileIndex, rankIndex) !== null;
+  }
+
+  isSquareOccupiedOrUnderAttack(fileIndex, rankIndex, isWhite) {
+    // console.log(
+    //   "checking isSquareOccupiedOrUnderAttack",
+    //   this.isSquareOccupied(fileIndex, rankIndex),
+    //   this.isSquareUnderAttack(fileIndex, rankIndex, isWhite),
+    //   fileIndex,
+    //   rankIndex,
+    //   isWhite
+    // );
+    return (
+      this.isSquareOccupied(fileIndex, rankIndex) ||
+      this.isSquareUnderAttack(fileIndex, rankIndex, isWhite)
+    );
   }
 }
