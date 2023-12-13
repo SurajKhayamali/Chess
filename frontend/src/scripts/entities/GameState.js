@@ -162,7 +162,7 @@ export class GameState {
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
     const isCaptureLegal = capturablePieces.some(
-      (piece) => piece.fileIndex === fileIndex && piece.rankIndex === rankIndex
+      (move) => move[0] === fileIndex && move[1] === rankIndex
     );
     return isMovePossible || isCaptureLegal;
   }

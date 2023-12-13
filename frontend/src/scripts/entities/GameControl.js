@@ -137,11 +137,26 @@ export class GameControl {
    * @param {number} rankIndex The rank index of the square to move the piece to.
    */
   moveSelectedPieceTo(fileIndex, rankIndex) {
-    const wasTargetSquareHighlighted = this.highlightedSquares.valid.some(
+    const wasTargetSquareHighlightedAsValid = this.highlightedSquares[
+      HIGHLIGHT_MODIFIERS.VALID
+    ].some(
       (square) =>
         square.fileIndex === fileIndex && square.rankIndex === rankIndex
     );
-    if (!this.selectedPiece || !wasTargetSquareHighlighted) return;
+    const wasTargetSquareHighlightedAsCapturable = this.highlightedSquares[
+      HIGHLIGHT_MODIFIERS.CAPTURABLE
+    ].some(
+      (square) =>
+        square.fileIndex === fileIndex && square.rankIndex === rankIndex
+    );
+    if (
+      !this.selectedPiece ||
+      !(
+        wasTargetSquareHighlightedAsValid ||
+        wasTargetSquareHighlightedAsCapturable
+      )
+    )
+      return;
 
     const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } =
       this.selectedPiece;
