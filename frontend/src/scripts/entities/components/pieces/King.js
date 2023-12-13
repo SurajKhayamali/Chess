@@ -1,10 +1,11 @@
+import { PIECES } from "../../../constants/constants";
 import { log } from "../../../utils";
 import { Piece } from "./Piece";
 import { getCastlingMovesIfPossible } from "./helpers/specialMoves";
 
 export class King extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("King", isWhite, fileIndex, rankIndex);
+  constructor(...args) {
+    super(PIECES.KING, ...args);
     this.isInCheck = false;
   }
 

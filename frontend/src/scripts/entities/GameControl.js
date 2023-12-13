@@ -1,13 +1,15 @@
 import {
   HIGHLIGHT_MODIFIERS,
+  PIECES,
+  RANKS_LENGTH,
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
 import { log } from "../utils";
 import { Pawn, Piece } from "./components/pieces";
 import { getRankIndexIncrement } from "./components/pieces/helpers/common.helper";
 import {
-  checkIfEnPassantShouldBeAvailable,
-  setEnPassantAvailableAt,
+  handleEnPassantCapture,
+  handlePawnPromotion,
 } from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
 
@@ -177,22 +179,11 @@ export class GameControl {
     if (!moveExecuted) return;
 
     const wasMovedPiecePawn = this.selectedPiece instanceof Pawn;
-    if (wasMovedPiecePawn && Math.abs(rankIndex - oldRankIndex) === 2) {
-      const shouldEnPassantBeAvailableForNextMove =
-        checkIfEnPassantShouldBeAvailable(
-          this.state,
-          fileIndex,
-          rankIndex,
-          isWhite
-        );
-
-      if (shouldEnPassantBeAvailableForNextMove) {
-        const rankIndexIncrement = getRankIndexIncrement(isWhite);
-        setEnPassantAvailableAt(
-          this.state,
-          fileIndex,
-          rankIndex - rankIndexIncrement * 1
-        );
+    if (wasMovedPiecePawn) {
+      if (Math.abs(rankIndex - oldRankIndex) === 2) {
+        handleEnPassantCapture(this.state, fileIndex, rankIndex, isWhite);
+      } else if (rankIndex === 0 || rankIndex === RANKS_LENGTH - 1) {
+        handlePawnPromotion(this.state, this.selectedPiece, PIECES.QUEEN);
       }
     }
 

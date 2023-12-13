@@ -1,8 +1,9 @@
+import { PIECES } from "../../../constants/constants";
 import { Piece } from "./Piece";
 
 export class Queen extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Queen", isWhite, fileIndex, rankIndex);
+  constructor(...args) {
+    super(PIECES.QUEEN, ...args);
   }
 
   getPossibleMoves() {

@@ -1,6 +1,7 @@
 import { Pawn } from "../../Pawn";
+import { getRankIndexIncrement } from "../common.helper";
 
-export function checkIfEnPassantShouldBeAvailable(
+function checkIfEnPassantShouldBeAvailable(
   state,
   fileIndex,
   rankIndex,
@@ -21,7 +22,21 @@ export function checkIfEnPassantShouldBeAvailable(
   return enPassantPossibleFromLeft || enPassantPossibleFromRight;
 }
 
-export function setEnPassantAvailableAt(state, fileIndex, rankIndex) {
+function setEnPassantAvailableAt(state, fileIndex, rankIndex) {
   const enPassantPossibleAt = state.getSquare(fileIndex, rankIndex);
   state.setEnPassantAvailableAt(enPassantPossibleAt);
+}
+
+export function handleEnPassantCapture(state, fileIndex, rankIndex, isWhite) {
+  const shouldEnPassantBeAvailableForNextMove =
+    checkIfEnPassantShouldBeAvailable(state, fileIndex, rankIndex, isWhite);
+
+  if (shouldEnPassantBeAvailableForNextMove) {
+    const rankIndexIncrement = getRankIndexIncrement(isWhite);
+    setEnPassantAvailableAt(
+      state,
+      fileIndex,
+      rankIndex - rankIndexIncrement * 1
+    );
+  }
 }

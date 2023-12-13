@@ -1,4 +1,6 @@
+import { PIECES } from "../../../constants/constants";
 import { Piece } from "./Piece";
+import { Queen } from "./Queen";
 import {
   addToPossibleAndCapturableMoves,
   addToPossibleAndCapturableMovesForPawn,
@@ -6,8 +8,8 @@ import {
 } from "./helpers/common.helper";
 
 export class Pawn extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Pawn", isWhite, fileIndex, rankIndex);
+  constructor(...args) {
+    super(PIECES.PAWN, ...args);
   }
 
   getPossibleMoves() {
@@ -46,5 +48,28 @@ export class Pawn extends Piece {
     }
 
     return { possibleMoves, capturablePieces };
+  }
+
+  /**
+   * Promotes the pawn to the specified piece type.
+   *
+   * @param {string} pieceType
+   *
+   * @returns {Piece} The promoted piece.
+   */
+  promoteTo(pieceType) {
+    const args = [this.isWhite, this.fileIndex, this.rankIndex, this.control];
+    switch (pieceType) {
+      case PIECES.QUEEN:
+        return new Queen(...args);
+      case PIECES.ROOK:
+        return new Rook(...args);
+      case PIECES.BISHOP:
+        return new Bishop(...args);
+      case PIECES.KNIGHT:
+        return new Knight(...args);
+      default:
+        throw new Error("Invalid piece type");
+    }
   }
 }

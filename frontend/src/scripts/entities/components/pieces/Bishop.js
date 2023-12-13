@@ -1,8 +1,9 @@
+import { PIECES } from "../../../constants/constants";
 import { Piece } from "./Piece";
 
 export class Bishop extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Bishop", isWhite, fileIndex, rankIndex);
+  constructor(...args) {
+    super(PIECES.BISHOP, ...args);
   }
 
   getPossibleMoves() {

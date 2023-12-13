@@ -1,8 +1,9 @@
+import { PIECES } from "../../../constants/constants";
 import { Piece } from "./Piece";
 
 export class Knight extends Piece {
-  constructor(isWhite, fileIndex, rankIndex) {
-    super("Knight", isWhite, fileIndex, rankIndex, "N");
+  constructor(isWhite, fileIndex, rankIndex, control, abbreviation = "N") {
+    super(PIECES.KNIGHT, isWhite, fileIndex, rankIndex, control, abbreviation);
   }
 
   getPossibleMoves() {

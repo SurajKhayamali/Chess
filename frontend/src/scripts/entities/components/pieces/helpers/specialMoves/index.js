@@ -1,5 +1,3 @@
 export { getCastlingMovesIfPossible } from "./castling.helper";
-export {
-  checkIfEnPassantShouldBeAvailable,
-  setEnPassantAvailableAt,
-} from "./enPassant.helper";
+export { handleEnPassantCapture } from "./enPassant.helper";
+export { handlePawnPromotion } from "./pawnPromotion.helper";

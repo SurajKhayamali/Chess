@@ -246,13 +246,7 @@ export class GameState {
     );
 
     // Capture piece if there is one
-    const targetSquare = this.getSquare(fileIndex, rankIndex);
-    if (targetSquare.piece !== null) {
-      targetSquare.piece.remove();
-    }
-
-    // Move piece to new square
-    targetSquare.setPiece(movedPiece);
+    this.replacePieceAtSquare(movedPiece, fileIndex, rankIndex);
 
     // Remove piece from old square
     const oldSquare = this.getSquare(oldFileIndex, oldRankIndex);
@@ -261,6 +255,14 @@ export class GameState {
     this.isWhitesTurn = !this.isWhitesTurn;
 
     return true;
+  }
+
+  replacePieceAtSquare(piece, fileIndex, rankIndex) {
+    const square = this.getSquare(fileIndex, rankIndex);
+
+    if (square.piece !== null) square.piece.remove();
+
+    square.setPiece(piece);
   }
 
   /**

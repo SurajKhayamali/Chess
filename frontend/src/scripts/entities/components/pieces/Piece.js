@@ -4,6 +4,7 @@ import {
   SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
 } from "../../../constants/constants";
 import { addToPossibleMoves } from "../../../utils";
+// import { GameControl } from "../../GameControl"; // TODO: figure out way to omit circular dependency
 
 /**
  * object containing possible moves and capturable pieces
@@ -26,17 +27,18 @@ export class Piece {
    * @param {boolean} isWhite - true if the piece is white, false if black
    * @param {number} fileIndex - index of the file the piece is on
    * @param {number} rankIndex - index of the rank the piece is on
+   * @param {GameControl} [control] - the piece's control, optional
    * @param {string} [abbreviation] - abbreviation of the piece, optional
    */
-  constructor(name, isWhite, fileIndex, rankIndex, abbreviation) {
+  constructor(name, isWhite, fileIndex, rankIndex, control, abbreviation) {
     this.name = name;
     this.abbreviation = abbreviation || name?.[0]?.toUpperCase();
     this.isWhite = isWhite;
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
+    this.control = control;
 
     this.htmlElement = this.generateHtmlElement();
-    this.control = null;
 
     this.initializeEventListners();
   }
@@ -235,6 +237,12 @@ export class Piece {
     piece.src = `/images/${fileName}.png`;
     piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
     piece.classList.add("chess-board__piece");
+    if (this.control?.state) {
+      const { isWhitesTurn } = this.control.state;
+
+      if (!isWhitesTurn && this.isWhite)
+        piece.classList.add("chess-board__piece--reverse");
+    }
     piece.setAttribute("data-piece", fileName);
 
     return piece;
