@@ -263,6 +263,8 @@ export class GameState {
     if (square.piece !== null) square.piece.remove();
 
     square.setPiece(piece);
+
+    this.currentBoardState[rankIndex][fileIndex] = piece;
   }
 
   /**

@@ -237,12 +237,6 @@ export class Piece {
     piece.src = `/images/${fileName}.png`;
     piece.alt = `${this.isWhite ? "White" : "Black"} ${this.name}`;
     piece.classList.add("chess-board__piece");
-    if (this.control?.state) {
-      const { isWhitesTurn } = this.control.state;
-
-      if (!isWhitesTurn && this.isWhite)
-        piece.classList.add("chess-board__piece--reverse");
-    }
     piece.setAttribute("data-piece", fileName);
 
     return piece;
