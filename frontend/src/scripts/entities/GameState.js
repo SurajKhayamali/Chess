@@ -4,7 +4,8 @@ import {
   RANKS_LENGTH,
 } from "../constants/constants";
 import { log } from "../utils";
-import { King, Piece } from "./components/pieces";
+import { King, Pawn, Piece } from "./components/pieces";
+import { handleEnPassantCapture } from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
 
@@ -214,8 +215,26 @@ export class GameState {
     const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = movedPiece;
 
     // Check and get if there is a piece on the target square
-    const capturedPiece = this.getPiece(fileIndex, rankIndex);
+    let capturedPiece = this.getPiece(fileIndex, rankIndex);
     log("capturedPiece:", capturedPiece, "at", fileIndex, rankIndex);
+
+    if (capturedPiece instanceof King) {
+      log("Game over");
+      return false;
+    }
+
+    if (movedPiece instanceof Pawn) {
+      const enPassantCapturedPiece = handleEnPassantCapture(
+        this,
+        fileIndex,
+        rankIndex,
+        movedPiece.isWhite
+      );
+      log("enPassantCapturedPiece:", enPassantCapturedPiece);
+      if (enPassantCapturedPiece) {
+        capturedPiece = enPassantCapturedPiece;
+      }
+    }
 
     // Move the piece to new square
     this._movePiece(movedPiece, fileIndex, rankIndex);
@@ -257,6 +276,13 @@ export class GameState {
     return true;
   }
 
+  /**
+   * Replace the piece at the specified square.
+   *
+   * @param {Piece} piece The piece to replace.
+   * @param {number} fileIndex The file index of the square to replace the piece at.
+   * @param {number} rankIndex The rank index of the square to replace the piece at.
+   */
   replacePieceAtSquare(piece, fileIndex, rankIndex) {
     const square = this.getSquare(fileIndex, rankIndex);
 
@@ -265,6 +291,22 @@ export class GameState {
     square.setPiece(piece);
 
     this.currentBoardState[rankIndex][fileIndex] = piece;
+  }
+
+  /**
+   * Removes the piece at the specified square.
+   *
+   * @param {number} fileIndex The file index of the square to remove the piece from.
+   * @param {number} rankIndex The rank index of the square to remove the piece from.
+   */
+  removePieceAtSquare(fileIndex, rankIndex) {
+    const square = this.getSquare(fileIndex, rankIndex);
+
+    if (square.piece !== null) square.piece.remove();
+
+    square.removePiece();
+
+    this.currentBoardState[rankIndex][fileIndex] = null;
   }
 
   /**

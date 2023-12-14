@@ -52,7 +52,7 @@ export class Board {
     });
     squareElement.addEventListener("drop", (event) => {
       const { fileIndex, rankIndex } = square;
-      this.control.moveSelectedPieceTo(fileIndex, rankIndex);
+      this.control.handleMoveSelectedPieceTo(fileIndex, rankIndex);
 
       square.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
     });
@@ -61,7 +61,7 @@ export class Board {
     });
     squareElement.addEventListener("click", (event) => {
       const { fileIndex, rankIndex } = square;
-      this.control.moveSelectedPieceTo(fileIndex, rankIndex);
+      this.control.handleMoveSelectedPieceTo(fileIndex, rankIndex);
 
       square.removeHighlight(HIGHLIGHT_MODIFIERS.HOVER);
     });

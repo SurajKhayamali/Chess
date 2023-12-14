@@ -6,9 +6,8 @@ import {
 } from "../constants/constants";
 import { log } from "../utils";
 import { Pawn, Piece } from "./components/pieces";
-import { getRankIndexIncrement } from "./components/pieces/helpers/common.helper";
 import {
-  handleEnPassantCapture,
+  handleEnPassantCaptureAvailability,
   handlePawnPromotion,
 } from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
@@ -138,12 +137,14 @@ export class GameControl {
   }
 
   /**
-   * Moves the selected piece to the specified square.
+   * Checks if the target square was highlighted as a valid or capturable.
    *
-   * @param {number} fileIndex The file index of the square to move the piece to.
-   * @param {number} rankIndex The rank index of the square to move the piece to.
+   * @param {number} fileIndex The file index of the target square.
+   * @param {number} rankIndex The rank index of the target square.
+   *
+   * @returns {boolean} Whether the target square was highlighted as a valid or capturable.
    */
-  moveSelectedPieceTo(fileIndex, rankIndex) {
+  _checkIfTargetSquareWasHighlightedAsLegalMove(fileIndex, rankIndex) {
     const wasTargetSquareHighlightedAsValid = this.highlightedSquares[
       HIGHLIGHT_MODIFIERS.VALID
     ].some(
@@ -156,12 +157,30 @@ export class GameControl {
       (square) =>
         square.fileIndex === fileIndex && square.rankIndex === rankIndex
     );
+    return (
+      wasTargetSquareHighlightedAsValid ||
+      wasTargetSquareHighlightedAsCapturable
+    );
+  }
+
+  /**
+   * Moves the selected piece to the specified square.
+   *
+   * @param {number} fileIndex The file index of the square to move the piece to.
+   * @param {number} rankIndex The rank index of the square to move the piece to.
+   */
+  moveSelectedPieceTo(fileIndex, rankIndex) {}
+
+  /**
+   * Handles the selected piece being moved to the specified square.
+   *
+   * @param {number} fileIndex The file index of the square to move the piece to.
+   * @param {number} rankIndex The rank index of the square to move the piece to.
+   */
+  handleMoveSelectedPieceTo(fileIndex, rankIndex) {
     if (
       !this.selectedPiece ||
-      !(
-        wasTargetSquareHighlightedAsValid ||
-        wasTargetSquareHighlightedAsCapturable
-      )
+      !this._checkIfTargetSquareWasHighlightedAsLegalMove(fileIndex, rankIndex)
     )
       return;
 
@@ -181,7 +200,12 @@ export class GameControl {
     const wasMovedPiecePawn = this.selectedPiece instanceof Pawn;
     if (wasMovedPiecePawn) {
       if (Math.abs(rankIndex - oldRankIndex) === 2) {
-        handleEnPassantCapture(this.state, fileIndex, rankIndex, isWhite);
+        handleEnPassantCaptureAvailability(
+          this.state,
+          fileIndex,
+          rankIndex,
+          isWhite
+        );
       } else if (rankIndex === 0 || rankIndex === RANKS_LENGTH - 1) {
         handlePawnPromotion(this.state, this.selectedPiece, PIECES.QUEEN);
       }
