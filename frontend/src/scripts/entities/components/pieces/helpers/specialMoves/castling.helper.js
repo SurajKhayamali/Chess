@@ -38,7 +38,6 @@ function isCastlingPossible(king, rook) {
   //   );
 
   if (kingRankIndex !== rookRankIndex) return false;
-  if (Math.abs(kingFileIndex - rookFileIndex) !== 3) return false;
 
   const fileIndexIncrement = kingFileIndex < rookFileIndex ? 1 : -1;
   //   debugger;

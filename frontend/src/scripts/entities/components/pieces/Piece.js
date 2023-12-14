@@ -37,6 +37,7 @@ export class Piece {
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
     this.control = control;
+    this.hasMoved = false;
 
     this.htmlElement = this.generateHtmlElement();
 
