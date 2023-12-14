@@ -1,3 +1,4 @@
+import { FILES_LENGTH, MIN_INDEX } from "../../../../../constants/constants";
 import { GameState } from "../../../../GameState";
 import { King } from "../../King";
 import { Rook } from "../../Rook";
@@ -25,22 +26,9 @@ function isCastlingPossible(king, rook) {
   const rookFileIndex = rook.fileIndex;
   const rookRankIndex = rook.rankIndex;
 
-  //   console.log(
-  //     "kingFileIndex:",
-  //     kingFileIndex,
-  //     "kingRankIndex:",
-  //     kingRankIndex,
-  //     "rookFileIndex:",
-  //     rookFileIndex,
-  //     "rookRankIndex:",
-  //     rookRankIndex,
-  //     Math.abs(kingFileIndex - rookFileIndex)
-  //   );
-
   if (kingRankIndex !== rookRankIndex) return false;
 
   const fileIndexIncrement = kingFileIndex < rookFileIndex ? 1 : -1;
-  //   debugger;
   for (
     let fileIndex = kingFileIndex + fileIndexIncrement;
     fileIndex !== rookFileIndex;
@@ -69,17 +57,8 @@ export function getCastlingMovesIfPossible(state, king) {
   const rooks = state
     .getPiecesOfType("Rook", king.isWhite)
     .filter((rook) => !rook.hasMoved);
-  //   console.log("rooks:", rooks);
 
   for (const rook of rooks) {
-    // console.log(
-    //   "rook:",
-    //   rook,
-    //   "king:",
-    //   king
-    //   //   "isCastlingPossible:",
-    //   //   isCastlingPossible(king, rook)
-    // );
     if (isCastlingPossible(king, rook)) {
       const kingFileIndex = king.fileIndex;
       const rookFileIndex = rook.fileIndex;
@@ -93,4 +72,29 @@ export function getCastlingMovesIfPossible(state, king) {
   }
 
   return possibleMoves;
+}
+
+/**
+ * Handles the castling move.
+ *
+ * @param {GameState} state
+ * @param {number} fileIndex
+ * @param {number} rankIndex
+ */
+export function handleCastlingMove(state, king, fileIndex, rankIndex) {
+  const kingFileIndexOffset = fileIndex - king.fileIndex;
+
+  const rookFileIndex = kingFileIndexOffset < 0 ? MIN_INDEX : FILES_LENGTH - 1;
+  const rookFileOffset = kingFileIndexOffset < 0 ? 1 : -1;
+
+  const rook = state.getPiece(rookFileIndex, rankIndex);
+
+  if (
+    !rook ||
+    !isCastlingPossible(king, rook) ||
+    Math.abs(kingFileIndexOffset) !== 2
+  )
+    return;
+
+  state.movePiece(rook, fileIndex + rookFileOffset, rankIndex);
 }

@@ -41,7 +41,7 @@ function parseFENString(fenString) {
     fullMoveNumber,
   };
 }
-console.log(parseFENString(FEN_STRING));
+// console.log(parseFENString(FEN_STRING));
 
 function getPieceClass(piece) {
   switch (piece) {

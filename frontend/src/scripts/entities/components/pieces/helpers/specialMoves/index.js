@@ -1,4 +1,7 @@
-export { getCastlingMovesIfPossible } from "./castling.helper";
+export {
+  getCastlingMovesIfPossible,
+  handleCastlingMove,
+} from "./castling.helper";
 export {
   handleEnPassantCaptureAvailability,
   handleEnPassantCapture,

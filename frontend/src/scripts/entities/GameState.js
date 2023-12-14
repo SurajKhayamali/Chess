@@ -5,7 +5,10 @@ import {
 } from "../constants/constants";
 import { log } from "../utils";
 import { King, Pawn, Piece } from "./components/pieces";
-import { handleEnPassantCapture } from "./components/pieces/helpers/specialMoves";
+import {
+  handleCastlingMove,
+  handleEnPassantCapture,
+} from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
 import { ComputerPlayer, Player } from "./Player";
 
@@ -144,10 +147,18 @@ export class GameState {
    * @param {number} fileIndex The file index to move to.
    * @param {number} rankIndex The rank index to move to.
    */
-  _movePiece(piece, fileIndex, rankIndex) {
-    this.currentBoardState[piece.rankIndex][piece.fileIndex] = null;
+  movePiece(piece, fileIndex, rankIndex) {
+    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = piece;
+    this.currentBoardState[oldRankIndex][oldFileIndex] = null;
     this.currentBoardState[rankIndex][fileIndex] = piece;
     piece.moveTo(fileIndex, rankIndex);
+
+    // Capture piece if there is one
+    this.replacePieceAtSquare(piece, fileIndex, rankIndex);
+
+    // Remove piece from old square
+    const oldSquare = this.getSquare(oldFileIndex, oldRankIndex);
+    oldSquare.removePiece();
   }
 
   /**
@@ -211,9 +222,6 @@ export class GameState {
       return false;
     }
 
-    // Save old position to remove the piece from old square later
-    const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = movedPiece;
-
     // Check and get if there is a piece on the target square
     let capturedPiece = this.getPiece(fileIndex, rankIndex);
     log("capturedPiece:", capturedPiece, "at", fileIndex, rankIndex);
@@ -223,7 +231,9 @@ export class GameState {
       return false;
     }
 
-    if (movedPiece instanceof Pawn) {
+    if (movedPiece instanceof King) {
+      handleCastlingMove(this, movedPiece, fileIndex, rankIndex);
+    } else if (movedPiece instanceof Pawn) {
       const enPassantCapturedPiece = handleEnPassantCapture(
         this,
         fileIndex,
@@ -237,7 +247,7 @@ export class GameState {
     }
 
     // Move the piece to new square
-    this._movePiece(movedPiece, fileIndex, rankIndex);
+    this.movePiece(movedPiece, fileIndex, rankIndex);
     log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
 
     const { isInCheck: isOponentsKingInCheck, king: oponentsKing } =
@@ -263,13 +273,6 @@ export class GameState {
       capturedPiece,
       isOponentsKingInCheck
     );
-
-    // Capture piece if there is one
-    this.replacePieceAtSquare(movedPiece, fileIndex, rankIndex);
-
-    // Remove piece from old square
-    const oldSquare = this.getSquare(oldFileIndex, oldRankIndex);
-    oldSquare.removePiece();
 
     this.isWhitesTurn = !this.isWhitesTurn;
 
