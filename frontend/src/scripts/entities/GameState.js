@@ -229,6 +229,8 @@ export class GameState {
     this.movePiece(movedPiece, fileIndex, rankIndex);
     log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
 
+    checkIfKingIsInCheck(this, movedPiece.isWhite);
+
     const { isInCheck: isOponentsKingInCheck } = checkIfKingIsInCheck(
       this,
       !movedPiece.isWhite

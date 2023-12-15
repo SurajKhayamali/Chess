@@ -31,6 +31,8 @@ export class GameControl {
       {}
     );
     this.selectedPiece = null;
+
+    if (!this.isWhitesTurn) this.flipBoard();
   }
 
   /**

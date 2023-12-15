@@ -3,7 +3,6 @@ import {
   HIGHLIGHT_MODIFIERS,
   RANKS_LENGTH,
 } from "../../constants/constants";
-import { INITIAL_BOARD_STATE } from "../../constants/gameState.constant";
 import { GameControl } from "../GameControl";
 import { GameState } from "../GameState";
 import { Square } from "./Square";
@@ -14,21 +13,18 @@ export class Board {
    * Creates a new board.
    *
    * @param {string} boardId The id of the HTML element that will contain the board.
+   * @param {string} initialState The initial state of the board.
    * @param {boolean} isWhitesTurn Whether it is white's turn.
    * @param {boolean} isPvP Whether the game is player vs player.
    */
-  constructor(boardId, isPvP = true, isWhitesTurn = true) {
+  constructor(boardId, initialState, isPvP = true, isWhitesTurn = true) {
     this.boardId = boardId;
     this.htmlElement = document.getElementById(boardId);
     if (!this.htmlElement)
       throw new Error(`Element with id ${boardId} not found`);
 
-    this.gameState = new GameState(INITIAL_BOARD_STATE, isPvP, isWhitesTurn);
-    this.control = new GameControl(
-      this.htmlElement,
-      this.gameState,
-      isWhitesTurn
-    );
+    this.gameState = new GameState(initialState, isPvP, isWhitesTurn);
+    this.control = new GameControl(this.htmlElement, this.gameState);
   }
 
   /**

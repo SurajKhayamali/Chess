@@ -1,8 +1,8 @@
-import { Board } from "./entities/components/Board";
 import { BOARD_ID } from "./constants/constants";
+import { generateBoardWithFENString } from "./parseFEN";
 
 function render() {
-  const board = new Board(BOARD_ID, true);
+  const board = generateBoardWithFENString(BOARD_ID);
   board.render();
 }
 
