@@ -13,6 +13,10 @@ export class Player {
     this.isWhite = isWhite;
     this.state = state;
     this.isComputer = isComputer;
+
+    this.king = this.state
+      .getPieces()
+      .find((piece) => piece instanceof King && piece.isWhite === this.isWhite);
   }
 
   /**
@@ -22,17 +26,6 @@ export class Player {
    */
   get isTurn() {
     return this.state.isWhitesTurn === this.isWhite;
-  }
-
-  /**
-   * Returns the player's king.
-   *
-   * @returns {King}
-   */
-  get king() {
-    return this.state
-      .getPieces()
-      .find((piece) => piece instanceof King && piece.isWhite === this.isWhite);
   }
 }
 

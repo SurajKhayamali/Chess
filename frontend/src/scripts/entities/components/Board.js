@@ -7,6 +7,7 @@ import { INITIAL_BOARD_STATE } from "../../constants/gameState.constant";
 import { GameControl } from "../GameControl";
 import { GameState } from "../GameState";
 import { Square } from "./Square";
+import { checkIfKingIsInCheck } from "./pieces/helpers/kingInCheck.helper";
 
 export class Board {
   /**
@@ -108,6 +109,10 @@ export class Board {
 
       boardHtml.appendChild(rowHtml);
     }
+
+    this.gameState.reEvaluateMoves(); // Evaluate moves for the first time
+    checkIfKingIsInCheck(this.gameState, true);
+    checkIfKingIsInCheck(this.gameState, false);
 
     return boardHtml;
   }

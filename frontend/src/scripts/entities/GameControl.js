@@ -123,7 +123,7 @@ export class GameControl {
     // log("currentPlayersKing.isInCheck:", currentPlayersKing.isInCheck);
     // TODO: Check if the king can move out of check or if a piece can block the check;
 
-    const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+    const { possibleMoves, capturablePieces } = piece.possibleMoves;
     for (const [fileIndex, rankIndex] of possibleMoves) {
       this.highlightSquare(fileIndex, rankIndex, HIGHLIGHT_MODIFIERS.VALID);
     }

@@ -1,4 +1,7 @@
-import { PIECES } from "../../../constants/constants";
+import {
+  PIECE_HIGHLIGHT_MODIFIERS,
+  PIECES,
+} from "../../../constants/constants";
 import { log } from "../../../utils";
 import { Piece } from "./Piece";
 import { getCastlingMovesIfPossible } from "./helpers/specialMoves";
@@ -82,6 +85,11 @@ export class King extends Piece {
   }
 
   updateIsInCheck(isInCheck) {
+    if (isInCheck) {
+      this.highlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED);
+    } else {
+      this.removeHighlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED);
+    }
     this.isInCheck = isInCheck;
   }
 

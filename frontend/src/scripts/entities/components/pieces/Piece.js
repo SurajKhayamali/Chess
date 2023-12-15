@@ -42,6 +42,34 @@ export class Piece {
     this.htmlElement = this.generateHtmlElement();
 
     this.initializeEventListners();
+
+    // this.possibleMoves = this.getPossibleMoves();
+    this.possibleMoves = { possibleMoves: [], capturablePieces: [] };
+    this.canAttackOponentKing = false;
+  }
+
+  /**
+   * Returns the oponent's king
+   *
+   * @returns {King} - the oponent's king
+   */
+  get oponentsKing() {
+    return this.control.state.getPlayersKing(!this.isWhite);
+  }
+
+  /**
+   * Recalculates the piece's possible moves
+   * For use when the board state changes
+   */
+  reEvaluateMoves() {
+    this.possibleMoves = this.getPossibleMoves();
+
+    const { capturablePieces } = this.possibleMoves;
+    this.canAttackOponentKing = capturablePieces.some(
+      (move) =>
+        move[0] === this.oponentsKing.fileIndex &&
+        move[1] === this.oponentsKing.rankIndex
+    );
   }
 
   /**
@@ -218,7 +246,9 @@ export class Piece {
    *
    * @returns {PossibleMovesResult} - object containing possible moves and capturable pieces
    */
-  getPossibleMoves() {}
+  getPossibleMoves() {
+    return { possibleMoves: [], capturablePieces: [] };
+  }
 
   /**
    * Generate the piece's html element
@@ -287,6 +317,8 @@ export class Piece {
     this.rankIndex = rankIndex;
 
     if (!this.hasMoved) this.hasMoved = true;
+
+    this.reEvaluateMoves();
   }
 
   /**

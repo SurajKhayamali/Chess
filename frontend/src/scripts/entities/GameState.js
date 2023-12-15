@@ -1,10 +1,7 @@
-import {
-  FILES_LENGTH,
-  PIECE_HIGHLIGHT_MODIFIERS,
-  RANKS_LENGTH,
-} from "../constants/constants";
+import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
 import { log } from "../utils";
 import { King, Pawn, Piece } from "./components/pieces";
+import { checkIfKingIsInCheck } from "./components/pieces/helpers/kingInCheck.helper";
 import {
   handleCastlingMove,
   handleEnPassantCapture,
@@ -159,6 +156,15 @@ export class GameState {
     // Remove piece from old square
     const oldSquare = this.getSquare(oldFileIndex, oldRankIndex);
     oldSquare.removePiece();
+
+    this.reEvaluateMoves();
+  }
+
+  /**
+   * Re-evaluates the moves of all pieces.
+   */
+  reEvaluateMoves() {
+    this.getPieces().forEach((piece) => piece.reEvaluateMoves());
   }
 
   /**
@@ -171,7 +177,7 @@ export class GameState {
    * @returns {boolean} Whether the move is legal.
    */
   checkIfMoveIsLegal(piece, fileIndex, rankIndex) {
-    const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+    const { possibleMoves, capturablePieces } = piece.possibleMoves;
     const isMovePossible = possibleMoves.some(
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
@@ -179,33 +185,6 @@ export class GameState {
       (move) => move[0] === fileIndex && move[1] === rankIndex
     );
     return isMovePossible || isCaptureLegal;
-  }
-
-  /**
-   * Checks if the king is in check
-   *
-   * @param {Piece} movedPiece The piece that was moved.
-   * @param {boolean} isWhiteKingToBeChecked Whether the white king is to be checked.
-   *
-   * @returns {{isInCheck: boolean, oponentsKing: Piece}} Whether the king is in check and the king piece.
-   */
-  checkIfKingIsInCheck(movedPiece, isWhiteKingToBeChecked) {
-    // Find the king to be checked
-    const king = this.getPieces().find(
-      (piece) =>
-        piece instanceof King && piece.isWhite === isWhiteKingToBeChecked
-    );
-    const { fileIndex: kingFileIndex, rankIndex: kingRankIndex } = king;
-
-    // Check if the moved piece can attack the oponent's king
-    const { capturablePieces } = movedPiece.getPossibleMoves();
-    // log("capturablePieces:", capturablePieces, "king:", king);
-    const isInCheck = capturablePieces.some(
-      (move) => move[0] === kingFileIndex && move[1] === kingRankIndex
-    );
-    // log("isInCheck:", isInCheck);
-
-    return { isInCheck, king };
   }
 
   /**
@@ -250,20 +229,10 @@ export class GameState {
     this.movePiece(movedPiece, fileIndex, rankIndex);
     log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
 
-    const { isInCheck: isOponentsKingInCheck, king: oponentsKing } =
-      this.checkIfKingIsInCheck(movedPiece, !movedPiece.isWhite);
-    // log(
-    //   "isOponentsKingInCheck:",
-    //   isOponentsKingInCheck,
-    //   "oponentsKing:",
-    //   oponentsKing
-    // );
-
-    oponentsKing.updateIsInCheck(isOponentsKingInCheck);
-
-    isOponentsKingInCheck
-      ? oponentsKing.highlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED)
-      : oponentsKing.removeHighlight(PIECE_HIGHLIGHT_MODIFIERS.CHECKED);
+    const { isInCheck: isOponentsKingInCheck } = checkIfKingIsInCheck(
+      this,
+      !movedPiece.isWhite
+    );
 
     // Record the move
     this.recordMove(
@@ -357,7 +326,7 @@ export class GameState {
     });
 
     for (const piece of oponentsPieces) {
-      const { possibleMoves, capturablePieces } = piece.getPossibleMoves();
+      const { possibleMoves, capturablePieces } = piece.possibleMoves;
       if (
         possibleMoves.some(
           (move) => move[0] === fileIndex && move[1] === rankIndex
@@ -405,5 +374,18 @@ export class GameState {
    */
   removeEnPassantAvailableAt() {
     this.enPassantAvailableAt = null;
+  }
+
+  /**
+   * Returns the player's king.
+   *
+   * @param {boolean} isWhite Whether the player is white.
+   *
+   * @returns {King} The player's king.
+   */
+  getPlayersKing(isWhite) {
+    if (isWhite) return this.player1.king;
+
+    return this.player2.king;
   }
 }
