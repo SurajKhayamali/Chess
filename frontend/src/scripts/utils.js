@@ -66,24 +66,6 @@ export function validateRankIndexOutOfBounds(rankIndex) {
 }
 
 /**
- * Adds a move to the possible moves array if it is within the bounds of the board.
- *
- * @param {number[][]} possibleMoves
- * @param {number} fileIndex
- * @param {number} rankIndex
- * @returns
- */
-export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
-  if (
-    checkFileIndexOutOfBounds(fileIndex) ||
-    checkRankIndexOutOfBounds(rankIndex)
-  )
-    return;
-
-  possibleMoves.push([fileIndex, rankIndex]);
-}
-
-/**
  * Returns the color of a square.
  *
  * @param {number} fileIndex The file index of the square.

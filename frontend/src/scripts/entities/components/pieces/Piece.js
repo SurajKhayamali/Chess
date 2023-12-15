@@ -3,7 +3,7 @@ import {
   RANKS_LENGTH,
   SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
 } from "../../../constants/constants";
-import { addToPossibleMoves } from "../../../utils";
+import { addToPossibleAndCapturableMoves } from "./helpers/common.helper";
 // import { GameControl } from "../../GameControl"; // TODO: figure out way to omit circular dependency
 
 /**
@@ -61,19 +61,14 @@ export class Piece {
     fileIndex,
     rankIndex
   ) {
-    const existingPiece = this.control.getPiecesOnSquare(fileIndex, rankIndex);
-
-    // If there is a piece on the square
-    if (!existingPiece) {
-      addToPossibleMoves(possibleMoves, fileIndex, rankIndex);
-      return true;
-    }
-
-    // If it is different color, add to capturable pieces
-    if (existingPiece.isWhite !== this.isWhite)
-      addToPossibleMoves(capturablePieces, fileIndex, rankIndex);
-
-    return false;
+    return addToPossibleAndCapturableMoves(
+      this.control,
+      possibleMoves,
+      capturablePieces,
+      fileIndex,
+      rankIndex,
+      this.isWhite
+    );
   }
 
   /**

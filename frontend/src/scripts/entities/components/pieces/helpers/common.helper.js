@@ -1,4 +1,25 @@
-import { addToPossibleMoves } from "../../../../utils";
+import {
+  checkFileIndexOutOfBounds,
+  checkRankIndexOutOfBounds,
+} from "../../../../utils";
+
+/**
+ * Adds a move to the possible moves array if it is within the bounds of the board.
+ *
+ * @param {number[][]} possibleMoves
+ * @param {number} fileIndex
+ * @param {number} rankIndex
+ * @returns
+ */
+export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
+  if (
+    checkFileIndexOutOfBounds(fileIndex) ||
+    checkRankIndexOutOfBounds(rankIndex)
+  )
+    return;
+
+  possibleMoves.push([fileIndex, rankIndex]);
+}
 
 /**
  * Adds a move to the possible moves array if it is within the bounds of the board.
