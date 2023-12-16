@@ -52,7 +52,9 @@ export class GameState {
 
     this.initializeSquaresAndPieces();
 
-    this.gameStarted = false;
+    this.hasGameStarted = false;
+    this.hasGameEnded = false;
+    this.winner = null;
   }
 
   /**
@@ -65,10 +67,29 @@ export class GameState {
   }
 
   /**
+   * Returns the oponent player.
+   *
+   * @returns {Player}
+   */
+  get oponentPlayer() {
+    return this.isWhitesTurn ? this.player2 : this.player1;
+  }
+
+  /**
    * Starts the game.
    */
   startGame() {
-    this.gameStarted = true;
+    this.hasGameStarted = true;
+  }
+
+  /**
+   * Ends the game.
+   *
+   * @param {Player?} winner The winner of the game if there is one (null if draw).
+   */
+  endGame(winner = null) {
+    this.hasGameEnded = true;
+    this.winner = winner;
   }
 
   /**
@@ -212,7 +233,7 @@ export class GameState {
    * @returns {boolean} Whether the move was executed.
    */
   executeMove(movedPiece, fileIndex, rankIndex) {
-    if (!this.gameStarted) return;
+    if (!this.hasGameStarted || this.hasGameEnded) return;
 
     if (!this.checkIfMoveIsLegal(movedPiece, fileIndex, rankIndex)) {
       log("Illegal move");
