@@ -65,6 +65,17 @@ export class Board {
   }
 
   /**
+   * Generates the board container.
+   *
+   * @returns {HTMLDivElement} The board container element.
+   */
+  generateBoardContainer() {
+    const boardContainer = document.createElement("div");
+    boardContainer.classList.add("chess-board__board-container");
+    return boardContainer;
+  }
+
+  /**
    * Generates a row for the chess board.
    *
    * @returns {HTMLDivElement} The row element.
@@ -76,6 +87,24 @@ export class Board {
   }
 
   /**
+   * Generates a player name element.
+   * @param {boolean} isWhite Whether the player is white.
+   *
+   * @returns {HTMLInputElement} The player name element.
+   */
+  generatePlayerName(isWhite) {
+    const playerName = document.createElement("input");
+    playerName.classList.add("chess-board__player-name");
+    playerName.classList.add(
+      isWhite
+        ? "chess-board__player-name--white"
+        : "chess-board__player-name--black"
+    );
+    playerName.value = isWhite ? "White" : "Black";
+    return playerName;
+  }
+
+  /**
    * Renders the board along with the pieces.
    *
    * @returns {HTMLDivElement} The board element.
@@ -83,6 +112,11 @@ export class Board {
   render() {
     const boardHtml = this.htmlElement;
     boardHtml.innerHTML = "";
+
+    const playerNameBlack = this.generatePlayerName(false);
+    boardHtml.appendChild(playerNameBlack);
+
+    const boardContainer = this.generateBoardContainer();
 
     for (let rankIndex = RANKS_LENGTH - 1; rankIndex >= 0; rankIndex--) {
       const rowHtml = this.generateRow();
@@ -103,8 +137,13 @@ export class Board {
         rowHtml.appendChild(squareHtml);
       }
 
-      boardHtml.appendChild(rowHtml);
+      boardContainer.appendChild(rowHtml);
     }
+
+    boardHtml.appendChild(boardContainer);
+
+    const playerNameWhite = this.generatePlayerName(true);
+    boardHtml.appendChild(playerNameWhite);
 
     this.gameState.reEvaluateMoves(); // Evaluate moves for the first time
     checkIfKingIsInCheck(this.gameState, true);

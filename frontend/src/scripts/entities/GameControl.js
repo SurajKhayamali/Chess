@@ -50,6 +50,12 @@ export class GameControl {
   flipBoard() {
     if (this.state.isPvP) {
       this.boardElement.classList.toggle("chess-board__container--reverse");
+      const playerNames = this.boardElement.querySelectorAll(
+        ".chess-board__player-name"
+      );
+      for (const playerName of playerNames) {
+        playerName.classList.toggle("chess-board__player-name--reverse");
+      }
 
       for (const piece of this.state.getPieces()) {
         piece.flip();

@@ -87,5 +87,10 @@ export const generateBoardWithFENString = (
   const { board, turn } = parseFENString(fenString);
   const state = boardToBoardState(board);
 
-  return new Board(BOARD_ID, state, isPlayerVsPlayer, turn === "w");
+  return new Board(
+    BOARD_ID,
+    state,
+    isPlayerVsPlayer,
+    turn ? turn === "w" : true
+  );
 };
