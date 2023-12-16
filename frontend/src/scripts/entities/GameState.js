@@ -57,8 +57,11 @@ export class GameState {
     gameStartButton.addEventListener("click", () => {
       this.gameStarted = true;
 
-      const gameStartScreen = document.querySelector(".new-game");
-      gameStartScreen.style.display = "none";
+      const gameStartSection = document.querySelector(".new-game");
+      gameStartSection.classList.add("hidden");
+
+      const gameInfoSection = document.querySelector(".game-info");
+      gameInfoSection.classList.remove("hidden");
     });
   }
 
