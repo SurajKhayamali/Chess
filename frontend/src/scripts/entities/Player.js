@@ -29,6 +29,15 @@ export class Player {
   get isTurn() {
     return this.state.isWhitesTurn === this.isWhite;
   }
+
+  /**
+   * Updates the player's name.
+   *
+   * @param {string} name Player's name
+   */
+  updateName(name) {
+    this.name = name;
+  }
 }
 
 export class ComputerPlayer extends Player {

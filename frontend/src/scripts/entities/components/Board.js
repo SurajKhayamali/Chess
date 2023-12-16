@@ -132,8 +132,10 @@ export class Board {
   changePlayerName(isWhite, newName) {
     if (isWhite) {
       this.player1Name = newName;
+      this.gameState.player1.updateName(newName);
     } else {
       this.player2Name = newName;
+      this.gameState.player2.updateName(newName);
     }
     this.store.changePlayerName(isWhite, newName);
   }
