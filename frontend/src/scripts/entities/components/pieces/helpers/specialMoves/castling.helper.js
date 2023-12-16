@@ -28,9 +28,11 @@ function isCastlingPossible(king, rook) {
 
   if (kingRankIndex !== rookRankIndex) return false;
 
+  if (king.isSquareUnderAttack(kingFileIndex, kingRankIndex)) return false;
+
   const fileIndexIncrement = kingFileIndex < rookFileIndex ? 1 : -1;
   for (
-    let fileIndex = kingFileIndex;
+    let fileIndex = kingFileIndex + fileIndexIncrement;
     fileIndex !== rookFileIndex;
     fileIndex += fileIndexIncrement
   ) {

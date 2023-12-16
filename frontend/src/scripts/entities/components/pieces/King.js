@@ -105,9 +105,29 @@ export class King extends Piece {
    * @param {number} rankIndex The rank index of the square.
    *
    * @returns {boolean} Whether the square at the specified file and rank index is under attack by an enemy piece.
+   *
+   * @usage This method is used on the castling path squares to check if any are under attack.
    */
   isSquareOccupiedOrUnderAttack(fileIndex, rankIndex) {
     return this.control.state.isSquareOccupiedOrUnderAttack(
+      fileIndex,
+      rankIndex,
+      this.isWhite
+    );
+  }
+
+  /**
+   * Returns whether the square at the specified file and rank index is under attack by an enemy piece.
+   *
+   * @param {number} fileIndex The file index of the square.
+   * @param {number} rankIndex The rank index of the square.
+   *
+   * @returns {boolean} Whether the square at the specified file and rank index is under attack by an enemy piece.
+   *
+   * @usage This method is used on the king's square to check if the king is in check.
+   */
+  isSquareUnderAttack(fileIndex, rankIndex) {
+    return this.control.state.isSquareUnderAttack(
       fileIndex,
       rankIndex,
       this.isWhite
