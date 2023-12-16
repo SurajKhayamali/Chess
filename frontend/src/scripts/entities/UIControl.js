@@ -37,8 +37,8 @@ export class UIControl {
   initializeEventListenerForUndoButton() {
     const undoButton = document.querySelector(".game-info__button--undo");
     undoButton.addEventListener("click", () => {
-      log("Undo button clicked");
-      // this.gameState.undo();
+      // log("Undo button clicked");
+      this.gameState.undoLastMove();
     });
   }
 
@@ -55,7 +55,7 @@ export class UIControl {
   initializeEventListenerForResignButton() {
     const resignButton = document.querySelector(".game-info__button--resign");
     resignButton.addEventListener("click", () => {
-      log("Resign button clicked");
+      // log("Resign button clicked");
       if (this.gameState.hasGameEnded) return;
 
       this.gameState.endGame(this.gameState.oponentPlayer);

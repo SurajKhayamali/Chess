@@ -264,29 +264,45 @@ export class GameState {
       }
     }
 
-    // Move the piece to new square
-    this.movePiece(movedPiece, fileIndex, rankIndex);
-    log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
-
-    checkIfKingIsInCheck(this, movedPiece.isWhite);
-
-    const { isInCheck: isOponentsKingInCheck } = checkIfKingIsInCheck(
-      this,
-      !movedPiece.isWhite
-    );
-
     // Record the move
-    this.recordMove(
-      movedPiece,
-      fileIndex,
-      rankIndex,
-      capturedPiece,
-      isOponentsKingInCheck
-    );
+    this.recordAndMove(movedPiece, fileIndex, rankIndex, capturedPiece);
 
     this.isWhitesTurn = !this.isWhitesTurn;
 
     return true;
+  }
+
+  /**
+   * Undoes the last move.
+   *
+   * @returns {boolean} Whether the move was undone.
+   */
+  undoLastMove() {
+    if (this.moves.length === 0) return false;
+
+    const lastMove = this.moves.pop();
+
+    const {
+      piece,
+      oldFileIndex,
+      oldRankIndex,
+      fileIndex,
+      rankIndex,
+      capturedPiece,
+    } = lastMove;
+
+    // Move the piece back to the old square
+    this.movePiece(piece, oldFileIndex, oldRankIndex);
+
+    // Remove the piece from the new square
+    this.removePieceAtSquare(fileIndex, rankIndex);
+
+    // Replace the captured piece if there was one
+    if (capturedPiece) {
+      this.replacePieceAtSquare(capturedPiece, fileIndex, rankIndex);
+    }
+
+    this.isWhitesTurn = !this.isWhitesTurn;
   }
 
   /**
@@ -323,18 +339,26 @@ export class GameState {
   }
 
   /**
-   * Returns the player whose turn it is.
+   * Records the move and moves the piece.
    *
-   * @param {Move} move record.
+   * @param {Piece} movedPiece The piece to move.
+   * @param {number} fileIndex The file index to move to.
+   * @param {number} rankIndex The rank index to move to.
+   * @param {Piece?} capturedPiece The piece that was captured.
    */
-  recordMove(
-    movedPiece,
-    fileIndex,
-    rankIndex,
-    capturedPiece = null,
-    isCheck = false
-  ) {
+  recordAndMove(movedPiece, fileIndex, rankIndex, capturedPiece = null) {
     const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = movedPiece;
+
+    // Move the piece to new square
+    this.movePiece(movedPiece, fileIndex, rankIndex);
+    log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
+
+    checkIfKingIsInCheck(this, movedPiece.isWhite);
+
+    const { isInCheck: isOponentsKingInCheck } = checkIfKingIsInCheck(
+      this,
+      !movedPiece.isWhite
+    );
 
     this.moves.push({
       piece: movedPiece,
@@ -343,7 +367,7 @@ export class GameState {
       fileIndex,
       rankIndex,
       capturedPiece: capturedPiece,
-      isCheck: isCheck,
+      isCheck: isOponentsKingInCheck,
     });
   }
 
