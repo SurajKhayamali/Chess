@@ -4,4 +4,4 @@
 // export const DEFAULT_FEN_STRING =
 //   "rnbqkbnr/ppppp1pp/5p2/7Q/8/4P3/PPPP1PPP/RNB1KBNR b KQkq - 1 2"; // Check condition
 export const DEFAULT_FEN_STRING =
-  "rnb1kbnr/pppppppp/3q4/8/8/8/P6P/R3K2R w KQkq - 0 1"; // Castling with check square in between
+  "rnb1kbnr/pppppppp/4q3/8/8/8/P6P/R3K2R w KQkq - 0 1"; // Castling with check square in between

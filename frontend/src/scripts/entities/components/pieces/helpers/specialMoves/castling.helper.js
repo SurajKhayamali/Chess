@@ -30,7 +30,7 @@ function isCastlingPossible(king, rook) {
 
   const fileIndexIncrement = kingFileIndex < rookFileIndex ? 1 : -1;
   for (
-    let fileIndex = kingFileIndex + fileIndexIncrement;
+    let fileIndex = kingFileIndex;
     fileIndex !== rookFileIndex;
     fileIndex += fileIndexIncrement
   ) {
