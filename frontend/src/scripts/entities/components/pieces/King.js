@@ -10,6 +10,7 @@ export class King extends Piece {
   constructor(...args) {
     super(PIECES.KING, ...args);
     this.isInCheck = false;
+    this.isKing = true;
   }
 
   getPossibleMoves() {

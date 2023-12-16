@@ -3,6 +3,7 @@ import {
   RANKS_LENGTH,
   SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
 } from "../../../constants/constants";
+import { filterMovesThatExposeKingToCheck } from "../../../evaluate";
 import { addToPossibleAndCapturableMoves } from "./helpers/common.helper";
 // import { GameControl } from "../../GameControl"; // TODO: figure out way to omit circular dependency
 
@@ -66,6 +67,33 @@ export class Piece {
 
     const { capturablePieces } = this.possibleMoves;
     this.canAttackOponentKing = capturablePieces.some(
+      (move) =>
+        move[0] === this.oponentsKing.fileIndex &&
+        move[1] === this.oponentsKing.rankIndex
+    );
+  }
+
+  reEvaluateMovesAndFilterIfExposeKingToCheck() {
+    // console.log("reEvaluateMovesAndFilterIfExposeKingToCheck");
+    const { possibleMoves, capturablePieces } = this.possibleMoves;
+
+    const filteredPossibleMoves = filterMovesThatExposeKingToCheck(
+      this.control.state,
+      this,
+      possibleMoves
+    );
+    const filteredCapturablePieces = filterMovesThatExposeKingToCheck(
+      this.control.state,
+      this,
+      capturablePieces
+    );
+
+    this.possibleMoves = {
+      possibleMoves: filteredPossibleMoves,
+      capturablePieces: filteredCapturablePieces,
+    };
+
+    this.canAttackOponentKing = filteredCapturablePieces.some(
       (move) =>
         move[0] === this.oponentsKing.fileIndex &&
         move[1] === this.oponentsKing.rankIndex

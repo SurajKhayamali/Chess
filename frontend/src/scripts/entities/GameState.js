@@ -212,6 +212,9 @@ export class GameState {
    */
   reEvaluateMoves() {
     this.getPieces().forEach((piece) => piece.reEvaluateMoves());
+    this.getPieces().forEach((piece) =>
+      piece.reEvaluateMovesAndFilterIfExposeKingToCheck()
+    );
     this.getPieces().forEach((piece) => piece.reEvaluateSpecialMoves());
   }
 
