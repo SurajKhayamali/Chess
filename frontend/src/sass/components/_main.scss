@@ -1,0 +1,44 @@
+.main {
+    display: flex;
+    align-items: center;
+    gap: $gap-default;
+    background-color: $color-background;
+
+    .new-game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $gap-default;
+
+        @include e("button") {
+            width: 100%;
+            height: 100%;
+            padding: $padding-default;
+            border-radius: $border-radius-default;
+            background-color: $color-primary;
+            color: $color-white;
+            font-size: $font-size-medium;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+
+            &:hover {
+                background-color: $color-hover;
+            }
+        }
+
+        @include e("input") {
+            width: 100%;
+            height: 100%;
+            padding: $padding-default;
+            border-radius: $border-radius-default;
+            background-color: $color-white;
+            color: $color-primary;
+            font-size: $font-size-medium;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+    }
+}

@@ -6,6 +6,7 @@
         box-sizing: border-box;
         height: 60px;
         width: 100%;
+        font-size: $font-size-large;
         padding: $padding-default;
 
         @include m("reverse") {
@@ -16,7 +17,7 @@
     @include e("container") {
         height: 100%;
         width: max-content;
-        transition: transform 2s ease-in-out;
+        // transition: transform 2s ease-in-out;
 
         @include m("reverse") {
             transform: rotate(180deg);

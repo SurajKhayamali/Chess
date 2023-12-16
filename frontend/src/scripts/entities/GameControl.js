@@ -112,6 +112,7 @@ export class GameControl {
    * @param {Piece} piece The piece that was clicked.
    */
   handlePieceClickOrDrag(piece) {
+    if (!this.state.gameStarted) return;
     if (piece.isWhite !== this.isWhitesTurn) return;
 
     this.selectedPiece = piece;

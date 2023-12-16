@@ -51,6 +51,15 @@ export class GameState {
     this.enPassantAvailableAt = null;
 
     this.initializeSquaresAndPieces();
+
+    this.gameStarted = false;
+    const gameStartButton = document.querySelector(".new-game__button");
+    gameStartButton.addEventListener("click", () => {
+      this.gameStarted = true;
+
+      const gameStartScreen = document.querySelector(".new-game");
+      gameStartScreen.style.display = "none";
+    });
   }
 
   /**
@@ -203,6 +212,8 @@ export class GameState {
    * @returns {boolean} Whether the move was executed.
    */
   executeMove(movedPiece, fileIndex, rankIndex) {
+    if (!this.gameStarted) return;
+
     if (!this.checkIfMoveIsLegal(movedPiece, fileIndex, rankIndex)) {
       log("Illegal move");
       return false;
