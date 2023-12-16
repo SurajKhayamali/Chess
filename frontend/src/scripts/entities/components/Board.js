@@ -5,6 +5,7 @@ import {
 } from "../../constants/constants";
 import { GameControl } from "../GameControl";
 import { GameState } from "../GameState";
+import { Store } from "../Store";
 import { Square } from "./Square";
 import { checkIfKingIsInCheck } from "./pieces/helpers/kingInCheck.helper";
 
@@ -23,8 +24,18 @@ export class Board {
     if (!this.htmlElement)
       throw new Error(`Element with id ${boardId} not found`);
 
-    this.gameState = new GameState(initialState, isPvP, isWhitesTurn);
+    this.gameState = new GameState(
+      initialState,
+      isPvP,
+      this.player1Name,
+      this.player2Name,
+      isWhitesTurn
+    );
     this.control = new GameControl(this.htmlElement, this.gameState);
+    this.store = new Store();
+
+    this.player1Name = this.store.getPlayerName(true);
+    this.player2Name = this.store.getPlayerName(false);
   }
 
   /**
@@ -100,8 +111,27 @@ export class Board {
         ? "chess-board__player-name--white"
         : "chess-board__player-name--black"
     );
-    playerName.value = isWhite ? "White" : "Black";
+    playerName.value = isWhite ? this.player1Name : this.player2Name;
+
+    playerName.addEventListener("change", (event) => {
+      this.changePlayerName(isWhite, event.target.value);
+    });
+
     return playerName;
+  }
+
+  /**
+   * Changes the name of the player.
+   * @param {boolean} isWhite Whether the player is white.
+   * @param {string} newName The new name of the player.
+   */
+  changePlayerName(isWhite, newName) {
+    if (isWhite) {
+      this.player1Name = newName;
+    } else {
+      this.player2Name = newName;
+    }
+    this.store.changePlayerName(isWhite, newName);
   }
 
   /**

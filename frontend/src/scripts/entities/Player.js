@@ -5,11 +5,13 @@ export class Player {
   /**
    * Creates a new player.
    *
+   * @param {string} name - The name of the player.
    * @param {boolean} isWhite - Whether the player is white or black.
    * @param {GameState} state - The game state.
    * @param {boolean} isComputer - Whether the player is a computer or not.
    */
-  constructor(isWhite, state, isComputer = false) {
+  constructor(name, isWhite, state, isComputer = false) {
+    this.name = name;
     this.isWhite = isWhite;
     this.state = state;
     this.isComputer = isComputer;
@@ -30,7 +32,7 @@ export class Player {
 }
 
 export class ComputerPlayer extends Player {
-  constructor(isWhite, state) {
-    super(isWhite, state, true);
+  constructor(name, isWhite, state) {
+    super(name, isWhite, state, true);
   }
 }

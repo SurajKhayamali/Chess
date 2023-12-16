@@ -28,15 +28,21 @@ export class GameState {
    * @param {boolean} isPvP Whether the game is player vs player.
    * @param {boolean} isWhitesTurn Whether it is white's turn.
    */
-  constructor(initialBoardState, isPvP, isWhitesTurn) {
+  constructor(
+    initialBoardState,
+    isPvP,
+    player1Name,
+    player2Name,
+    isWhitesTurn
+  ) {
     this.squares = []; // 2D array of squares
 
     this.currentBoardState = initialBoardState; // 2D array of pieces
     this.isPvP = isPvP;
-    this.player1 = new Player(true, this);
+    this.player1 = new Player(player1Name, true, this);
     this.player2 = isPvP
-      ? new Player(false, this)
-      : new ComputerPlayer(false, this);
+      ? new Player(player2Name, false, this)
+      : new ComputerPlayer(player2Name, false, this);
     this.isWhitesTurn = isWhitesTurn;
 
     this.selectedPiece = null;
