@@ -38,8 +38,9 @@ export class Board {
       isWhitesTurn
     );
     this.control = new GameControl(this.htmlElement, this.gameState);
+    this.uiContorl = new UIControl(this);
 
-    new UIControl(this);
+    this.gameState.setControl(this.control);
   }
 
   /**

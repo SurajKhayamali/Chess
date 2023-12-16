@@ -55,6 +55,8 @@ export class GameState {
     this.hasGameStarted = false;
     this.hasGameEnded = false;
     this.winner = null;
+
+    this.control = null;
   }
 
   /**
@@ -73,6 +75,15 @@ export class GameState {
    */
   get oponentPlayer() {
     return this.isWhitesTurn ? this.player2 : this.player1;
+  }
+
+  /**
+   * Sets the control.
+   *
+   * @param {GameControl} control The control to set.
+   */
+  setControl(control) {
+    this.control = control;
   }
 
   /**
@@ -300,9 +311,11 @@ export class GameState {
     // Replace the captured piece if there was one
     if (capturedPiece) {
       this.replacePieceAtSquare(capturedPiece, fileIndex, rankIndex);
+      capturedPiece.flip();
     }
 
     this.isWhitesTurn = !this.isWhitesTurn;
+    this.control.flipBoard();
   }
 
   /**
