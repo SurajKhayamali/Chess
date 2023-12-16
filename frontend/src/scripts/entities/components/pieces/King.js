@@ -72,16 +72,21 @@ export class King extends Piece {
       this.rankIndex + 1
     );
 
+    return { possibleMoves, capturablePieces };
+  }
+
+  /**
+   * Adds the square at the specified file and rank index to the possible moves for castling.
+   */
+  addPossibleSpecialMoves() {
     const castlingMovesIfPossible = getCastlingMovesIfPossible(
       this.control.state,
       this
     );
     log("castlingMovesIfPossible:", castlingMovesIfPossible);
     for (const castlingMove of castlingMovesIfPossible) {
-      possibleMoves.push(castlingMove);
+      this.possibleMoves.possibleMoves.push(castlingMove);
     }
-
-    return { possibleMoves, capturablePieces };
   }
 
   updateIsInCheck(isInCheck) {

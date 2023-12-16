@@ -165,6 +165,7 @@ export class GameState {
    */
   reEvaluateMoves() {
     this.getPieces().forEach((piece) => piece.reEvaluateMoves());
+    this.getPieces().forEach((piece) => piece.reEvaluateSpecialMoves());
   }
 
   /**
@@ -322,9 +323,10 @@ export class GameState {
     // Also it solves the maximum call stack size exceeded error as breaks the loop on checking each other kings castling possibility squares
     const oponentsPieces = this.getPieces().filter((piece) => {
       const isOponentColor = piece.isWhite !== isWhite; // If the piece is of oponent's color
-      const ifOponentsKingHasMoved = piece instanceof King && piece.hasMoved; // If the piece is the king and it has moved
+      const ifOponentsKingHasNotMoved =
+        piece instanceof King && !piece.hasMoved; // If the piece is the king and it has moved
 
-      return isOponentColor && ifOponentsKingHasMoved;
+      return isOponentColor && !ifOponentsKingHasNotMoved;
     });
 
     for (const piece of oponentsPieces) {

@@ -73,6 +73,16 @@ export class Piece {
   }
 
   /**
+   * Recalculates the piece's special moves
+   * For use when the board state changes
+   * It must be reevaluated after the completion of evaluation moves of all pieces
+   * @example castling for the king, which requires the evaluation of other pieces' moves whether they are checking the castling path or not
+   */
+  reEvaluateSpecialMoves() {
+    this.addPossibleSpecialMoves();
+  }
+
+  /**
    * Adds a move to the possible moves array if it is within the bounds of the board.
    * Also adds the move to the capturable moves array if there is an oponent's piece on the square.
    *
@@ -249,6 +259,12 @@ export class Piece {
   getPossibleMoves() {
     return { possibleMoves: [], capturablePieces: [] };
   }
+
+  /**
+   * Adds possible special moves to the piece's possible moves
+   * @example castling for the king
+   */
+  addPossibleSpecialMoves() {}
 
   /**
    * Generate the piece's html element
