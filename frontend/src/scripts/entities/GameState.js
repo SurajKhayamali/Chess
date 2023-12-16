@@ -53,16 +53,6 @@ export class GameState {
     this.initializeSquaresAndPieces();
 
     this.gameStarted = false;
-    const gameStartButton = document.querySelector(".new-game__button");
-    gameStartButton.addEventListener("click", () => {
-      this.gameStarted = true;
-
-      const gameStartSection = document.querySelector(".new-game");
-      gameStartSection.classList.add("hidden");
-
-      const gameInfoSection = document.querySelector(".game-info");
-      gameInfoSection.classList.remove("hidden");
-    });
   }
 
   /**
@@ -72,6 +62,13 @@ export class GameState {
    */
   get currentPlayer() {
     return this.isWhitesTurn ? this.player1 : this.player2;
+  }
+
+  /**
+   * Starts the game.
+   */
+  startGame() {
+    this.gameStarted = true;
   }
 
   /**

@@ -6,6 +6,7 @@ import {
 import { GameControl } from "../GameControl";
 import { GameState } from "../GameState";
 import { Store } from "../Store";
+import { UIControl } from "../UIControl";
 import { Square } from "./Square";
 import { checkIfKingIsInCheck } from "./pieces/helpers/kingInCheck.helper";
 
@@ -24,6 +25,11 @@ export class Board {
     if (!this.htmlElement)
       throw new Error(`Element with id ${boardId} not found`);
 
+    this.store = new Store();
+
+    this.player1Name = this.store.getPlayerName(true);
+    this.player2Name = this.store.getPlayerName(false);
+
     this.gameState = new GameState(
       initialState,
       isPvP,
@@ -32,10 +38,8 @@ export class Board {
       isWhitesTurn
     );
     this.control = new GameControl(this.htmlElement, this.gameState);
-    this.store = new Store();
 
-    this.player1Name = this.store.getPlayerName(true);
-    this.player2Name = this.store.getPlayerName(false);
+    new UIControl(this);
   }
 
   /**

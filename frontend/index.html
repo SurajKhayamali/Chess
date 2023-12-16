@@ -7,10 +7,10 @@
     <title>Chess</title>
 
     <link rel="stylesheet" href="./src/sass/app.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-
     <div class="container main">
         <section class="chess-board">
             <div id="board" class="chess-board__container">
@@ -22,6 +22,55 @@
                 <option value="30">30 min</option>
             </select>
             <button id="start-game" class="new-game__button">New Game</button>
+        </section>
+        <section class="game-info hidden">
+            <div class="game-info__player">
+                <p class="game-info__player-name">Player 1</p>
+                <p class="game-info__player-time">10:00</p>
+            </div>
+            <div class="game-info__player">
+                <p class="game-info__player-name">Player 2</p>
+                <p class="game-info__player-time">10:00</p>
+            </div>
+
+            <div class="game-info__status">
+                <p class="game-info__status__text">Player 1 turn</p>
+            </div>
+
+            <div class="game-info__buttons during-game">
+                <button class="game-info__button game-info__button--undo"><i class="fa-solid fa-backward"></i>
+                    <span>Undo</span></button>
+                <button class="game-info__button game-info__button--draw"><i
+                        class="fa-solid fa-handshake"></i><span>Draw</span></button>
+                <button class="game-info__button game-info__button--resign"><i
+                        class="fa-solid fa-flag"></i><span>Resign</span></button>
+            </div>
+
+            <div class="game-info__buttons after-game hidden">
+                <button class="game-info__button game-info__button--new"><i class="fa-solid fa-plus"></i>
+                    <span>New Game</span></button>
+                <button class="game-info__button game-info__button--restart"><i
+                        class="fa-solid fa-rotate-left"></i></i><span>Rematch</span></button>
+            </div>
+
+            <table class="game-info__history">
+                <thead>
+                    <tr>
+                        <th>Move</th>
+                        <th>White</th>
+                        <th>Black</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <div class="game-info__buttons hidden">
+                <i class="fa-solid fa-backward-fast"></i>
+                <i class="fa-solid fa-backward-step"></i>
+                <i class="fa-solid fa-forward-step"></i>
+                <i class="fa-solid fa-forward-fast"></i>
+            </div>
         </section>
     </div>
 
