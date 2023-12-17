@@ -106,7 +106,6 @@
         }
 
         @include e("button") {
-            width: 100%;
             padding: $padding-default;
             border-radius: $border-radius-default;
             border: 1px solid $color-primary;

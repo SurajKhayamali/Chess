@@ -6,14 +6,15 @@ export class UIControl {
     this.board = board;
     this.playersHtml = document.querySelector(".game-info__players");
     this.playerNames = document.querySelectorAll(".game-info__player-name");
-
-    this.drawButton = document.querySelector(".game-info__button--draw");
-    this.resignButton = document.querySelector(".game-info__button--resign");
+    this.buttonsDuringGame = document.querySelector(".during-game");
+    this.buttonsAfterGame = document.querySelector(".after-game");
 
     this.initializeEventListenerForGameStartButton();
     this.initializeEventListenerForUndoButton();
     this.initializeEventListenerForDrawButton();
     this.initializeEventListenerForResignButton();
+    this.initializeEventListenerForNewGameButton();
+    this.initializeEventListenerForRestartButton();
     this.renderLoop();
   }
 
@@ -63,6 +64,22 @@ export class UIControl {
     });
   }
 
+  initializeEventListenerForNewGameButton() {
+    const newGameButton = document.querySelector(".game-info__button--new");
+    newGameButton.addEventListener("click", () => {
+      // log("New game button clicked");
+      this.gameState.startGame();
+    });
+  }
+
+  initializeEventListenerForRestartButton() {
+    const restartButton = document.querySelector(".game-info__button--restart");
+    restartButton.addEventListener("click", () => {
+      // log("Restart button clicked");
+      this.gameState.startGame();
+    });
+  }
+
   updatePlayerNames() {
     if (this.playerNames.length !== 2) return;
     this.playerNames[0].textContent = this.board.player1Name;
@@ -70,15 +87,20 @@ export class UIControl {
   }
 
   renderLoop() {
-    if (this.gameState.hasGameEnded) return;
-
-    this.updatePlayerNames();
-    displayTurn(this.gameState.currentPlayer.name);
-
-    if (!this.gameState.isWhitesTurn) {
-      this.playersHtml.classList.add("game-info__players--reverse");
+    if (this.gameState.hasGameEnded) {
+      this.buttonsDuringGame.classList.add("hidden");
+      this.buttonsAfterGame.classList.remove("hidden");
     } else {
-      this.playersHtml.classList.remove("game-info__players--reverse");
+      this.buttonsDuringGame.classList.remove("hidden");
+      this.buttonsAfterGame.classList.add("hidden");
+      this.updatePlayerNames();
+      displayTurn(this.gameState.currentPlayer.name);
+
+      if (!this.gameState.isWhitesTurn) {
+        this.playersHtml.classList.add("game-info__players--reverse");
+      } else {
+        this.playersHtml.classList.remove("game-info__players--reverse");
+      }
     }
 
     requestAnimationFrame(() => {

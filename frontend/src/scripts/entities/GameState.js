@@ -88,9 +88,19 @@ export class GameState {
   }
 
   /**
+   * Starts a new game.
+   */
+  newGame() {
+    this.hasGameStarted = false;
+    this.hasGameEnded = false;
+    this.winner = null;
+  }
+
+  /**
    * Starts the game.
    */
   startGame() {
+    this.newGame();
     this.hasGameStarted = true;
   }
 
