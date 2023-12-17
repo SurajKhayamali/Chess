@@ -1,3 +1,4 @@
+import { checkIfSameColor } from "../utils";
 import { GameState } from "./GameState";
 import { King } from "./components/pieces";
 
@@ -18,7 +19,10 @@ export class Player {
 
     this.king = this.state
       .getPieces()
-      .find((piece) => piece instanceof King && piece.isWhite === this.isWhite);
+      .find(
+        (piece) =>
+          piece instanceof King && checkIfSameColor(piece.isWhite, this.isWhite)
+      );
   }
 
   /**
@@ -27,7 +31,7 @@ export class Player {
    * @returns {boolean}
    */
   get isTurn() {
-    return this.state.isWhitesTurn === this.isWhite;
+    return checkIfSameColor(this.state.isWhitesTurn, this.isWhite);
   }
 
   /**

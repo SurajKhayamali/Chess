@@ -102,6 +102,18 @@ export function getSquareId(fileIndex, rankIndex) {
 }
 
 /**
+ * Returns if both the colors are the same.
+ *
+ * @param {any} color1 The first color.
+ * @param {any} color2 The second color.
+ *
+ * @returns {boolean} Whether the colors are the same.
+ */
+export function checkIfSameColor(color1, color2) {
+  return color1 === color2;
+}
+
+/**
  * Logs to the console if the debug flag is set.
  * @param  {...any} args The arguments to log.
  */

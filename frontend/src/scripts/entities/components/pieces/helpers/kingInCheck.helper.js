@@ -1,3 +1,4 @@
+import { checkIfSameColor } from "../../../../utils";
 import { GameState } from "../../../GameState";
 import { King } from "../King";
 import { Piece } from "../Piece";
@@ -16,7 +17,7 @@ export function checkIfKingIsInCheck(state, isWhiteKingToBeChecked) {
 
   // Find all the pieces of the opposite color
   const piecesToCheck = state.getPieces().filter((piece) => {
-    if (piece.isWhite === isWhiteKingToBeChecked) return false;
+    if (checkIfSameColor(piece.isWhite, isWhiteKingToBeChecked)) return false;
     if (piece instanceof King) return false;
     return true;
   });

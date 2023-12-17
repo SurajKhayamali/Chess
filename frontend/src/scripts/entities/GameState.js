@@ -1,6 +1,6 @@
 import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
 import { displayCheckmate } from "../message";
-import { log } from "../utils";
+import { checkIfSameColor, log } from "../utils";
 import { King, Pawn, Piece } from "./components/pieces";
 import { checkIfKingIsInCheck } from "./components/pieces/helpers/kingInCheck.helper";
 import {
@@ -206,12 +206,12 @@ export class GameState {
    *
    * @returns {Piece[]} The pieces of the specified type and color.
    *
-   * @example getPiecesOfType("Pawn", true) // returns all white pawns
-   * @example getPiecesOfType("Knight", false) // returns all black knights
+   * @example getPiecesOfName("Pawn", true) // returns all white pawns
+   * @example getPiecesOfName("Knight", false) // returns all black knights
    */
-  getPiecesOfType(type, isWhite) {
+  getPiecesOfName(name, isWhite) {
     return this.getPieces().filter(
-      (piece) => piece.name === type && piece.isWhite === isWhite
+      (piece) => piece.name === name && checkIfSameColor(piece.isWhite, isWhite)
     );
   }
 

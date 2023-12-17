@@ -57,7 +57,7 @@ export function getCastlingMovesIfPossible(state, king) {
   if (king.hasMoved) return possibleMoves;
 
   const rooks = state
-    .getPiecesOfType("Rook", king.isWhite)
+    .getPiecesOfName("Rook", king.isWhite)
     .filter((rook) => !rook.hasMoved);
 
   for (const rook of rooks) {
