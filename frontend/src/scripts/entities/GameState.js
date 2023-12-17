@@ -9,6 +9,7 @@ import {
 } from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
 import { Player } from "./Player";
+import { AudioPlayer } from "./AudioPlayer";
 
 /**
  * @typedef {Object} Move
@@ -57,6 +58,8 @@ export class GameState {
     this.winner = null;
 
     this.control = null;
+
+    this.audioPlayer = new AudioPlayer();
   }
 
   /**
@@ -146,6 +149,14 @@ export class GameState {
   endGame(winner = null) {
     this.hasGameEnded = true;
     this.winner = winner;
+
+    if (!winner) {
+      this.audioPlayer.playDraw();
+    } else if (winner.isWhite === this.player1.isWhite) {
+      this.audioPlayer.playCheckmate();
+    } else {
+      this.audioPlayer.playCheckmateLose();
+    }
   }
 
   /**
@@ -307,6 +318,7 @@ export class GameState {
 
     if (!this.checkIfMoveIsLegal(movedPiece, fileIndex, rankIndex)) {
       log("Illegal move");
+      this.audioPlayer.playIllegalMove();
       return false;
     }
 
@@ -443,6 +455,12 @@ export class GameState {
       capturedPiece: capturedPiece,
       isCheck: isOponentsKingInCheck,
     });
+
+    if (capturedPiece) {
+      this.audioPlayer.playCapture();
+    } else {
+      this.audioPlayer.playMove();
+    }
   }
 
   /**

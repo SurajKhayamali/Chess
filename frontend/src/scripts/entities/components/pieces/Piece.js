@@ -434,17 +434,4 @@ export class Piece {
       this.control.handlePieceClickOrDrag(this);
     });
   }
-
-  clone() {
-    const clonePiece = new Piece(
-      this.name,
-      this.isWhite,
-      this.fileIndex,
-      this.rankIndex,
-      this.abbreviation
-    );
-
-    // clonePiece.htmlElement = this.htmlElement;
-    clonePiece.control = this.control;
-  }
 }
