@@ -22,3 +22,8 @@ export function displayResignation(winner) {
   message.classList.add("game-info__status__text--winner");
   displayGameStatusText(`${winner} wins by resignation!`);
 }
+
+export function displayWinByTime(winner) {
+  message.classList.add("game-info__status__text--winner");
+  displayGameStatusText(`${winner} wins by time!`);
+}
