@@ -1,4 +1,4 @@
-import { getRandomMove } from "../ai";
+import { DEFAULT_AI_TYPE, getMoveBasedOnAiType } from "../ai";
 import {
   AI_THINKING_TIME,
   HIGHLIGHT_MODIFIERS,
@@ -36,6 +36,7 @@ export class GameControl {
 
     if (!this.isWhitesTurn) this.flipBoard();
 
+    this.aiType = DEFAULT_AI_TYPE;
     this.aiThinkingStartTimestamp = null;
     this.handleAIsTurn();
   }
@@ -286,9 +287,10 @@ export class GameControl {
         this.aiThinkingStartTimestamp ?? Date.now();
 
       if (this.aiThinkingStartTimestamp + AI_THINKING_TIME < Date.now()) {
-        const { piece, fileIndex, rankIndex } = getRandomMove(
+        const { piece, fileIndex, rankIndex } = getMoveBasedOnAiType(
           this.state,
-          this.state.currentPlayer.isWhite
+          this.state.currentPlayer.isWhite,
+          this.aiType
         );
         // log("Random move:", piece, fileIndex, rankIndex);
         this.handlePieceClickOrDrag(piece);
