@@ -127,23 +127,16 @@ function boardToBoardState(board) {
  * Generates a board with the given FEN string.
  *
  * @param {string} BOARD_ID The id of the board.
- * @param {boolean?} isPlayerVsPlayer Whether the game is player vs player.
  * @param {string?} fenString The fen string.
  *
  * @returns {Board} The generated board.
  */
 export const generateBoardWithFENString = (
   BOARD_ID,
-  isPlayerVsPlayer = true,
   fenString = DEFAULT_FEN_STRING
 ) => {
   const { board, turn } = parseFENString(fenString);
   const state = boardToBoardState(board);
 
-  return new Board(
-    BOARD_ID,
-    state,
-    isPlayerVsPlayer,
-    turn ? turn === "w" : true
-  );
+  return new Board(BOARD_ID, state, turn ? turn === "w" : true);
 };

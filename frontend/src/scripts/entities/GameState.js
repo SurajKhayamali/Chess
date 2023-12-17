@@ -8,7 +8,7 @@ import {
   handleEnPassantCapture,
 } from "./components/pieces/helpers/specialMoves";
 import { Square } from "./components/Square";
-import { ComputerPlayer, Player } from "./Player";
+import { Player } from "./Player";
 
 /**
  * @typedef {Object} Move
@@ -26,25 +26,17 @@ export class GameState {
    * Creates a new game state.
    *
    * @param {Piece[][]} initialBoardState The initial board state.
-   * @param {boolean} isPvP Whether the game is player vs player.
+   * @param {string} player1Name The name of player 1.
+   * @param {string} player2Name The name of player 2.
    * @param {boolean} isWhitesTurn Whether it is white's turn.
    */
-  constructor(
-    initialBoardState,
-    isPvP,
-    player1Name,
-    player2Name,
-    isWhitesTurn
-  ) {
+  constructor(initialBoardState, player1Name, player2Name, isWhitesTurn) {
     this.initialBoardState = initialBoardState; // 2D array of pieces
 
     this.squares = []; // 2D array of squares
     this.currentBoardState = initialBoardState; // 2D array of pieces
-    this.isPvP = isPvP;
     this.player1 = new Player(player1Name, true, this);
-    this.player2 = isPvP
-      ? new Player(player2Name, false, this)
-      : new ComputerPlayer(player2Name, false, this);
+    this.player2 = new Player(player2Name, false, this);
     this.isWhitesTurn = isWhitesTurn;
 
     this.moves = [];
@@ -76,6 +68,15 @@ export class GameState {
    */
   get oponentPlayer() {
     return this.isWhitesTurn ? this.player2 : this.player1;
+  }
+
+  /**
+   * Returns whether the game is player vs player.
+   *
+   * @returns {boolean}
+   */
+  get isPlayerVsPlayer() {
+    return !this.player1.isComputer && !this.player2.isComputer;
   }
 
   /**
@@ -527,5 +528,31 @@ export class GameState {
     if (isWhite) return this.player1.king;
 
     return this.player2.king;
+  }
+
+  /**
+   * Switches the player 2 to computer.
+   * This is called when playing against computer is selected.
+   */
+  switchToPlayerVsComputer() {
+    this.player2.switchToComputer();
+  }
+
+  /**
+   * Switches both players to computer.
+   * This is called when computer vs computer mode is selected.
+   */
+  switchToComputerVsComputer() {
+    this.player1.switchToComputer();
+    this.player2.switchToComputer();
+  }
+
+  /**
+   * Switches both players to player.
+   * This is called when player vs player mode is selected. default
+   */
+  switchToPlayerVsPlayer() {
+    this.player1.switchToPlayer();
+    this.player2.switchToPlayer();
   }
 }

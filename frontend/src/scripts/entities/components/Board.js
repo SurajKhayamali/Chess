@@ -17,9 +17,8 @@ export class Board {
    * @param {string} boardId The id of the HTML element that will contain the board.
    * @param {string} initialState The initial state of the board.
    * @param {boolean} isWhitesTurn Whether it is white's turn.
-   * @param {boolean} isPvP Whether the game is player vs player.
    */
-  constructor(boardId, initialState, isPvP = true, isWhitesTurn = true) {
+  constructor(boardId, initialState, isWhitesTurn = true) {
     this.boardId = boardId;
     this.htmlElement = document.getElementById(boardId);
     if (!this.htmlElement)
@@ -32,7 +31,6 @@ export class Board {
 
     this.gameState = new GameState(
       initialState,
-      isPvP,
       this.player1Name,
       this.player2Name,
       isWhitesTurn

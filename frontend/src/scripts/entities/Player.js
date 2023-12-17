@@ -42,6 +42,20 @@ export class Player {
   updateName(name) {
     this.name = name;
   }
+
+  /**
+   * Switches the player to computer.
+   */
+  switchToComputer() {
+    this.isComputer = true;
+  }
+
+  /**
+   * Switches the player to human.
+   */
+  switchToPlayer() {
+    this.isComputer = false;
+  }
 }
 
 export class ComputerPlayer extends Player {

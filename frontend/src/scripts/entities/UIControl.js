@@ -45,13 +45,37 @@ export class UIControl {
   }
 
   /**
-   * Initializes the event listener for the game start button.
-   * When the button is clicked, the game starts.
+   * Returns whether the timers should be activated.
+   * The timers should be activated if the game is player vs player.
+   * Otherwise, the timers should not be activated.
+   *
+   * @returns {boolean}
+   */
+  get shouldActivateTimers() {
+    return this.gameState.isPlayerVsPlayer;
+  }
+
+  /**
+   * Handles the game start.
+   * The game is started.
    * The game start section is hidden and the game info section is shown.
    */
+  handleGameStart() {
+    this.gameState.startGame();
+
+    this.gameStartSection.classList.add("hidden");
+
+    this.gameInfoSection.classList.remove("hidden");
+  }
+
+  /**
+   * Initializes the event listener for the all mode game start buttons.
+   */
   initializeEventListenerForGameStartButton() {
-    const gameStartButton = document.querySelector(".new-game__button");
-    gameStartButton.addEventListener("click", () => {
+    const playerVsPlayerGameStartButton = document.querySelector(
+      ".new-player-vs-player"
+    );
+    playerVsPlayerGameStartButton.addEventListener("click", () => {
       const selectedTime = this.newGameInput.value;
       if (selectedTime) {
         this.timeDuration =
@@ -60,11 +84,24 @@ export class UIControl {
         this.player2Timer.updateInitialTime(this.timeDuration);
       }
 
-      this.gameState.startGame();
+      this.gameState.switchToPlayerVsPlayer();
+      this.handleGameStart();
+    });
 
-      this.gameStartSection.classList.add("hidden");
+    const playerVsComputerGameStartButton = document.querySelector(
+      ".new-player-vs-computer"
+    );
+    playerVsComputerGameStartButton.addEventListener("click", () => {
+      this.gameState.switchToPlayerVsComputer();
+      this.handleGameStart();
+    });
 
-      this.gameInfoSection.classList.remove("hidden");
+    const computerVsComputerGameStartButton = document.querySelector(
+      ".new-computer-vs-computer"
+    );
+    computerVsComputerGameStartButton.addEventListener("click", () => {
+      this.gameState.switchToComputerVsComputer();
+      this.handleGameStart();
     });
   }
 
@@ -158,6 +195,8 @@ export class UIControl {
    * The timer is switched based on player's turn switch.
    */
   switchTimer() {
+    if (!this.shouldActivateTimers) return;
+
     if (this.gameState.isWhitesTurn) {
       this.player1Timer.start();
       this.player2Timer.stop();
@@ -171,6 +210,8 @@ export class UIControl {
    * Stops the current player's timer.
    */
   stopTimer() {
+    if (!this.shouldActivateTimers) return;
+
     if (this.gameState.isWhitesTurn) {
       this.player1Timer.stop();
     } else {
@@ -183,6 +224,8 @@ export class UIControl {
    * The timers are reset to their initial values.
    */
   resetTimers() {
+    if (!this.shouldActivateTimers) return;
+
     this.player1Timer.reset();
     this.player2Timer.reset();
   }
@@ -196,6 +239,8 @@ export class UIControl {
    * The timers are stopped.
    */
   handleTimeOut() {
+    if (!this.shouldActivateTimers) return;
+
     if (this.player1Timer.time <= 0) {
       this.gameState.endGame(this.gameState.player2);
       displayWinByTime(this.gameState.player2.name);
@@ -210,6 +255,24 @@ export class UIControl {
   }
 
   /**
+   * Hides the player times.
+   */
+  hidePlayerTimes() {
+    for (const playerTime of this.playerTimes) {
+      playerTime.classList.add("hidden");
+    }
+  }
+
+  /**
+   * Shows the player times.
+   */
+  showPlayerTimes() {
+    for (const playerTime of this.playerTimes) {
+      playerTime.classList.remove("hidden");
+    }
+  }
+
+  /**
    * The render loop is used to update the UI on every frame.
    */
   renderLoop() {
@@ -218,7 +281,7 @@ export class UIControl {
       this.buttonsAfterGame.classList.remove("hidden");
 
       this.stopTimer();
-    } else {
+    } else if (this.gameState.hasGameStarted) {
       this.buttonsDuringGame.classList.remove("hidden");
       this.buttonsAfterGame.classList.add("hidden");
 
@@ -227,14 +290,22 @@ export class UIControl {
 
       this.handleTimeOut();
 
+      if (!this.shouldActivateTimers) {
+        this.hidePlayerTimes();
+      } else {
+        this.showPlayerTimes();
+      }
+
       if (!this.gameState.isWhitesTurn) {
         this.playersHtml.classList.add("game-info__players--reverse");
 
+        if (!this.shouldActivateTimers) return;
         this.player1Timer.stop();
         this.player2Timer.start();
       } else {
         this.playersHtml.classList.remove("game-info__players--reverse");
 
+        if (!this.shouldActivateTimers) return;
         this.player2Timer.stop();
         this.player1Timer.start();
       }
