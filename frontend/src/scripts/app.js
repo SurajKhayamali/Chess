@@ -3,6 +3,7 @@ import { generateBoardWithFENString } from "./parseFEN";
 
 function render() {
   const board = generateBoardWithFENString(BOARD_ID);
+  window.board = board;
   board.render();
 }
 

@@ -47,6 +47,8 @@ export class Piece {
     // this.possibleMoves = this.getPossibleMoves();
     this.possibleMoves = { possibleMoves: [], capturablePieces: [] };
     this.canAttackOponentKing = false;
+
+    this.depthToCheck = 1;
   }
 
   /**
@@ -80,12 +82,14 @@ export class Piece {
     const filteredPossibleMoves = filterMovesThatExposeKingToCheck(
       this.control.state,
       this,
-      possibleMoves
+      possibleMoves,
+      this.depthToCheck--
     );
     const filteredCapturablePieces = filterMovesThatExposeKingToCheck(
       this.control.state,
       this,
-      capturablePieces
+      capturablePieces,
+      this.depthToCheck--
     );
 
     this.possibleMoves = {

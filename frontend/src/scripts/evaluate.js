@@ -40,8 +40,17 @@ function checkIfMoveExposeKingToCheck(
   piece,
   fileIndex,
   rankIndex,
-  capturedPiece
+  depth
 ) {
+  // return true;
+  if (depth < 0) return false;
+  if (depth === 0) {
+    const { isInCheck } = checkIfKingIsInCheck(gameState, piece.isWhite);
+    return isInCheck;
+  }
+
+  const capturedPiece = gameState.getPiece(fileIndex, rankIndex);
+
   gameState.recordAndMove(piece, fileIndex, rankIndex, capturedPiece);
   const { isInCheck } = checkIfKingIsInCheck(gameState, piece.isWhite);
   gameState.undoLastMove();
@@ -52,14 +61,16 @@ function checkIfMoveExposeKingToCheck(
 export function filterMovesThatExposeKingToCheck(
   gameState,
   piece,
-  possibleMoves
+  possibleMoves,
+  depth
 ) {
   return possibleMoves.filter(([fileIndex, rankIndex]) => {
     return !checkIfMoveExposeKingToCheck(
       gameState,
       piece,
       fileIndex,
-      rankIndex
+      rankIndex,
+      depth
     );
   });
 }

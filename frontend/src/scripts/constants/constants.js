@@ -40,4 +40,4 @@ export const SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS = [
   PIECE_HIGHLIGHT_MODIFIERS.CHECKED,
 ];
 
-export const DEBUG = false;
+export const DEBUG = true;
