@@ -7,12 +7,13 @@ import {
 import { log } from "../utils";
 import { Timer } from "./Timer";
 
-const timeInSeconds = 10 * 60;
+const DEFAULT_GAME_TIME_IN_SECONDS = 10 * 60;
 
 export class UIControl {
   constructor(board) {
     this.board = board;
     this.gameStartSection = document.querySelector(".new-game");
+    this.newGameInput = document.querySelector(".new-game__input");
     this.gameInfoSection = document.querySelector(".game-info");
     this.playersHtml = document.querySelector(".game-info__players");
     this.playerNames = document.querySelectorAll(".game-info__player-name");
@@ -20,8 +21,10 @@ export class UIControl {
     this.buttonsDuringGame = document.querySelector(".during-game");
     this.buttonsAfterGame = document.querySelector(".after-game");
 
-    this.player1Timer = new Timer(this.playerTimes[0], timeInSeconds);
-    this.player2Timer = new Timer(this.playerTimes[1], timeInSeconds);
+    this.timeDuration = DEFAULT_GAME_TIME_IN_SECONDS;
+
+    this.player1Timer = new Timer(this.playerTimes[0], this.timeDuration);
+    this.player2Timer = new Timer(this.playerTimes[1], this.timeDuration);
 
     this.initializeEventListenerForGameStartButton();
     this.initializeEventListenerForUndoButton();
@@ -49,6 +52,14 @@ export class UIControl {
   initializeEventListenerForGameStartButton() {
     const gameStartButton = document.querySelector(".new-game__button");
     gameStartButton.addEventListener("click", () => {
+      const selectedTime = this.newGameInput.value;
+      if (selectedTime) {
+        this.timeDuration =
+          parseInt(selectedTime) || DEFAULT_GAME_TIME_IN_SECONDS;
+        this.player1Timer.updateInitialTime(this.timeDuration);
+        this.player2Timer.updateInitialTime(this.timeDuration);
+      }
+
       this.gameState.startGame();
 
       this.gameStartSection.classList.add("hidden");

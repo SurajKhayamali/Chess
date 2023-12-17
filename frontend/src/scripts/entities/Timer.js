@@ -4,6 +4,8 @@ export class Timer {
     this.time = timeInSeconds;
     this.timerInterval = null;
     this.timerHtml = timerHtml;
+
+    this.render();
   }
 
   /**
@@ -32,6 +34,19 @@ export class Timer {
   reset() {
     this.time = this.initialTime;
     this.stop();
+
+    this.render();
+  }
+
+  /**
+   * Updates the initial time.
+   * Based on the user's input.
+   *
+   * @param {number} timeInSeconds - The time in seconds.
+   */
+  updateInitialTime(timeInSeconds) {
+    this.initialTime = timeInSeconds;
+    this.time = timeInSeconds;
 
     this.render();
   }
