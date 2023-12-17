@@ -59,9 +59,20 @@ export class Piece {
 
   /**
    * Returns whether it is white's turn.
+   *
+   * @returns {boolean}
    */
   get isWhitesTurn() {
     return this.control.state.isWhitesTurn;
+  }
+
+  /**
+   * Returns whether the game is player vs player.
+   *
+   * @returns {boolean}
+   */
+  get isPlayerVsPlayer() {
+    return this.control.state.isPlayerVsPlayer;
   }
 
   /**
@@ -311,7 +322,7 @@ export class Piece {
    * Fixes the piece's orientation
    */
   fixPieceOrientation() {
-    if (this.isWhitesTurn) {
+    if (this.isWhitesTurn || !this.isPlayerVsPlayer) {
       this.htmlElement.classList.remove("chess-board__piece--reverse");
     } else {
       this.htmlElement.classList.add("chess-board__piece--reverse");
