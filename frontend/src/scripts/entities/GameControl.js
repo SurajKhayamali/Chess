@@ -75,7 +75,7 @@ export class GameControl {
       }
 
       for (const piece of this.state.getPieces()) {
-        piece.flip();
+        piece.fixPieceOrientation();
       }
     }
   }

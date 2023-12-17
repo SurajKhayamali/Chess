@@ -310,7 +310,7 @@ export class Piece {
   /**
    * Fixes the piece's orientation
    */
-  _fixPieceOrientation() {
+  fixPieceOrientation() {
     if (this.isWhitesTurn) {
       this.htmlElement.classList.remove("chess-board__piece--reverse");
     } else {
@@ -372,7 +372,7 @@ export class Piece {
    */
   handleResetAt(fileIndex, rankIndex) {
     this._resetAt(fileIndex, rankIndex);
-    this._fixPieceOrientation();
+    this.fixPieceOrientation();
     this._removeAllHighlights();
   }
 

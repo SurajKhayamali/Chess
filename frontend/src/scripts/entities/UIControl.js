@@ -299,15 +299,17 @@ export class UIControl {
       if (!this.gameState.isWhitesTurn) {
         this.playersHtml.classList.add("game-info__players--reverse");
 
-        if (!this.shouldActivateTimers) return;
-        this.player1Timer.stop();
-        this.player2Timer.start();
+        if (this.shouldActivateTimers) {
+          this.player1Timer.stop();
+          this.player2Timer.start();
+        }
       } else {
         this.playersHtml.classList.remove("game-info__players--reverse");
 
-        if (!this.shouldActivateTimers) return;
-        this.player2Timer.stop();
-        this.player1Timer.start();
+        if (this.shouldActivateTimers) {
+          this.player2Timer.stop();
+          this.player1Timer.start();
+        }
       }
     }
 
