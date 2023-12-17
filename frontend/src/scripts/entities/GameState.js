@@ -1,4 +1,5 @@
 import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
+import { displayCheckmate } from "../message";
 import { log } from "../utils";
 import { King, Pawn, Piece } from "./components/pieces";
 import { checkIfKingIsInCheck } from "./components/pieces/helpers/kingInCheck.helper";
@@ -257,6 +258,8 @@ export class GameState {
 
     if (capturedPiece instanceof King) {
       log("Game over");
+      this.endGame(this.currentPlayer);
+      displayCheckmate(this.currentPlayer.name, this.oponentPlayer.name);
       return false;
     }
 

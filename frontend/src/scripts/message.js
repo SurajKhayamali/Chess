@@ -13,9 +13,9 @@ export function displayDraw() {
   displayGameStatusText("Draw!");
 }
 
-export function displayCheckmate(winner) {
+export function displayCheckmate(winner, loser) {
   message.classList.add("game-info__status__text--winner");
-  displayGameStatusText(`${winner} wins!`);
+  displayGameStatusText(`${winner} wins by capturing ${loser}'s king!`);
 }
 
 export function displayResignation(winner) {
