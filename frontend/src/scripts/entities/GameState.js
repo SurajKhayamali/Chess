@@ -542,6 +542,7 @@ export class GameState {
    * This is called when playing against computer is selected.
    */
   switchToPlayerVsComputer() {
+    this.player1.switchToPlayer();
     this.player2.switchToComputer();
   }
 
