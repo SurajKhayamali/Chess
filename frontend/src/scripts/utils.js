@@ -101,6 +101,10 @@ export function getSquareId(fileIndex, rankIndex) {
   return `${file}${rank}`;
 }
 
+/**
+ * Logs to the console if the debug flag is set.
+ * @param  {...any} args The arguments to log.
+ */
 export function log(...args) {
   if (!DEBUG) return;
 

@@ -47,7 +47,6 @@ export class GameState {
       : new ComputerPlayer(player2Name, false, this);
     this.isWhitesTurn = isWhitesTurn;
 
-    this.selectedPiece = null;
     this.moves = [];
 
     this.enPassantAvailableAt = null;
@@ -88,9 +87,13 @@ export class GameState {
     this.control = control;
   }
 
+  /**
+   * Resets the pieces positions.
+   * This is used when the new game is started.
+   */
   resetPiecesPositions() {
-    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
-      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+    for (let rankIndex = 0; rankIndex < RANKS_LENGTH; rankIndex++) {
+      for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
         const piece = this.getPiece(fileIndex, rankIndex);
         if (!piece) continue;
 
@@ -105,7 +108,6 @@ export class GameState {
   newGame() {
     this.currentBoardState = [...this.initialBoardState.map((arr) => [...arr])]; // 2D array of piece
 
-    this.selectedPiece = null;
     this.moves = [];
 
     this.enPassantAvailableAt = null;
@@ -143,10 +145,10 @@ export class GameState {
    */
   initializeSquaresAndPieces() {
     this.squares = [];
-    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
+    for (let rankIndex = 0; rankIndex < RANKS_LENGTH; rankIndex++) {
       this.squares.push([]);
 
-      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+      for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
         const piece = this.getPiece(fileIndex, rankIndex);
         const square = new Square(fileIndex, rankIndex, piece);
 
@@ -159,8 +161,8 @@ export class GameState {
    * Resets the squares and pieces on the board.
    */
   resetSquaresAndPieces() {
-    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
-      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+    for (let rankIndex = 0; rankIndex < RANKS_LENGTH; rankIndex++) {
+      for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
         const piece = this.getPiece(fileIndex, rankIndex);
 
         if (piece) this.squares[rankIndex][fileIndex].setPiece(piece);
@@ -471,19 +473,27 @@ export class GameState {
     return false;
   }
 
+  /**
+   * Returns if the square is occupied.
+   *
+   * @param {number} fileIndex The file index of the square to check.
+   * @param {number} rankIndex The rank index of the square to check.
+   *
+   * @returns {boolean} Whether the square is occupied.
+   */
   isSquareOccupied(fileIndex, rankIndex) {
     return this.getPiece(fileIndex, rankIndex) !== null;
   }
 
+  /**
+   * Returns if the square is occupied or under attack.
+   *
+   * @param {number} fileIndex The file index of the square to check.
+   * @param {number} rankIndex The rank index of the square to check.
+   *
+   * @returns {boolean} Whether the square is occupied or under attack.
+   */
   isSquareOccupiedOrUnderAttack(fileIndex, rankIndex, isWhite) {
-    // console.log(
-    //   "checking isSquareOccupiedOrUnderAttack",
-    //   this.isSquareOccupied(fileIndex, rankIndex),
-    //   this.isSquareUnderAttack(fileIndex, rankIndex, isWhite),
-    //   fileIndex,
-    //   rankIndex,
-    //   isWhite
-    // );
     return (
       this.isSquareOccupied(fileIndex, rankIndex) ||
       this.isSquareUnderAttack(fileIndex, rankIndex, isWhite)

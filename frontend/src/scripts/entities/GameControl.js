@@ -185,14 +185,6 @@ export class GameControl {
   }
 
   /**
-   * Moves the selected piece to the specified square.
-   *
-   * @param {number} fileIndex The file index of the square to move the piece to.
-   * @param {number} rankIndex The rank index of the square to move the piece to.
-   */
-  moveSelectedPieceTo(fileIndex, rankIndex) {}
-
-  /**
    * Handles the selected piece being moved to the specified square.
    *
    * @param {number} fileIndex The file index of the square to move the piece to.

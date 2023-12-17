@@ -1,5 +1,10 @@
 const message = document.querySelector(".game-info__status__text");
 
+/**
+ * Displays the given text in the game status text.
+ *
+ * @param {string} text The text to display.
+ */
 function displayGameStatusText(text) {
   message.innerText = text;
 }
