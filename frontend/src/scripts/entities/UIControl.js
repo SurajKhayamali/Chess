@@ -4,6 +4,8 @@ import { log } from "../utils";
 export class UIControl {
   constructor(board) {
     this.board = board;
+    this.gameStartSection = document.querySelector(".new-game");
+    this.gameInfoSection = document.querySelector(".game-info");
     this.playersHtml = document.querySelector(".game-info__players");
     this.playerNames = document.querySelectorAll(".game-info__player-name");
     this.buttonsDuringGame = document.querySelector(".during-game");
@@ -27,11 +29,9 @@ export class UIControl {
     gameStartButton.addEventListener("click", () => {
       this.gameState.startGame();
 
-      const gameStartSection = document.querySelector(".new-game");
-      gameStartSection.classList.add("hidden");
+      this.gameStartSection.classList.add("hidden");
 
-      const gameInfoSection = document.querySelector(".game-info");
-      gameInfoSection.classList.remove("hidden");
+      this.gameInfoSection.classList.remove("hidden");
     });
   }
 
@@ -68,7 +68,7 @@ export class UIControl {
     const newGameButton = document.querySelector(".game-info__button--new");
     newGameButton.addEventListener("click", () => {
       // log("New game button clicked");
-      this.gameState.startGame();
+      this.gameState.newGame();
     });
   }
 
@@ -87,19 +87,24 @@ export class UIControl {
   }
 
   renderLoop() {
-    if (this.gameState.hasGameEnded) {
-      this.buttonsDuringGame.classList.add("hidden");
-      this.buttonsAfterGame.classList.remove("hidden");
+    if (!this.gameState.hasGameStarted) {
+      this.gameStartSection.classList.remove("hidden");
+      this.gameInfoSection.classList.add("hidden");
     } else {
-      this.buttonsDuringGame.classList.remove("hidden");
-      this.buttonsAfterGame.classList.add("hidden");
-      this.updatePlayerNames();
-      displayTurn(this.gameState.currentPlayer.name);
-
-      if (!this.gameState.isWhitesTurn) {
-        this.playersHtml.classList.add("game-info__players--reverse");
+      if (this.gameState.hasGameEnded) {
+        this.buttonsDuringGame.classList.add("hidden");
+        this.buttonsAfterGame.classList.remove("hidden");
       } else {
-        this.playersHtml.classList.remove("game-info__players--reverse");
+        this.buttonsDuringGame.classList.remove("hidden");
+        this.buttonsAfterGame.classList.add("hidden");
+        this.updatePlayerNames();
+        displayTurn(this.gameState.currentPlayer.name);
+
+        if (!this.gameState.isWhitesTurn) {
+          this.playersHtml.classList.add("game-info__players--reverse");
+        } else {
+          this.playersHtml.classList.remove("game-info__players--reverse");
+        }
       }
     }
 

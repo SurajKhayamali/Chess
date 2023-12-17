@@ -58,6 +58,13 @@ export class Piece {
   }
 
   /**
+   * Returns whether it is white's turn.
+   */
+  get isWhitesTurn() {
+    return this.control.state.isWhitesTurn;
+  }
+
+  /**
    * Recalculates the piece's possible moves
    * For use when the board state changes
    */
@@ -301,6 +308,26 @@ export class Piece {
   }
 
   /**
+   * Fixes the piece's orientation
+   */
+  _fixPieceOrientation() {
+    if (this.isWhitesTurn) {
+      this.htmlElement.classList.remove("chess-board__piece--reverse");
+    } else {
+      this.htmlElement.classList.add("chess-board__piece--reverse");
+    }
+  }
+
+  /**
+   * Removes all highlights from the piece
+   */
+  _removeAllHighlights() {
+    for (const modifier of SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS) {
+      this.removeHighlight(modifier);
+    }
+  }
+
+  /**
    * Highlights a piece on the board.
    *
    * @param {"checked"} modifier The modifier to add to the class name.
@@ -320,6 +347,33 @@ export class Piece {
     if (!SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS.includes(modifier)) return;
 
     this.htmlElement.classList.remove(`chess-board__piece--${modifier}`);
+  }
+
+  /**
+   * Resets the piece's position to the specified square
+   *
+   * @param {number} fileIndex - index of the file to reset to
+   * @param {number} rankIndex - index of the rank to reset to
+   */
+  _resetAt(fileIndex, rankIndex) {
+    this.fileIndex = fileIndex;
+    this.rankIndex = rankIndex;
+    this.hasMoved = false;
+
+    this.reEvaluateMoves();
+  }
+
+  /**
+   * Resets the piece's position to the specified square and fixes its orientation
+   * Also removes all highlights from the piece
+   *
+   * @param {number} fileIndex - index of the file to reset to
+   * @param {number} rankIndex - index of the rank to reset to
+   */
+  handleResetAt(fileIndex, rankIndex) {
+    this._resetAt(fileIndex, rankIndex);
+    this._fixPieceOrientation();
+    this._removeAllHighlights();
   }
 
   /**

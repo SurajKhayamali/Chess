@@ -45,6 +45,18 @@ export class GameControl {
   }
 
   /**
+   * Resets the game control state.
+   * This is called when the game is restarted.
+   */
+  reset() {
+    this.selectedPiece = null;
+
+    for (const modifier of SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS) {
+      this.removeHighlightFromSquare(modifier);
+    }
+  }
+
+  /**
    * Flips the board.
    */
   flipBoard() {

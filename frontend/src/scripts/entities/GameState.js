@@ -36,8 +36,9 @@ export class GameState {
     player2Name,
     isWhitesTurn
   ) {
-    this.squares = []; // 2D array of squares
+    this.initialBoardState = initialBoardState; // 2D array of pieces
 
+    this.squares = []; // 2D array of squares
     this.currentBoardState = initialBoardState; // 2D array of pieces
     this.isPvP = isPvP;
     this.player1 = new Player(player1Name, true, this);
@@ -87,13 +88,36 @@ export class GameState {
     this.control = control;
   }
 
+  resetPiecesPositions() {
+    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
+      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+        const piece = this.getPiece(fileIndex, rankIndex);
+        if (!piece) continue;
+
+        piece.handleResetAt(fileIndex, rankIndex);
+      }
+    }
+  }
+
   /**
    * Starts a new game.
    */
   newGame() {
+    this.currentBoardState = [...this.initialBoardState.map((arr) => [...arr])]; // 2D array of piece
+
+    this.selectedPiece = null;
+    this.moves = [];
+
+    this.enPassantAvailableAt = null;
+
+    this.resetSquaresAndPieces();
+
     this.hasGameStarted = false;
     this.hasGameEnded = false;
     this.winner = null;
+
+    this.control.reset();
+    this.resetPiecesPositions();
   }
 
   /**
@@ -127,6 +151,20 @@ export class GameState {
         const square = new Square(fileIndex, rankIndex, piece);
 
         this.squares[rankIndex].push(square);
+      }
+    }
+  }
+
+  /**
+   * Resets the squares and pieces on the board.
+   */
+  resetSquaresAndPieces() {
+    for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
+      for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+        const piece = this.getPiece(fileIndex, rankIndex);
+
+        if (piece) this.squares[rankIndex][fileIndex].setPiece(piece);
+        else this.squares[rankIndex][fileIndex].removePiece();
       }
     }
   }
