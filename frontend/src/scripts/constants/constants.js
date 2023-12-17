@@ -7,12 +7,30 @@ export const MIN_INDEX = 0;
 export const MAX_INDEX = 7;
 
 export const PIECES = {
-  PAWN: "Pawn",
-  KNIGHT: "Knight",
-  BISHOP: "Bishop",
-  ROOK: "Rook",
-  QUEEN: "Queen",
-  KING: "King",
+  PAWN: {
+    name: "Pawn",
+    abbreviation: "P",
+  },
+  KNIGHT: {
+    name: "Knight",
+    abbreviation: "N",
+  },
+  BISHOP: {
+    name: "Bishop",
+    abbreviation: "B",
+  },
+  ROOK: {
+    name: "Rook",
+    abbreviation: "R",
+  },
+  QUEEN: {
+    name: "Queen",
+    abbreviation: "Q",
+  },
+  KING: {
+    name: "King",
+    abbreviation: "K",
+  },
 };
 
 export const BOARD_ID = "board";

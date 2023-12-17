@@ -216,7 +216,11 @@ export class GameControl {
           isWhite
         );
       } else if (rankIndex === 0 || rankIndex === RANKS_LENGTH - 1) {
-        handlePawnPromotion(this.state, this.selectedPiece, PIECES.QUEEN);
+        handlePawnPromotion(
+          this.state,
+          this.selectedPiece,
+          PIECES.QUEEN.abbreviation
+        );
       }
     }
 

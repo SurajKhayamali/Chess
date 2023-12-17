@@ -60,9 +60,9 @@ export class Pawn extends Piece {
   promoteTo(pieceType) {
     const args = [this.isWhite, this.fileIndex, this.rankIndex, this.control];
     switch (pieceType) {
-      case PIECES.QUEEN:
+      case PIECES.QUEEN.abbreviation:
         return new Queen(...args);
-      case PIECES.ROOK:
+      case PIECES.ROOK.abbreviation:
         return new Rook(...args);
       case PIECES.BISHOP:
         return new Bishop(...args);

@@ -84,7 +84,7 @@ export class King extends Piece {
       this.control.state,
       this
     );
-    log("castlingMovesIfPossible:", castlingMovesIfPossible);
+    // log("castlingMovesIfPossible:", castlingMovesIfPossible);
     for (const castlingMove of castlingMovesIfPossible) {
       this.possibleMoves.possibleMoves.push(castlingMove);
     }

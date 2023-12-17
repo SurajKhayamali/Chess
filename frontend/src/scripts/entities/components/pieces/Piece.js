@@ -24,16 +24,15 @@ export class Piece {
   /**
    * Creates a piece
    *
-   * @param {string} name - name of the piece
+   * @param {{name: string, abbreviation: string}} pieceInfo - info of the piece
    * @param {boolean} isWhite - true if the piece is white, false if black
    * @param {number} fileIndex - index of the file the piece is on
    * @param {number} rankIndex - index of the rank the piece is on
    * @param {GameControl} [control] - the piece's control, optional
-   * @param {string} [abbreviation] - abbreviation of the piece, optional
    */
-  constructor(name, isWhite, fileIndex, rankIndex, control, abbreviation) {
-    this.name = name;
-    this.abbreviation = abbreviation || name?.[0]?.toUpperCase();
+  constructor(pieceInfo, isWhite, fileIndex, rankIndex, control) {
+    this.name = pieceInfo.name;
+    this.abbreviation = pieceInfo.abbreviation;
     this.isWhite = isWhite;
     this.fileIndex = fileIndex; // stored as 0-7, but represented as a-h
     this.rankIndex = rankIndex; // stored as 0-7, but represented as 1-8
@@ -46,7 +45,7 @@ export class Piece {
 
     // this.possibleMoves = this.getPossibleMoves();
     this.possibleMoves = { possibleMoves: [], capturablePieces: [] };
-    this.canAttackOponentKing = false;
+    // this.canAttackOponentKing = false;
 
     this.depthToCheck = 1;
   }
@@ -66,18 +65,25 @@ export class Piece {
    */
   reEvaluateMoves() {
     this.possibleMoves = this.getPossibleMoves();
+    console.log("Possible moves:", this.name, this.isWhite, this.possibleMoves);
 
     const { capturablePieces } = this.possibleMoves;
-    this.canAttackOponentKing = capturablePieces.some(
-      (move) =>
-        move[0] === this.oponentsKing.fileIndex &&
-        move[1] === this.oponentsKing.rankIndex
-    );
+    // this.canAttackOponentKing = capturablePieces.some(
+    //   (move) =>
+    //     move[0] === this.oponentsKing.fileIndex &&
+    //     move[1] === this.oponentsKing.rankIndex
+    // );
   }
 
   reEvaluateMovesAndFilterIfExposeKingToCheck() {
     // console.log("reEvaluateMovesAndFilterIfExposeKingToCheck");
     const { possibleMoves, capturablePieces } = this.possibleMoves;
+    console.log(
+      "Before filtering:",
+      this.name,
+      this.isWhite,
+      this.possibleMoves
+    );
 
     const filteredPossibleMoves = filterMovesThatExposeKingToCheck(
       this.control.state,
@@ -85,22 +91,32 @@ export class Piece {
       possibleMoves,
       this.depthToCheck--
     );
+    // this.depthToCheck = 1;
     const filteredCapturablePieces = filterMovesThatExposeKingToCheck(
       this.control.state,
       this,
       capturablePieces,
       this.depthToCheck--
     );
+    // this.depthToCheck = 1;
 
     this.possibleMoves = {
       possibleMoves: filteredPossibleMoves,
       capturablePieces: filteredCapturablePieces,
     };
+    console.log("After filtering:", this.name, this.possibleMoves);
 
-    this.canAttackOponentKing = filteredCapturablePieces.some(
+    // this.canAttackOponentKing = filteredCapturablePieces.some(
+    //   (move) =>
+    //     move[0] === this.oponentsKing.fileIndex &&
+    //     move[1] === this.oponentsKing.rankIndex
+    // );
+  }
+
+  canAttackOponentKing(oponentKingFileIndex, oponentKingRankIndex) {
+    return this.possibleMoves.capturablePieces.some(
       (move) =>
-        move[0] === this.oponentsKing.fileIndex &&
-        move[1] === this.oponentsKing.rankIndex
+        move[0] === oponentKingFileIndex && move[1] === oponentKingRankIndex
     );
   }
 

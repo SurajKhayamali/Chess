@@ -212,10 +212,23 @@ export class GameState {
    */
   reEvaluateMoves() {
     this.getPieces().forEach((piece) => piece.reEvaluateMoves());
-    this.getPieces().forEach((piece) =>
-      piece.reEvaluateMovesAndFilterIfExposeKingToCheck()
-    );
+    this.getPieces().forEach((piece) => {
+      piece.reEvaluateMovesAndFilterIfExposeKingToCheck();
+    });
+    // this.getPieces().forEach((piece) => {
+    //   piece.depthToCheck = 1;
+    // });
     this.getPieces().forEach((piece) => piece.reEvaluateSpecialMoves());
+
+    console.log(
+      "Current player king in check",
+      this.currentPlayer.name,
+      this.currentPlayer.isWhite,
+      this.currentPlayer.king.isInCheck
+    );
+    this.getPieces().forEach((piece) =>
+      console.log(piece.name, piece.possibleMoves)
+    );
   }
 
   /**
@@ -367,7 +380,7 @@ export class GameState {
 
     // Move the piece to new square
     this.movePiece(movedPiece, fileIndex, rankIndex);
-    log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
+    // log("movedPiece:", movedPiece, "to", fileIndex, rankIndex);
 
     checkIfKingIsInCheck(this, movedPiece.isWhite);
 

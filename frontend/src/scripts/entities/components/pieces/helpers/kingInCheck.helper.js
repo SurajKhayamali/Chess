@@ -13,16 +13,24 @@ import { Piece } from "../Piece";
 export function checkIfKingIsInCheck(state, isWhiteKingToBeChecked) {
   // Find the king to be checked
   const king = state.getPlayersKing(isWhiteKingToBeChecked);
+  const oponentKing = state.getPlayersKing(!isWhiteKingToBeChecked);
 
   // Find all the pieces of the opposite color
-  const piecesToCheck = state.getPieces().filter((piece) => {
-    if (piece.isWhite === isWhiteKingToBeChecked) return false;
+  const oponentsPieces = state.getPieces().filter((piece) => {
+    const isSameColor = piece.isWhite === isWhiteKingToBeChecked;
+    if (isSameColor) return false;
+
     if (piece instanceof King) return false;
+
     return true;
   });
+  console.log("oponentsPieces:", oponentsPieces);
+  // debugger;
 
-  for (const piece of piecesToCheck) {
-    if (piece.canAttackOponentKing) {
+  for (const piece of oponentsPieces) {
+    if (
+      piece.canAttackOponentKing(oponentKing.fileIndex, oponentKing.rankIndex)
+    ) {
       king.updateIsInCheck(true);
       return { isInCheck: true, king, checkBy: piece };
     }

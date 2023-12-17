@@ -2,20 +2,59 @@
 
 const POSSIBLE_CASES = [];
 
-export function evaluate(gameState) {}
+// function getPossibleMoves(boardState) {
+//   const possibleMoves = [];
+//   const capturablePieces = [];
 
-function reEvaluateMovesAndFilterIfExposeKingToCheck(gameState) {
-  const pieces = gameState.getPieces();
-  for (const piece of pieces) {
-    piece.reEvaluateMovesAndFilterIfExposeKingToCheck();
+//   for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
+//     for (let rankIndex = 0; rankIndex < 8; rankIndex++) {
+//       const possibleMoves
+
+function makeMove(boardState, move) {
+  const [fileIndex, rankIndex] = move;
+  const piece = boardState[fileIndex][rankIndex];
+  const capturedPiece = boardState[fileIndex][rankIndex];
+
+  boardState[fileIndex][rankIndex] = piece;
+  boardState[fileIndex][rankIndex] = capturedPiece;
+}
+
+/**
+ * Evaluates the board state.
+ *
+ * @param {string[][]} boardState
+ * @param {number} depth
+ */
+export function evaluate(boardState, depth) {
+  const moves = [];
+  // Base case: if depth is 0 or game is over, return
+  // if (depth === 0 || isGameOver(boardState)) {
+  if (depth === 0) {
+    return moves;
   }
+
+  // Recursive case
+  for (const move of getPossibleMoves(boardState)) {
+    // Make a move
+    makeMove(boardState, move);
+    // Check if the king is exposed to check
+    if (!isKingExposedToCheck(boardState)) {
+      // If not, add this move to the list of valid moves
+      moves.push(move);
+    }
+    // Undo the move
+    undoMove(boardState, move);
+    // Recurse with a smaller depth
+    evaluate(boardState, depth - 1);
+  }
+
+  return moves;
 }
 
 function checkIfKingIsInCheck(state, isWhiteKingToBeChecked) {
-  // reEvaluateMovesAndFilterIfExposeKingToCheck(state);
-
   // Find the king to be checked
   const king = state.getPlayersKing(isWhiteKingToBeChecked);
+  const oponentKing = state.getPlayersKing(!isWhiteKingToBeChecked);
 
   // Find all the pieces of the opposite color
   const piecesToCheck = state.getPieces().filter((piece) => {
@@ -25,7 +64,9 @@ function checkIfKingIsInCheck(state, isWhiteKingToBeChecked) {
   });
 
   for (const piece of piecesToCheck) {
-    if (piece.canAttackOponentKing) {
+    if (
+      piece.canAttackOponentKing(oponentKing.fileIndex, oponentKing.rankIndex)
+    ) {
       king.updateIsInCheck(true);
       return { isInCheck: true, king, checkBy: piece };
     }
@@ -43,17 +84,19 @@ function checkIfMoveExposeKingToCheck(
   depth
 ) {
   // return true;
-  if (depth < 0) return false;
-  if (depth === 0) {
-    const { isInCheck } = checkIfKingIsInCheck(gameState, piece.isWhite);
-    return isInCheck;
-  }
+  // return isInInCheck(gameState, piece, fileIndex, rankIndex, depth);
 
-  const capturedPiece = gameState.getPiece(fileIndex, rankIndex);
+  // if (depth < 0) return false;
+  // if (depth === 0) {
+  //   const { isInCheck } = checkIfKingIsInCheck(gameState, piece.isWhite);
+  //   return isInCheck;
+  // }
 
-  gameState.recordAndMove(piece, fileIndex, rankIndex, capturedPiece);
+  // const capturedPiece = gameState.getPiece(fileIndex, rankIndex);
+
+  // gameState.recordAndMove(piece, fileIndex, rankIndex, capturedPiece);
   const { isInCheck } = checkIfKingIsInCheck(gameState, piece.isWhite);
-  gameState.undoLastMove();
+  // gameState.undoLastMove();
   return isInCheck;
   //   return true;
 }
@@ -73,6 +116,26 @@ export function filterMovesThatExposeKingToCheck(
       depth
     );
   });
+  // Base case: if depth is 0 or game is over, return
+  // if (depth === 0 || gameState.hasGameEnded) {
+  //   return;
+  // }
+  // const validMoves = [];
+  // // Recursive case
+  // for (const move of possibleMoves) {
+  //   // Make a move
+  //   makeMove(state, move);
+  //   // Check if the king is exposed to check
+  //   if (!isKingExposedToCheck(state, piece)) {
+  //     // If not, add this move to the list of valid moves
+  //     validMoves.push(move);
+  //   }
+  //   // Undo the move
+  //   undoMove(state, move);
+  //   // Recurse with a smaller depth
+  //   filterMovesThatExposeKingToCheck(state, piece, possibleMoves, depth - 1);
+  // }
+  // return validMoves;
 }
 
 // export function checkIfMoveBlocksOrEscapesKingFromCheck(
