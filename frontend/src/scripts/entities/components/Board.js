@@ -39,6 +39,15 @@ export class Board {
     this.uiContorl = new UIControl(this);
 
     this.gameState.setControl(this.control);
+
+    this.renderLoop();
+  }
+
+  /**
+   * fixes the board orientation.
+   */
+  fixOrientation() {
+    this.control.fixBoardOrientation();
   }
 
   /**
@@ -140,6 +149,15 @@ export class Board {
   }
 
   /**
+   * Re-evaluates the game state.
+   */
+  reEvaluateGameState() {
+    this.gameState.reEvaluateMoves(); // Evaluate moves for the first time
+    checkIfKingIsInCheck(this.gameState, true);
+    checkIfKingIsInCheck(this.gameState, false);
+  }
+
+  /**
    * Renders the board along with the pieces.
    *
    * @returns {HTMLDivElement} The board element.
@@ -180,10 +198,19 @@ export class Board {
     const playerNameWhite = this.generatePlayerName(true);
     boardHtml.appendChild(playerNameWhite);
 
-    this.gameState.reEvaluateMoves(); // Evaluate moves for the first time
-    checkIfKingIsInCheck(this.gameState, true);
-    checkIfKingIsInCheck(this.gameState, false);
-
     return boardHtml;
+  }
+
+  /**
+   * The render loop is used to update the UI on every frame.
+   */
+  renderLoop() {
+    if (this.gameState.hasGameStarted) {
+      this.fixOrientation();
+    }
+
+    requestAnimationFrame(() => {
+      this.renderLoop();
+    });
   }
 }

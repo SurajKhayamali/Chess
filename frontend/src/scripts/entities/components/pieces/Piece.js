@@ -4,7 +4,7 @@ import {
   SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS,
 } from "../../../constants/constants";
 import { addToPossibleAndCapturableMoves } from "./helpers/common.helper";
-// import { GameControl } from "../../GameControl"; // TODO: figure out way to omit circular dependency
+import { GameControl } from "../../GameControl";
 
 /**
  * object containing possible moves and capturable pieces

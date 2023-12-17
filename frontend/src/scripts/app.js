@@ -4,6 +4,7 @@ import { generateBoardWithFENString } from "./parseFEN";
 function render() {
   const board = generateBoardWithFENString(BOARD_ID);
   board.render();
+  board.reEvaluateGameState();
 }
 
 render();

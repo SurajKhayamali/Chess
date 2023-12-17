@@ -6,7 +6,7 @@ import {
   RANKS_LENGTH,
   SUPPORTED_SQUARE_HIGILIGHT_MODIFIERS,
 } from "../constants/constants";
-import { log } from "../utils";
+// import { log } from "../utils";
 import { Pawn, Piece } from "./components/pieces";
 import {
   handleEnPassantCaptureAvailability,
@@ -33,8 +33,6 @@ export class GameControl {
       {}
     );
     this.selectedPiece = null;
-
-    if (!this.isWhitesTurn) this.flipBoard();
 
     this.aiType = DEFAULT_AI_TYPE;
     this.aiThinkingStartTimestamp = null;
@@ -63,16 +61,23 @@ export class GameControl {
   }
 
   /**
-   * Flips the board.
+   * Fixes the board orientation.
    */
-  flipBoard() {
+  fixBoardOrientation() {
     if (this.state.isPlayerVsPlayer) {
-      this.boardElement.classList.toggle("chess-board__container--reverse");
       const playerNames = this.boardElement.querySelectorAll(
         ".chess-board__player-name"
       );
-      for (const playerName of playerNames) {
-        playerName.classList.toggle("chess-board__player-name--reverse");
+      if (!this.state.isWhitesTurn) {
+        this.boardElement.classList.add("chess-board__container--reverse");
+        for (const playerName of playerNames) {
+          playerName.classList.add("chess-board__player-name--reverse");
+        }
+      } else {
+        this.boardElement.classList.remove("chess-board__container--reverse");
+        for (const playerName of playerNames) {
+          playerName.classList.remove("chess-board__player-name--reverse");
+        }
       }
 
       for (const piece of this.state.getPieces()) {
@@ -96,7 +101,7 @@ export class GameControl {
   }
 
   /**
-   * Highlights a square on the board.
+   * Highlights a square on the board with a given modifier.
    *
    * @param {number} fileIndex The file index of the square to highlight.
    * @param {number} rankIndex The rank index of the square to highlight.
@@ -111,7 +116,7 @@ export class GameControl {
   }
 
   /**
-   * Removes a highlight styling from all square for a given modifier on the board.
+   * Removes a highlight styling from all square and resets the highlighted squares for a given modifier on the board.
    *
    * @param {"selected" | "valid" | "last-move" | "hover"} modifier The modifier to add to the class name.
    */
@@ -242,7 +247,7 @@ export class GameControl {
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.SELECTED);
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.VALID);
     this.removeHighlightFromSquare(HIGHLIGHT_MODIFIERS.CAPTURABLE);
-    this.flipBoard();
+    this.fixBoardOrientation();
     this.selectedPiece = null;
   }
 

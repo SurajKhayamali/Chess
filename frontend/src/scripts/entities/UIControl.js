@@ -4,7 +4,7 @@ import {
   displayTurn,
   displayWinByTime,
 } from "../message";
-import { log } from "../utils";
+// import { log } from "../utils";
 import { Timer } from "./Timer";
 
 const DEFAULT_GAME_TIME_IN_SECONDS = 10 * 60;
