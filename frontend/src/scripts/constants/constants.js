@@ -40,4 +40,6 @@ export const SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS = [
   PIECE_HIGHLIGHT_MODIFIERS.CHECKED,
 ];
 
+export const AI_THINKING_TIME = 1 * 1000; // 1 second, in milliseconds
+
 export const DEBUG = false;

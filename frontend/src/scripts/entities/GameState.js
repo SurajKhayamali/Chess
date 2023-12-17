@@ -1,3 +1,4 @@
+import { getRandomMove } from "../ai";
 import { FILES_LENGTH, RANKS_LENGTH } from "../constants/constants";
 import { displayCheckmate } from "../message";
 import { checkIfSameColor, log } from "../utils";
@@ -19,6 +20,13 @@ import { Player } from "./Player";
  * @property {number} rankIndex The new rank index of the piece.
  * @property {Piece?} capturedPiece The piece that was captured.
  * @property {boolean} isCheck Whether the move resulted in a check.
+ */
+
+/**
+ * @typedef {Object} ValidMove
+ * @property {Piece} piece The piece that was moved.
+ * @property {number} fileIndex The new file index of the piece.
+ * @property {number} rankIndex The new rank index of the piece.
  */
 
 export class GameState {
@@ -554,5 +562,36 @@ export class GameState {
   switchToPlayerVsPlayer() {
     this.player1.switchToPlayer();
     this.player2.switchToPlayer();
+  }
+
+  /**
+   * Returns all valid moves for the current player.
+   *
+   * @param {boolean} isWhite Whether the player is white.
+   *
+   * @returns {ValidMove[]} All valid moves for the current player.
+   */
+  getValidMoves(isWhite) {
+    const moves = [];
+    this.getPieces()
+      .filter((piece) => checkIfSameColor(piece.isWhite, isWhite))
+      .forEach((piece) => {
+        const { possibleMoves, capturablePieces } = piece.possibleMoves;
+        possibleMoves.forEach((move) => {
+          moves.push({
+            piece,
+            fileIndex: move[0],
+            rankIndex: move[1],
+          });
+        });
+        capturablePieces.forEach((move) => {
+          moves.push({
+            piece,
+            fileIndex: move[0],
+            rankIndex: move[1],
+          });
+        });
+      });
+    return moves;
   }
 }

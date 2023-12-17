@@ -1,4 +1,6 @@
+import { getRandomMove } from "../ai";
 import {
+  AI_THINKING_TIME,
   HIGHLIGHT_MODIFIERS,
   PIECES,
   RANKS_LENGTH,
@@ -33,6 +35,9 @@ export class GameControl {
     this.selectedPiece = null;
 
     if (!this.isWhitesTurn) this.flipBoard();
+
+    this.aiThinkingStartTimestamp = null;
+    this.handleAIsTurn();
   }
 
   /**
@@ -259,5 +264,42 @@ export class GameControl {
    */
   getEnPassantAvailableAt() {
     return this.state.enPassantAvailableAt;
+  }
+
+  /**
+   * Handles the AI's turn.
+   * This is called every frame.
+   * The AI will make a move after a certain amount of time.
+   * This is to prevent the AI from making a move instantly.
+   * This is to make the game more realistic.
+   * The AI will not make a move if the game has not started or has ended.
+   * The AI will not make a move if it is not the AI's turn.
+   * The AI will not make a move if the AI is not a computer.
+   */
+  handleAIsTurn() {
+    if (
+      this.state.currentPlayer.isComputer &&
+      this.state.hasGameStarted &&
+      !this.state.hasGameEnded
+    ) {
+      this.aiThinkingStartTimestamp =
+        this.aiThinkingStartTimestamp ?? Date.now();
+
+      if (this.aiThinkingStartTimestamp + AI_THINKING_TIME < Date.now()) {
+        const { piece, fileIndex, rankIndex } = getRandomMove(
+          this.state,
+          this.state.currentPlayer.isWhite
+        );
+        // log("Random move:", piece, fileIndex, rankIndex);
+        this.handlePieceClickOrDrag(piece);
+        this.handleMoveSelectedPieceTo(fileIndex, rankIndex);
+
+        this.aiThinkingStartTimestamp = null;
+      }
+    }
+
+    requestAnimationFrame(() => {
+      this.handleAIsTurn();
+    });
   }
 }
