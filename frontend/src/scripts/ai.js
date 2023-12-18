@@ -10,6 +10,12 @@ export const AI_TYPES = {
   ALPHA_BETA: "alphaBeta", // TODO: Not implemented yet, default to random
 };
 
+export const SELECTABLE_AI_TYPES = [
+  AI_TYPES.RANDOM,
+  AI_TYPES.GREEDY,
+  AI_TYPES.GENEROUS,
+];
+
 export const DEFAULT_AI_TYPE = AI_TYPES.GREEDY;
 
 /**
