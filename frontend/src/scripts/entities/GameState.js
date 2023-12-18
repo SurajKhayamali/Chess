@@ -147,9 +147,6 @@ export class GameState {
    * @param {Player?} winner The winner of the game if there is one (null if draw).
    */
   endGame(winner = null) {
-    this.hasGameEnded = true;
-    this.winner = winner;
-
     if (!winner) {
       this.audioPlayer.playDraw();
     } else if (winner.isWhite === this.player1.isWhite) {
@@ -157,6 +154,9 @@ export class GameState {
     } else {
       this.audioPlayer.playCheckmateLose();
     }
+
+    this.hasGameEnded = true;
+    this.winner = winner;
   }
 
   /**
@@ -433,6 +433,12 @@ export class GameState {
    * @param {Piece?} capturedPiece The piece that was captured.
    */
   recordAndMove(movedPiece, fileIndex, rankIndex, capturedPiece = null) {
+    if (capturedPiece) {
+      this.audioPlayer.playCapture();
+    } else {
+      this.audioPlayer.playMove();
+    }
+
     const { fileIndex: oldFileIndex, rankIndex: oldRankIndex } = movedPiece;
 
     // Move the piece to new square
@@ -455,12 +461,6 @@ export class GameState {
       capturedPiece: capturedPiece,
       isCheck: isOponentsKingInCheck,
     });
-
-    if (capturedPiece) {
-      this.audioPlayer.playCapture();
-    } else {
-      this.audioPlayer.playMove();
-    }
   }
 
   /**
