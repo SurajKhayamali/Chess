@@ -34,7 +34,6 @@ export class GameControl {
     );
     this.selectedPiece = null;
 
-    this.aiType = DEFAULT_AI_TYPE;
     this.aiThinkingStartTimestamp = null;
     this.handleAIsTurn();
   }
@@ -295,7 +294,7 @@ export class GameControl {
         const { piece, fileIndex, rankIndex } = getMoveBasedOnAiType(
           this.state,
           this.state.currentPlayer.isWhite,
-          this.aiType
+          this.state.currentPlayer.aiType
         );
         // log("Random move:", piece, fileIndex, rankIndex);
         this.handlePieceClickOrDrag(piece);

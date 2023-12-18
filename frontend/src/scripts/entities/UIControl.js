@@ -1,4 +1,4 @@
-import { SELECTABLE_AI_TYPES } from "../ai";
+import { DEFAULT_AI_TYPE, SELECTABLE_AI_TYPES } from "../ai";
 import {
   displayDraw,
   displayResignation,
@@ -94,6 +94,9 @@ export class UIControl {
       const option = document.createElement("option");
       option.value = aiType;
       option.textContent = aiType;
+
+      if (aiType === DEFAULT_AI_TYPE) option.setAttribute("selected", "true");
+
       this.aiTypeForPlayer1.forEach((aiTypeForPlayer1) => {
         aiTypeForPlayer1.appendChild(option.cloneNode(true));
       });
@@ -147,7 +150,9 @@ export class UIControl {
   initializeEventListenerForPlayerVsComputerModeForm() {
     this.playerVsComputerModeForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      this.gameState.switchToPlayerVsComputer();
+      const formData = new FormData(this.playerVsComputerModeForm);
+      const aiTypeForPlayer2 = formData.get("aiTypeForPlayer2");
+      this.gameState.switchToPlayerVsComputer(aiTypeForPlayer2);
       this.handleGameStart();
     });
   }
@@ -155,7 +160,13 @@ export class UIControl {
   initializeEventListenerForComputerVsComputerModeForm() {
     this.computerVsComputerModeForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      this.gameState.switchToComputerVsComputer();
+      const formData = new FormData(this.computerVsComputerModeForm);
+      const aiTypeForPlayer1 = formData.get("aiTypeForPlayer1");
+      const aiTypeForPlayer2 = formData.get("aiTypeForPlayer2");
+      this.gameState.switchToComputerVsComputer(
+        aiTypeForPlayer1,
+        aiTypeForPlayer2
+      );
       this.handleGameStart();
     });
   }

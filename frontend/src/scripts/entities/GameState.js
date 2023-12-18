@@ -558,19 +558,24 @@ export class GameState {
   /**
    * Switches the player 2 to computer.
    * This is called when playing against computer is selected.
+   *
+   * @param {string} aiTypeForPlayer2 selected AI type for player 2
    */
-  switchToPlayerVsComputer() {
+  switchToPlayerVsComputer(aiTypeForPlayer2) {
     this.player1.switchToPlayer();
-    this.player2.switchToComputer();
+    this.player2.switchToComputer(aiTypeForPlayer2);
   }
 
   /**
    * Switches both players to computer.
    * This is called when computer vs computer mode is selected.
+   *
+   * @param {string} aiTypeForPlayer1 selected AI type for player 1
+   * @param {string} aiTypeForPlayer2 selected AI type for player 2
    */
-  switchToComputerVsComputer() {
-    this.player1.switchToComputer();
-    this.player2.switchToComputer();
+  switchToComputerVsComputer(aiTypeForPlayer1, aiTypeForPlayer2) {
+    this.player1.switchToComputer(aiTypeForPlayer1);
+    this.player2.switchToComputer(aiTypeForPlayer2);
   }
 
   /**

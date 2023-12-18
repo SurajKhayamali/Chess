@@ -16,6 +16,7 @@ export class Player {
     this.isWhite = isWhite;
     this.state = state;
     this.isComputer = isComputer;
+    this.aiType = isComputer ? DEFAULT_AI_TYPE : null;
 
     this.king = this.state
       .getPieces()
@@ -45,9 +46,12 @@ export class Player {
 
   /**
    * Switches the player to computer.
+   *
+   * @param {string} aiType AI type
    */
-  switchToComputer() {
+  switchToComputer(aiType) {
     this.isComputer = true;
+    this.aiType = aiType;
   }
 
   /**
@@ -55,6 +59,7 @@ export class Player {
    */
   switchToPlayer() {
     this.isComputer = false;
+    this.aiType = null;
   }
 }
 
