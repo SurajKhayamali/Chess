@@ -17,20 +17,61 @@
             </div>
         </section>
         <section class="new-game">
-            <select class="new-game__input">
-                <option value="60">1 min</option>
-                <option value="180">3 min</option>
-                <option value="300">5 min</option>
-                <option value="600" selected>10 min</option>
-                <option value="1800">30 min</option>
-            </select>
-            <button class="new-game__button new-player-vs-player"
-                title="Play with another player on the same screen turn by turn">New Game
-                (Player vs Player)</button>
-            <button class="new-game__button new-player-vs-computer" title="Play with Computer">New Game (Player vs
-                Computer)</button>
-            <button class="new-game__button new-computer-vs-computer" title="Watch Computer play against itself">New
-                Game (Computer vs Computer)</button>
+            <h2 class="new-game__title">Play a New Game</h2>
+            <form class="player-vs-player-mode-form">
+                <div class="form-group">
+                    <label for="player1-name">Player/Computer 1's Name</label>
+                    <input type="text" id="player1-name" name="player1-name" class="new-game__input"
+                        placeholder="Enter player/computer 1's name">
+                </div>
+                <div class="form-group">
+                    <label for="player2-name">Player/Computer 2's Name</label>
+                    <input type="text" id="player2-name" name="player2-name" class="new-game__input"
+                        placeholder="Enter player/computer 2's name">
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <select id="duration" name="duration" class="new-game__input">
+                        <option value="60">1 min</option>
+                        <option value="180">3 min</option>
+                        <option value="300">5 min</option>
+                        <option value="600" selected>10 min</option>
+                        <option value="1800">30 min</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="new-game__button new-player-vs-player"
+                    title="Play with another player on the same screen turn by turn">New Game
+                    (Player vs Player)</button>
+            </form>
+            <form class="player-vs-computer-mode-form">
+                <div class="form-group">
+                    <label for="aiTypeForPlayer2">AI Type (Computer 2)</label>
+                    <select id="aiTypeForPlayer2" class="new-game__input ai-type-for-player-2">
+                    </select>
+                </div>
+
+                <button type="submit" class="new-game__button new-player-vs-computer"
+                    title="Play with Computerof your choice">New
+                    Game (Player vs
+                    Computer)</button>
+            </form>
+            <form class="computer-vs-computer-mode-form">
+                <div class="form-group">
+                    <label for="aiTypeForPlayer1">AI Type (Computer 1)</label>
+                    <select id="aiTypeForPlayer1" class="new-game__input ai-type-for-player-1">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="aiTypeForPlayer2">AI Type (Computer 2)</label>
+                    <select id="aiTypeForPlayer2" class="new-game__input ai-type-for-player-2">
+                    </select>
+                </div>
+                <button type="submit" class="new-game__button new-computer-vs-computer"
+                    title="Watch Computer play against itself">New
+                    Game (Computer vs Computer)</button>
+            </form>
         </section>
         <section class="game-info hidden">
             <div class="game-info__players">

@@ -14,11 +14,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $gap-default;
-        color: $color-white;
+        gap: $gap-large;
+        color: $color-primary;
         font-size: $font-size-medium;
         font-weight: bold;
-        text-transform: uppercase;
+        overflow-y: auto;
+        height: 100vh;
 
         @include e("button") {
             width: 100%;
@@ -38,9 +39,32 @@
         @include e("input") {
             width: 100%;
             padding: $padding-default;
+            box-sizing: border-box;
             border-radius: $border-radius-default;
             background-color: $color-white;
             cursor: pointer;
+        }
+
+        .player-vs-player-mode-form,
+        .player-vs-computer-mode-form,
+        .computer-vs-computer-mode-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gap-default;
+        }
+
+        .form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: $gap-default;
+
+            label {
+                font-size: $font-size-medium;
+                font-weight: bold;
+            }
         }
     }
 

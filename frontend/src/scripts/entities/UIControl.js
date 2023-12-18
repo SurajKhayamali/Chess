@@ -1,3 +1,4 @@
+import { SELECTABLE_AI_TYPES } from "../ai";
 import {
   displayDraw,
   displayResignation,
@@ -13,7 +14,18 @@ export class UIControl {
   constructor(board) {
     this.board = board;
     this.gameStartSection = document.querySelector(".new-game");
-    this.newGameInput = document.querySelector(".new-game__input");
+    this.playerVsPlayerModeForm = document.querySelector(
+      ".player-vs-player-mode-form"
+    );
+    this.playerVsComputerModeForm = document.querySelector(
+      ".player-vs-computer-mode-form"
+    );
+    this.computerVsComputerModeForm = document.querySelector(
+      ".computer-vs-computer-mode-form"
+    );
+    this.aiTypeForPlayer1 = document.querySelectorAll(".ai-type-for-player-1");
+    this.aiTypeForPlayer2 = document.querySelectorAll(".ai-type-for-player-2");
+    // this.newGameInput = document.querySelector(".new-game__input");
     this.gameInfoSection = document.querySelector(".game-info");
     this.playersHtml = document.querySelector(".game-info__players");
     this.playerNames = document.querySelectorAll(".game-info__player-name");
@@ -26,7 +38,10 @@ export class UIControl {
     this.player1Timer = new Timer(this.playerTimes[0], this.timeDuration);
     this.player2Timer = new Timer(this.playerTimes[1], this.timeDuration);
 
-    this.initializeEventListenerForGameStartButton();
+    this.fillOptionsForAiType();
+    this.initializeEventListenerForPlayerVsPlayerModeForm();
+    this.initializeEventListenerForPlayerVsComputerModeForm();
+    this.initializeEventListenerForComputerVsComputerModeForm();
     this.initializeEventListenerForUndoButton();
     this.initializeEventListenerForDrawButton();
     this.initializeEventListenerForResignButton();
@@ -55,6 +70,8 @@ export class UIControl {
     return this.gameState.isPlayerVsPlayer;
   }
 
+  get currentAiTypeForPlayer1() {}
+
   /**
    * Handles the game start.
    * The game is started.
@@ -68,38 +85,50 @@ export class UIControl {
     this.gameInfoSection.classList.remove("hidden");
   }
 
+  fillOptionsForAiType() {
+    SELECTABLE_AI_TYPES.forEach((aiType) => {
+      const option = document.createElement("option");
+      option.value = aiType;
+      option.textContent = aiType;
+      this.aiTypeForPlayer1.forEach((aiTypeForPlayer1) => {
+        aiTypeForPlayer1.appendChild(option.cloneNode(true));
+      });
+      this.aiTypeForPlayer2.forEach((aiTypeForPlayer2) => {
+        aiTypeForPlayer2.appendChild(option.cloneNode(true));
+      });
+    });
+  }
+
   /**
    * Initializes the event listener for the all mode game start buttons.
    */
-  initializeEventListenerForGameStartButton() {
-    const playerVsPlayerGameStartButton = document.querySelector(
-      ".new-player-vs-player"
-    );
-    playerVsPlayerGameStartButton.addEventListener("click", () => {
-      const selectedTime = this.newGameInput.value;
+  initializeEventListenerForPlayerVsPlayerModeForm() {
+    this.playerVsPlayerModeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(this.playerVsPlayerModeForm);
+      const selectedTime = formData.get("duration");
       if (selectedTime) {
         this.timeDuration =
           parseInt(selectedTime) || DEFAULT_GAME_TIME_IN_SECONDS;
         this.player1Timer.updateInitialTime(this.timeDuration);
         this.player2Timer.updateInitialTime(this.timeDuration);
       }
-
       this.gameState.switchToPlayerVsPlayer();
       this.handleGameStart();
     });
+  }
 
-    const playerVsComputerGameStartButton = document.querySelector(
-      ".new-player-vs-computer"
-    );
-    playerVsComputerGameStartButton.addEventListener("click", () => {
+  initializeEventListenerForPlayerVsComputerModeForm() {
+    this.playerVsComputerModeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
       this.gameState.switchToPlayerVsComputer();
       this.handleGameStart();
     });
+  }
 
-    const computerVsComputerGameStartButton = document.querySelector(
-      ".new-computer-vs-computer"
-    );
-    computerVsComputerGameStartButton.addEventListener("click", () => {
+  initializeEventListenerForComputerVsComputerModeForm() {
+    this.computerVsComputerModeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
       this.gameState.switchToComputerVsComputer();
       this.handleGameStart();
     });
