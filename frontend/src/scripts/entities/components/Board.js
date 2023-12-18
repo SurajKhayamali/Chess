@@ -40,6 +40,9 @@ export class Board {
 
     this.gameState.setControl(this.control);
 
+    this.playerNameBlack = this.generatePlayerName(false);
+    this.playerNameWhite = this.generatePlayerName(true);
+
     this.renderLoop();
   }
 
@@ -141,9 +144,11 @@ export class Board {
     if (isWhite) {
       this.player1Name = newName;
       this.gameState.player1.updateName(newName);
+      this.playerNameWhite.value = newName;
     } else {
       this.player2Name = newName;
       this.gameState.player2.updateName(newName);
+      this.playerNameBlack.value = newName;
     }
     this.store.changePlayerName(isWhite, newName);
   }
@@ -166,8 +171,7 @@ export class Board {
     const boardHtml = this.htmlElement;
     boardHtml.innerHTML = "";
 
-    const playerNameBlack = this.generatePlayerName(false);
-    boardHtml.appendChild(playerNameBlack);
+    boardHtml.appendChild(this.playerNameBlack);
 
     const boardContainer = this.generateBoardContainer();
 
@@ -195,8 +199,7 @@ export class Board {
 
     boardHtml.appendChild(boardContainer);
 
-    const playerNameWhite = this.generatePlayerName(true);
-    boardHtml.appendChild(playerNameWhite);
+    boardHtml.appendChild(this.playerNameWhite);
 
     return boardHtml;
   }

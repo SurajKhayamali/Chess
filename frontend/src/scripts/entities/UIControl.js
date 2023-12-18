@@ -39,6 +39,7 @@ export class UIControl {
     this.player2Timer = new Timer(this.playerTimes[1], this.timeDuration);
 
     this.fillOptionsForAiType();
+    this.fillExistingNameOfPlayers();
     this.initializeEventListenerForPlayerVsPlayerModeForm();
     this.initializeEventListenerForPlayerVsComputerModeForm();
     this.initializeEventListenerForComputerVsComputerModeForm();
@@ -85,6 +86,9 @@ export class UIControl {
     this.gameInfoSection.classList.remove("hidden");
   }
 
+  /**
+   * Fill options for AI type
+   */
   fillOptionsForAiType() {
     SELECTABLE_AI_TYPES.forEach((aiType) => {
       const option = document.createElement("option");
@@ -100,6 +104,20 @@ export class UIControl {
   }
 
   /**
+   * Fill existing name of players
+   */
+  fillExistingNameOfPlayers() {
+    if (this.board.player1Name) {
+      const player1NameInput = document.getElementById("player1-name");
+      player1NameInput.value = this.board.player1Name;
+    }
+    if (this.board.player2Name) {
+      const player2NameInput = document.getElementById("player2-name");
+      player2NameInput.value = this.board.player2Name;
+    }
+  }
+
+  /**
    * Initializes the event listener for the all mode game start buttons.
    */
   initializeEventListenerForPlayerVsPlayerModeForm() {
@@ -107,11 +125,19 @@ export class UIControl {
       event.preventDefault();
       const formData = new FormData(this.playerVsPlayerModeForm);
       const selectedTime = formData.get("duration");
+      const player1Name = formData.get("player1-name");
+      const player2Name = formData.get("player2-name");
       if (selectedTime) {
         this.timeDuration =
           parseInt(selectedTime) || DEFAULT_GAME_TIME_IN_SECONDS;
         this.player1Timer.updateInitialTime(this.timeDuration);
         this.player2Timer.updateInitialTime(this.timeDuration);
+      }
+      if (player1Name) {
+        this.board.changePlayerName(true, player1Name);
+      }
+      if (player2Name) {
+        this.board.changePlayerName(false, player2Name);
       }
       this.gameState.switchToPlayerVsPlayer();
       this.handleGameStart();
