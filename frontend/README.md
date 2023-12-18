@@ -8,7 +8,8 @@ The project has the following structure:
 
     .
     ├── public/ 
-    ├── images/ 
+    │   ├── audios/                                     # Audio files
+    │   └── images/                                     # Image files
     ├── src/ 
     │   ├── sass/ 
     │   │   ├── abstracts/ 
