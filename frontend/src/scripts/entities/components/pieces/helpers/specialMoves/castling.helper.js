@@ -48,7 +48,6 @@ function isCastlingPossible(king, rook) {
  *
  * @param {GameState} state
  * @param {King} king
- * @param {Rook} rook
  *
  * @returns {number[][]} possibleMoves
  */
@@ -80,6 +79,7 @@ export function getCastlingMovesIfPossible(state, king) {
  * Handles the castling move.
  *
  * @param {GameState} state
+ * @param {King} king
  * @param {number} fileIndex
  * @param {number} rankIndex
  */
