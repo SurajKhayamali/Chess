@@ -1,0 +1,9 @@
+{ 
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "baseUrl": "http://localhost:5000",
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzA0MzQwMDE1LCJleHAiOjE3MDQzNDAzMTV9.6rfUO_DS2Zqsi_1gpjns-Q9MujYknpgdvXjbcCSh2k0",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidG9rZW5UeXBlIjoicmVmcmVzaCIsImlhdCI6MTcwNDMxMTA2MSwiZXhwIjoxNzA2OTAzMDYxfQ.XxE1ulsUoGlpAf7TILoPMLMf24BdY0zzNBahylcJhs8"
+    }
+  }
+}

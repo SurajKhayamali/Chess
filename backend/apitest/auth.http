@@ -1,0 +1,52 @@
+@BASE_URL={{baseUrl}}
+@BASE_URL_FOR_AUTH={{BASE_URL}}/auth
+
+###
+POST {{BASE_URL_FOR_AUTH}}/signup
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "test@mail.com",
+    "username": "test",
+    "password": "test1234"
+}
+
+# Login with email
+###
+POST {{BASE_URL_FOR_AUTH}}/login
+Content-Type: application/json
+
+{
+    "emailOrUsername": "test@mail.com",
+    "password": "test1234"
+}
+
+# Login with username
+###
+POST {{BASE_URL_FOR_AUTH}}/login
+Content-Type: application/json
+
+{
+    "emailOrUsername": "test",
+    "password": "test1234"
+}
+
+# Invalid login
+###
+POST {{BASE_URL_FOR_AUTH}}/login
+Content-Type: application/json
+
+{
+    "emailOrUsername": "test",
+    "password": "test1"
+}
+
+###
+POST {{BASE_URL_FOR_AUTH}}/refresh
+Authorization: Bearer {{refreshToken}}
+
+###
+POST {{BASE_URL_FOR_AUTH}}/logout
+Authorization: Bearer {{refreshToken}}

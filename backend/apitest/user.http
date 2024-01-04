@@ -1,0 +1,20 @@
+@BASE_URL={{baseUrl}}
+@BASE_URL_FOR_USER={{BASE_URL}}/users
+
+###
+GET {{BASE_URL_FOR_USER}}
+
+###
+GET {{BASE_URL_FOR_USER}}/1
+
+###
+PATCH {{BASE_URL_FOR_USER}}/1
+Content-Type: application/json
+
+{
+    "firstName": "Johnny"
+}
+
+
+###
+DELETE {{BASE_URL_FOR_USER}}/1
