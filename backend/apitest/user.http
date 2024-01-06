@@ -1,14 +1,13 @@
-@BASE_URL={{baseUrl}}
-@BASE_URL_FOR_USER={{BASE_URL}}/users
+@BASE_URL={{baseUrl}}/users
 
 ###
-GET {{BASE_URL_FOR_USER}}
+GET {{BASE_URL}}
 
 ###
-GET {{BASE_URL_FOR_USER}}/1
+GET {{BASE_URL}}/1
 
 ###
-PATCH {{BASE_URL_FOR_USER}}/1
+PATCH {{BASE_URL}}/1
 Content-Type: application/json
 
 {
@@ -17,4 +16,4 @@ Content-Type: application/json
 
 
 ###
-DELETE {{BASE_URL_FOR_USER}}/1
+DELETE {{BASE_URL}}/1

@@ -1,8 +1,7 @@
-@BASE_URL={{baseUrl}}
-@BASE_URL_FOR_AUTH={{BASE_URL}}/auth
+@BASE_URL={{baseUrl}}/aut
 
 ###
-POST {{BASE_URL_FOR_AUTH}}/signup
+POST {{BASE_URL}}/signup
 Content-Type: application/json
 
 {
@@ -15,7 +14,7 @@ Content-Type: application/json
 
 # Login with email
 ###
-POST {{BASE_URL_FOR_AUTH}}/login
+POST {{BASE_URL}}/login
 Content-Type: application/json
 
 {
@@ -25,7 +24,7 @@ Content-Type: application/json
 
 # Login with username
 ###
-POST {{BASE_URL_FOR_AUTH}}/login
+POST {{BASE_URL}}/login
 Content-Type: application/json
 
 {
@@ -35,7 +34,7 @@ Content-Type: application/json
 
 # Invalid login
 ###
-POST {{BASE_URL_FOR_AUTH}}/login
+POST {{BASE_URL}}/login
 Content-Type: application/json
 
 {
@@ -44,9 +43,9 @@ Content-Type: application/json
 }
 
 ###
-POST {{BASE_URL_FOR_AUTH}}/refresh
+POST {{BASE_URL}}/refresh
 Authorization: Bearer {{refreshToken}}
 
 ###
-POST {{BASE_URL_FOR_AUTH}}/logout
+POST {{BASE_URL}}/logout
 Authorization: Bearer {{refreshToken}}
