@@ -1,0 +1,106 @@
+.chess-board {
+    height: 100vh;
+
+    @include e("player-name") {
+        all: unset;
+        box-sizing: border-box;
+        height: 60px;
+        width: 100%;
+        font-size: $font-size-large;
+        padding: $padding-default;
+
+        @include m("reverse") {
+            transform: rotate(180deg);
+        }
+    }
+
+    @include e("container") {
+        height: 100%;
+        width: max-content;
+        // transition: transform 2s ease-in-out;
+
+        @include m("reverse") {
+            transform: rotate(180deg);
+        }
+    }
+
+    @include e("board-container") {
+        height: calc(100% - 120px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    @include e("row") {
+        display: flex;
+        height: calc(100% / 8);
+    }
+
+    @include e("square") {
+        height: 100%;
+        aspect-ratio: 1;
+        /* disable any native browser highlighting */
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        @include m("dark") {
+            background-color: $color-dark;
+        }
+
+        @include m("light") {
+            background-color: $color-light;
+        }
+
+        @include m("selected") {
+            @include box-shadow-selected;
+        }
+
+        @include m("last-move") {
+            @include box-shadow-last-move;
+        }
+
+        @include m("valid") {
+            @include box-shadow-valid;
+
+            &:hover {
+                @include box-shadow-hover;
+            }
+        }
+
+        @include m("capturable") {
+            @include box-shadow-capturable;
+
+            &:hover {
+                @include box-shadow-hover;
+            }
+        }
+
+        @include m("hover") {
+            @include box-shadow-hover;
+        }
+    }
+
+    @include e("piece") {
+        height: 100%;
+        width: 100%;
+
+        @include cursor-grab;
+
+        &:active {
+            @include cursor-grabbing;
+        }
+
+        // transition: transform 2s ease-in-out;
+
+        @include m("reverse") {
+            transform: rotate(180deg);
+        }
+
+        @include m("checked") {
+            @include background-checked;
+        }
+    }
+}

@@ -1,0 +1,185 @@
+.main {
+    display: flex;
+    align-items: center;
+    gap: $gap-default;
+
+    .hidden {
+        display: none !important;
+    }
+
+    .new-game {
+        flex: 1;
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $gap-large;
+        color: $color-primary;
+        font-size: $font-size-medium;
+        font-weight: bold;
+        overflow-y: auto;
+        height: 100vh;
+
+        @include e("button") {
+            width: 100%;
+            padding: $padding-default;
+            border-radius: $border-radius-default;
+            border: none;
+            background-color: $color-primary;
+            color: $color-white;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+
+            &:hover {
+                background-color: $color-hover;
+            }
+        }
+
+        @include e("input") {
+            width: 100%;
+            padding: $padding-default;
+            box-sizing: border-box;
+            border-radius: $border-radius-default;
+            background-color: $color-white;
+            cursor: pointer;
+        }
+
+        .player-vs-player-mode-form,
+        .player-vs-computer-mode-form,
+        .computer-vs-computer-mode-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gap-default;
+        }
+
+        .form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: $gap-default;
+
+            label {
+                font-size: $font-size-medium;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .game-info {
+        width: 100%;
+        max-width: 600px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: $gap-default;
+        padding: $padding-default;
+        border-radius: $border-radius-default;
+        background-color: $color-white;
+        color: $color-primary;
+        font-size: $font-size-medium;
+        cursor: pointer;
+
+        @include e("players") {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            @include m("reverse") {
+                flex-direction: column-reverse;
+            }
+        }
+        @include e("player") {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @include e("status") {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gap-default;
+
+            @include e("text") {
+                font-size: $font-size-medium;
+                font-weight: normal;
+
+                @include m("winner") {
+                    color: $color-primary;
+                    font-weight: bold;
+                }
+
+                @include m("draw") {
+                    color: $color-secondary;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        @include e("buttons") {
+            display: flex;
+            align-items: center;
+            gap: $gap-default;
+        }
+
+        @include e("button") {
+            padding: $padding-default;
+            border-radius: $border-radius-default;
+            border: 1px solid $color-primary;
+            background-color: $color-white;
+            color: $color-primary;
+            font-size: $font-size-default;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+
+            display: flex;
+            gap: $gap-default;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background-color: $color-hover;
+                color: $color-white;
+            }
+        }
+
+        @include e("history") {
+            width: 100%;
+            max-height: 300px;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gap-default;
+            font-size: $font-size-small;
+            color: $color-black;
+
+            @include e("item") {
+                display: flex;
+                align-items: center;
+                gap: $gap-large;
+
+                @include e("button") {
+                    padding: $padding-default;
+                    border-radius: $border-radius-default;
+                    font-size: $font-size-default;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease-in-out;
+
+                    &:hover {
+                        background-color: $color-hover;
+                        color: $color-white;
+                    }
+                }
+            }
+        }
+    }
+}

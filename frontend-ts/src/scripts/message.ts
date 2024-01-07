@@ -1,0 +1,36 @@
+const message = document.querySelector(
+  '.game-info__status__text'
+) as HTMLParagraphElement;
+
+/**
+ * Displays the given text in the game status text.
+ *
+ * @param {string} text The text to display.
+ */
+function displayGameStatusText(text: string) {
+  message.innerText = text;
+}
+
+export function displayTurn(playerName: string) {
+  displayGameStatusText(`${playerName}'s turn`);
+}
+
+export function displayDraw() {
+  message.classList.add('game-info__status__text--draw');
+  displayGameStatusText('Draw!');
+}
+
+export function displayCheckmate(winner: string, loser: string) {
+  message.classList.add('game-info__status__text--winner');
+  displayGameStatusText(`${winner} wins by capturing ${loser}'s king!`);
+}
+
+export function displayResignation(winner: string) {
+  message.classList.add('game-info__status__text--winner');
+  displayGameStatusText(`${winner} wins by resignation!`);
+}
+
+export function displayWinByTime(winner: string) {
+  message.classList.add('game-info__status__text--winner');
+  displayGameStatusText(`${winner} wins by time!`);
+}

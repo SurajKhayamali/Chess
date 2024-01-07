@@ -1,0 +1,56 @@
+// colors
+$color-primary: #629924;
+$color-secondary: #88b537;
+$color-light: #f0d9b5;
+$color-dark: #b58863;
+$color-white: #ffffff;
+$color-background: #f1f1f1;
+$color-black: #000000;
+// $color-selected: #f7ec09;
+// $color-valid: #3ec70b;
+// $color-hover: #a149fa;
+// $color-selected: #629924;
+// $color-valid: #88b537;
+// $color-hover: #4c7a1a;
+$color-selected: $color-primary;
+$color-valid: transparentize($color-primary, 0.11);
+$color-capturable: transparentize($color-primary, 0.22);
+$color-last-move: transparentize($color-primary, 0.33);
+$color-checked: red;
+$color-hover: darken($color-primary, 5%);
+
+// padding
+$padding-xsmall: 5px;
+$padding-small: 10px;
+$padding-default: 20px;
+$padding-medium: 25px;
+$padding-large: 40px;
+$padding-xlarge: 70px;
+
+// margins
+$margin-default: 16px;
+$margin-medium: 32px;
+$margin-large: 48px;
+
+// gap
+$gap-default: 16px;
+$gap-medium: 32px;
+$gap-large: 48px;
+
+// border-radius
+$border-radius-default: 5px;
+$border-radius-medium: 10px;
+$border-radius-large: 20px;
+
+// font-size
+$font-size-xsmall: 0.5rem;
+$font-size-small: 0.75rem;
+$font-size-default: 1rem;
+$font-size-medium: 1.5rem;
+$font-size-large: 2rem;
+$font-size-xlarge: 3rem;
+
+// breakpoints
+$breakpoint-small: 576px;
+$breakpoint-medium: 768px;
+$breakpoint-large: 1024px;
