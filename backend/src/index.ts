@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import pino from 'pino-http';
+import cors from 'cors';
 
 import config from './config';
 import routes from './routes';
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(config.cookieSecret));
 
 app.use(pino());
+
+app.use(cors());
 
 app.use(routes);
 
