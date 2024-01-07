@@ -11,7 +11,12 @@ const router = new UniversalRouter(routes);
  */
 export function render(url: string) {
   router.resolve(url).then((html) => {
-    app.innerHTML = html;
+    if (typeof html === 'string') {
+      app.innerHTML = html;
+    } else {
+      app.innerHTML = '';
+      app.appendChild(html);
+    }
     window.history.pushState({}, '', url);
   });
 }

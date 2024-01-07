@@ -3,5 +3,18 @@ export function renderRegister() {
 }
 
 export function renderLogin() {
-  return '<h1>Login</h1>';
+  const loginForm = document.createElement('form');
+  loginForm.setAttribute('id', 'loginForm');
+  loginForm.innerHTML = `
+    <input name="email" type="email" placeholder="email" />
+    <input name="password" type="current-password" placeholder="password" />
+    <button type="submit">Login</button>
+  `;
+  loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    console.log('loginForm', loginForm);
+  });
+
+  return loginForm;
 }
