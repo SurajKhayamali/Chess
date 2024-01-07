@@ -26,7 +26,7 @@ export class AudioPlayer {
     this._isCurrentlyPlaying = false;
   }
 
-  _play(src) {
+  _play(src: string) {
     if (this._isCurrentlyPlaying) {
       this._audio.pause();
     }

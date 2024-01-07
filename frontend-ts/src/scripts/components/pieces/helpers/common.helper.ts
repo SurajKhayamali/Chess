@@ -1,3 +1,5 @@
+import { GameControl } from '../../../entities/GameControl';
+import { Moves } from '../../../interfaces/game.interface';
 import {
   checkFileIndexOutOfBounds,
   checkRankIndexOutOfBounds,
@@ -6,12 +8,15 @@ import {
 /**
  * Adds a move to the possible moves array if it is within the bounds of the board.
  *
- * @param {number[][]} possibleMoves
- * @param {number} fileIndex
- * @param {number} rankIndex
- * @returns
+ * @param possibleMoves
+ * @param fileIndex
+ * @param rankIndex
  */
-export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
+export function addToPossibleMoves(
+  possibleMoves: Moves,
+  fileIndex: number,
+  rankIndex: number
+) {
   if (
     checkFileIndexOutOfBounds(fileIndex) ||
     checkRankIndexOutOfBounds(rankIndex)
@@ -25,22 +30,22 @@ export function addToPossibleMoves(possibleMoves, fileIndex, rankIndex) {
  * Adds a move to the possible moves array if it is within the bounds of the board.
  * Also adds the move to the capturable moves array if there is an oponent's piece on the square.
  *
- * @param {GameControl} control
- * @param {number[][]} possibleMoves
- * @param {number[][]} capturablePieces
- * @param {number} fileIndex
- * @param {number} rankIndex
- * @param {boolean} isWhite
+ * @param control
+ * @param possibleMoves
+ * @param capturablePieces
+ * @param fileIndex
+ * @param rankIndex
+ * @param isWhite
  *
- * @returns {boolean} - true if should continue, false if should break
+ * @returns - true if should continue, false if should break
  */
 export function addToPossibleAndCapturableMoves(
-  control,
-  possibleMoves,
-  capturablePieces,
-  fileIndex,
-  rankIndex,
-  isWhite
+  control: GameControl,
+  possibleMoves: Moves,
+  capturablePieces: Moves,
+  fileIndex: number,
+  rankIndex: number,
+  isWhite: boolean
 ) {
   const existingPiece = control?.getPiecesOnSquare(fileIndex, rankIndex);
 
@@ -63,22 +68,22 @@ export function addToPossibleAndCapturableMoves(
  * This function is specific to the Pawn piece.
  * It handles the special case of the pawn capturing a piece diagonally.
  *
- * @param {GameControl} control
- * @param {number[][]} possibleMoves
- * @param {number[][]} capturablePieces
- * @param {number} fileIndex
- * @param {number} rankIndex
- * @param {boolean} isWhite
+ * @param control
+ * @param possibleMoves
+ * @param capturablePieces
+ * @param fileIndex
+ * @param rankIndex
+ * @param isWhite
  *
  * @returns {boolean} - true if should continue, false if should break
  */
 export function addToPossibleAndCapturableMovesForPawn(
-  control,
-  possibleMoves,
-  capturablePieces,
-  fileIndex,
-  rankIndex,
-  isWhite
+  control: GameControl,
+  possibleMoves: Moves,
+  capturablePieces: Moves,
+  fileIndex: number,
+  rankIndex: number,
+  isWhite: boolean
 ) {
   const existingPieceAtLeft = control?.getPiecesOnSquare(
     fileIndex - 1,
@@ -109,10 +114,10 @@ export function addToPossibleAndCapturableMovesForPawn(
 /**
  * Returns whether rank index should be incremented or decremented based on the color of the piece.
  *
- * @param {boolean} isWhite
+ * @param isWhite
  *
- * @returns {number} 1 if white, -1 if black
+ * @returns 1 if white, -1 if black
  */
-export function getRankIndexIncrement(isWhite) {
+export function getRankIndexIncrement(isWhite: boolean) {
   return isWhite ? 1 : -1;
 }

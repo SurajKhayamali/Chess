@@ -78,8 +78,10 @@ export class King extends Piece {
    * Adds the square at the specified file and rank index to the possible moves for castling.
    */
   addPossibleSpecialMoves() {
+    if (!this.control) return;
+
     const castlingMovesIfPossible = getCastlingMovesIfPossible(
-      this.control?.state,
+      this.control.state,
       this
     );
     log('castlingMovesIfPossible:', castlingMovesIfPossible);
@@ -88,7 +90,12 @@ export class King extends Piece {
     }
   }
 
-  updateIsInCheck(isInCheck) {
+  /**
+   * Updates the isInCheck property and highlights the piece if it is in check.
+   *
+   * @param isInCheck Whether the piece is in check.
+   */
+  updateIsInCheck(isInCheck: boolean) {
     if (isInCheck) {
       this.highlight(PieceHighlightModifiers.CHECKED);
     } else {
@@ -100,14 +107,16 @@ export class King extends Piece {
   /**
    * Returns whether the square at the specified file and rank index is under attack by an enemy piece.
    *
-   * @param {number} fileIndex The file index of the square.
-   * @param {number} rankIndex The rank index of the square.
+   * @param fileIndex The file index of the square.
+   * @param rankIndex The rank index of the square.
    *
-   * @returns {boolean} Whether the square at the specified file and rank index is under attack by an enemy piece.
+   * @returns Whether the square at the specified file and rank index is under attack by an enemy piece.
    *
    * @usage This method is used on the castling path squares to check if any are under attack.
    */
-  isSquareOccupiedOrUnderAttack(fileIndex, rankIndex) {
+  isSquareOccupiedOrUnderAttack(fileIndex: number, rankIndex: number) {
+    if (!this.control) return false;
+
     return this.control.state.isSquareOccupiedOrUnderAttack(
       fileIndex,
       rankIndex,
@@ -118,14 +127,16 @@ export class King extends Piece {
   /**
    * Returns whether the square at the specified file and rank index is under attack by an enemy piece.
    *
-   * @param {number} fileIndex The file index of the square.
-   * @param {number} rankIndex The rank index of the square.
+   * @param fileIndex The file index of the square.
+   * @param rankIndex The rank index of the square.
    *
-   * @returns {boolean} Whether the square at the specified file and rank index is under attack by an enemy piece.
+   * @returns Whether the square at the specified file and rank index is under attack by an enemy piece.
    *
    * @usage This method is used on the king's square to check if the king is in check.
    */
-  isSquareUnderAttack(fileIndex, rankIndex) {
+  isSquareUnderAttack(fileIndex: number, rankIndex: number) {
+    if (!this.control) return false;
+
     return this.control.state.isSquareUnderAttack(
       fileIndex,
       rankIndex,

@@ -1,4 +1,5 @@
 import { PieceType } from '../../enums/game.enum';
+import { Moves } from '../../interfaces/game.interface';
 import { Piece, PieceConstructorArgsWithoutName } from './Piece';
 
 export class Knight extends Piece {
@@ -7,8 +8,8 @@ export class Knight extends Piece {
   }
 
   getPossibleMoves() {
-    const possibleMoves = [];
-    const capturablePieces = [];
+    const possibleMoves: Moves = [];
+    const capturablePieces: Moves = [];
     const moveOffsets = [
       [-2, -1],
       [-2, 1],

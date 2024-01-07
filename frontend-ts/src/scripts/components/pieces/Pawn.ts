@@ -20,6 +20,8 @@ export class Pawn extends Piece {
     const possibleMoves: Moves = [];
     const capturablePieces: Moves = [];
 
+    if (!this.control) return { possibleMoves, capturablePieces };
+
     const rankIndexIncrement = getRankIndexIncrement(this.isWhite);
 
     const shouldContinue = addToPossibleAndCapturableMovesForPawn(
@@ -57,9 +59,9 @@ export class Pawn extends Piece {
   /**
    * Promotes the pawn to the specified piece type.
    *
-   * @param {string} pieceType
+   * @param pieceType
    *
-   * @returns {Piece} The promoted piece.
+   * @returns The promoted piece.
    */
   promoteTo(pieceType: PieceType) {
     const args: PieceConstructorArgsWithoutName = [

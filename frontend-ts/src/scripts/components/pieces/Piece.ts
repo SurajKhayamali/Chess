@@ -141,6 +141,8 @@ export class Piece {
     fileIndex: number,
     rankIndex: number
   ): boolean {
+    if (!this.control) return false;
+
     return addToPossibleAndCapturableMoves(
       this.control,
       possibleMoves,

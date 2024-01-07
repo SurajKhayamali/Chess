@@ -1,21 +1,22 @@
 /**
  * Returns the value of the item in local storage.
  *
- * @param {string} key
- *
- * @returns {any}
+ * @param key
  */
-function getItem(key) {
-  return JSON.parse(localStorage.getItem(key));
+function getItem(key: string) {
+  const value = localStorage.getItem(key);
+  if (!value) return null;
+
+  return JSON.parse(value);
 }
 
 /**
  * Sets the value of the item in local storage.
  *
- * @param {string} key
- * @param {any} value
+ * @param key
+ * @param value
  */
-function setItem(key, value) {
+function setItem(key: string, value: unknown) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
@@ -31,21 +32,21 @@ export class Store {
   /**
    * Returns the player name.
    *
-   * @param {boolean} isPlayer1 Whether it is of player 1.
+   * @param isPlayer1 Whether it is of player 1.
    *
-   * @returns {string} The player name.
+   * @returns The player name.
    */
-  getPlayerName(isPlayer1) {
+  getPlayerName(isPlayer1: boolean) {
     return isPlayer1 ? this.player1Name : this.player2Name;
   }
 
   /**
    * Changes the player name.
    *
-   * @param {boolean} isPlayer1 Whether it is for player 1.
-   * @param {string} newName The new name.
+   * @param isPlayer1 Whether it is for player 1.
+   * @param newName The new name.
    */
-  changePlayerName(isPlayer1, newName) {
+  changePlayerName(isPlayer1: boolean, newName: string) {
     if (isPlayer1) {
       this.player1Name = newName;
       setItem('player1Name', newName);

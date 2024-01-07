@@ -159,8 +159,8 @@ export class UIControl {
       event.preventDefault();
       const formData = new FormData(this.playerVsPlayerModeForm);
       const selectedTime = formData.get('duration') as string;
-      const player1Name = formData.get('player1-name');
-      const player2Name = formData.get('player2-name');
+      const player1Name = formData.get('player1-name') as string;
+      const player2Name = formData.get('player2-name') as string;
       if (selectedTime) {
         this.timeDuration =
           parseInt(selectedTime) || DEFAULT_GAME_TIME_IN_SECONDS;
