@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import pino from 'pino-http';
@@ -8,6 +9,7 @@ import {
   errorHandlerMiddleware,
   notFoundHandlerMiddleware,
 } from './middlewares/errorHandler.middleware';
+import { initializeDatabase } from './database/data-source';
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use(errorHandlerMiddleware);
 
 app.use(notFoundHandlerMiddleware);
 
-app.listen(config.port, () => {
-  console.log(`Server listening on port: ${config.port}`);
+initializeDatabase().then(() => {
+  app.listen(config.port, () => {
+    console.log(`Server listening on port: ${config.port}`);
+  });
 });

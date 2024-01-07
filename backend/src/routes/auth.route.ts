@@ -7,10 +7,15 @@ import {
 } from '../controllers/auth.controller';
 import { loginSchema, signUpSchema } from '../schemas/auth.schema';
 import { validateReqBody } from '../middlewares/validator.middleware';
+import { asyncHandler } from '../helpers/async.helper';
 
 const router = Router();
 
-router.post('/signup', validateReqBody(signUpSchema), handleSignup);
+router.post(
+  '/signup',
+  validateReqBody(signUpSchema),
+  asyncHandler(handleSignup)
+);
 
 router.post('/login', validateReqBody(loginSchema), handleLogin);
 

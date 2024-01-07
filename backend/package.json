@@ -40,6 +40,8 @@
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
-    "pino-http": "^9.0.0"
+    "pino-http": "^9.0.0",
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.19"
   }
 }

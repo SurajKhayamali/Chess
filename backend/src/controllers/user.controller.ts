@@ -22,7 +22,7 @@ export async function create(req: Request, res: Response) {
  * @param req
  * @param res
  */
-export async function getAll(req: Request, res: Response) {
+export async function getAll(_req: Request, res: Response) {
   const users = await userService.getAll();
 
   res.json(users);

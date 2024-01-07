@@ -11,11 +11,8 @@ import { clearCookie, setCookie } from '../helpers/cookie.helper';
  * @param req
  * @param res
  */
-export async function handleSignup(
-  req: Request<unknown, unknown, SignupDto>,
-  res: Response
-) {
-  const signupDto = req.body;
+export async function handleSignup(req: Request, res: Response) {
+  const signupDto = req.body as SignupDto;
 
   const { accessToken, refreshToken } = await authService.handleSignup(
     signupDto
@@ -100,7 +97,7 @@ export async function handleRefreshToken(
  * @param req
  * @param res
  */
-export async function handleLogout(req: Request, res: Response) {
+export async function handleLogout(_req: Request, res: Response) {
   clearCookie(res);
 
   return res.json({

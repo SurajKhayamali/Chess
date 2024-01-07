@@ -1,8 +1,5 @@
-import { NotFoundException } from '../exceptions';
-import { CreateUserDto, User } from '../interfaces/user.interface';
-// import { UserModel } from '../model/user.model';
-
-const users: User[] = [];
+import { CreateUserDto } from '../interfaces/user.interface';
+import { UserRepository } from '../repositories/user.repository';
 
 /**
  * Create a new user
@@ -12,15 +9,8 @@ const users: User[] = [];
  * @returns user
  */
 export async function create(createUserDto: CreateUserDto) {
-  // return UserModel.create(createUserDto);
-
-  const user = {
-    id: users.length + 1,
-    ...createUserDto,
-  };
-
-  users.push(user);
-
+  const user = UserRepository.create(createUserDto);
+  await UserRepository.save(user);
   return user;
 }
 
@@ -30,7 +20,7 @@ export async function create(createUserDto: CreateUserDto) {
  * @returns users
  */
 export async function getAll() {
-  // return UserModel.getAll();
+  const users = await UserRepository.find();
   return users;
 }
 
@@ -42,8 +32,24 @@ export async function getAll() {
  * @returns user
  */
 export async function getById(id: number) {
-  // return UserModel.getById(id);
-  return users.find((user) => user.id === id);
+  return UserRepository.findOneBy({ id });
+}
+
+/**
+ * Get user by id or fail
+ *
+ * @param id
+ *
+ * @returns user
+ */
+export async function getByIdOrFail(id: number) {
+  const user = await getById(id);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return user;
 }
 
 /**
@@ -54,8 +60,7 @@ export async function getById(id: number) {
  * @returns user
  */
 export async function getByEmail(email: string) {
-  // return UserModel.getByEmail(email);
-  return users.find((user) => user.email === email);
+  return UserRepository.findOneBy({ email });
 }
 
 /**
@@ -66,8 +71,7 @@ export async function getByEmail(email: string) {
  * @returns user
  */
 export async function getByUsername(username: string) {
-  // return UserModel.getByUsername(username);
-  return users.find((user) => user.username === username);
+  return UserRepository.findOneBy({ username });
 }
 
 /**
@@ -78,11 +82,10 @@ export async function getByUsername(username: string) {
  * @returns user
  */
 export async function getByEmailOrUsername(emailOrUsername: string) {
-  // return UserModel.getByEmailOrUsername(emailOrUsername);
-  return users.find(
-    (user) =>
-      user.email === emailOrUsername || user.username === emailOrUsername
-  );
+  return UserRepository.findOneBy([
+    { email: emailOrUsername },
+    { username: emailOrUsername },
+  ]);
 }
 
 /**
@@ -94,16 +97,13 @@ export async function getByEmailOrUsername(emailOrUsername: string) {
  * @returns user
  */
 export async function update(id: number, updateUserDto: CreateUserDto) {
-  const userIndex = users.findIndex((user) => user.id === id);
+  const user = await getByIdOrFail(id);
 
-  if (userIndex === -1) throw new NotFoundException();
+  UserRepository.merge(user, updateUserDto);
 
-  users[userIndex] = {
-    ...users[userIndex],
-    ...updateUserDto,
-  };
+  await UserRepository.save(user);
 
-  return users;
+  return user;
 }
 
 /**
@@ -112,12 +112,9 @@ export async function update(id: number, updateUserDto: CreateUserDto) {
  * @param id
  */
 export async function remove(id: number) {
-  // return UserModel.remove(id);
-  const userIndex = users.findIndex((user) => user.id === id);
+  const user = await getByIdOrFail(id);
 
-  if (userIndex === -1) throw new NotFoundException();
+  await UserRepository.remove(user);
 
-  users.splice(userIndex, 1);
-
-  return users;
+  return user;
 }

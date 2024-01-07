@@ -1,4 +1,4 @@
-@BASE_URL={{baseUrl}}/aut
+@BASE_URL={{baseUrl}}/auth
 
 ###
 POST {{BASE_URL}}/signup
@@ -44,8 +44,6 @@ Content-Type: application/json
 
 ###
 POST {{BASE_URL}}/refresh
-Authorization: Bearer {{refreshToken}}
 
 ###
 POST {{BASE_URL}}/logout
-Authorization: Bearer {{refreshToken}}

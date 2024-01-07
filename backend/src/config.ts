@@ -23,14 +23,12 @@ const serverConfig = {
   isProduction: process.env.NODE_ENV === 'production',
 
   database: {
-    charset: 'utf8',
-    client: process.env.DB_CLIENT,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    password: process.env.DB_PASSWORD,
-    port: Number(process.env.DB_PORT),
-    timezone: 'UTC',
-    user: process.env.DB_USER,
+    type: process.env.DB_TYPE || 'postgres',
+    database: process.env.DB_NAME || 'chess-backend',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    port: Number(process.env.DB_PORT) || 5432,
   },
 };
 

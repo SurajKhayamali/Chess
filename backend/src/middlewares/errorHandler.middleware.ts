@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions';
+import { TypeORMError } from 'typeorm';
 
 /**
  * Error handler middleware
@@ -23,6 +24,20 @@ export async function errorHandlerMiddleware(
 
   if (response.headersSent) {
     return next(error);
+  }
+
+  if (error instanceof TypeORMError && error.name === 'QueryFailedError') {
+    let message = 'Something went wrong!';
+    let statusCode = 500;
+
+    if (error.message.includes('duplicate key value violates unique')) {
+      message = 'Duplicate key error!';
+      statusCode = 400;
+    }
+
+    return response.status(statusCode).json({
+      error: message,
+    });
   }
 
   return response.status(statusCode || 500).json({
