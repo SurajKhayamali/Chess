@@ -1,4 +1,4 @@
-import '../../css/app.css';
+import '/styles/css/app.css';
 
 const app = document.getElementById('app')!;
 app.innerHTML = `

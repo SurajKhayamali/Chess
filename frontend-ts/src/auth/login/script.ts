@@ -1,4 +1,4 @@
-import { fetchHelper } from './helpers/fetch.helper';
+import { fetchHelper } from 'scripts/helpers/fetch.helper';
 
 const loginForm = document.querySelector('#loginForm') as HTMLFormElement;
 
