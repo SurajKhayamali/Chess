@@ -1,7 +1,7 @@
 @BASE_URL={{baseUrl}}/auth
 
 ###
-POST {{BASE_URL}}/signup
+POST {{BASE_URL}}/register
 Content-Type: application/json
 
 {

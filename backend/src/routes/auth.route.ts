@@ -12,7 +12,7 @@ import { asyncHandler } from '../helpers/async.helper';
 const router = Router();
 
 router.post(
-  '/signup',
+  '/register',
   validateReqBody(signUpSchema),
   asyncHandler(handleSignup)
 );

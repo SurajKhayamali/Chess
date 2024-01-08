@@ -1,6 +1,9 @@
+import tailwindcssTypography from '@tailwindcss/typography';
+import tailwindcssForms from '@tailwindcss/forms';
 import daisyui from 'daisyui';
 
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss';
+
 export default {
   content: [
     './public/**/*.{html,js}',
@@ -10,14 +13,17 @@ export default {
     './auth/**/*.{html,js}',
   ],
   theme: {
+    container: {
+      center: true,
+    },
     extend: {
       fontFamily: {
         sans: ['Custom Font', 'Nunito'],
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [tailwindcssTypography, tailwindcssForms, daisyui],
   daisyui: {
     themes: ['light', 'dark', 'cupcake'],
   },
-};
+} satisfies Config;
