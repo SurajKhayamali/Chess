@@ -1,7 +1,7 @@
 export class Timer {
   initialTime: number;
   time: number;
-  timerInterval?: number;
+  timerInterval?: NodeJS.Timeout;
   timerHtml: HTMLElement;
 
   constructor(timerHtml: HTMLElement, timeInSeconds = 10 * 60) {
