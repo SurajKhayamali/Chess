@@ -1,6 +1,6 @@
 export const component = `
     <div class="container w-full h-full flex justify-center items-center">
-        <div class="p-12 bg-neutral rounded-lg">
+        <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Register</h1>
             <form class="grid grid-cols-1 gap-6">
                 <label class="block">
