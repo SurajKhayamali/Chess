@@ -17,7 +17,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      sass: path.resolve(__dirname, 'src/styles/sass'),
       scripts: path.resolve(__dirname, 'src/scripts'),
     },
   },

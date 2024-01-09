@@ -6,35 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="./login.scss">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
 </head>
 
-<body class="container">
-    <div class="auth">
-        <h1>Log in</h1>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="emailOrUsername">Email or username</label>
-                <input type="text" class="form-control" id="emailOrUsername" name="emailOrUsername"
-                    aria-describedby="emailHelp" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="current-password" class="form-control" id="password" name="password"
-                    placeholder="Password">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-                <label class="form-check-label" for="rememberMe">Keep me logged in</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Log in</button>
-        </form>
+<body>
+    <div class="container w-screen h-screen flex justify-center items-center">
+        <div class="p-12 bg-neutral rounded-lg">
+            <h1 class="text-3xl font-bold mb-8">Log in</h1>
+            <form class="grid grid-cols-1 gap-6">
+                <label class="block">
+                    <span>Email or username</span>
+                    <input type="text" class="input input-bordered w-full max-w-xs" name="emailOrUsername"
+                        placeholder="john@example.com" required />
+                </label>
+                <label class="block">
+                    <span>Password*</span>
+                    <input type="current-password" class="input input-bordered w-full max-w-xs" name="password"
+                        placeholder="Enter your password" required />
+                </label>
 
-        <div class="alternate"><a href="/register">Register</a><a href="/password/reset">Password reset</a></div>
+                <div class="mt-2">
+                    <div>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="checkbox" name="agree" required />
+                            <span class="ml-2 label cursor-pointer">Keep me logged in</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-full">
+                    Log in
+                </button>
+            </form>
+
+            <div class="flex justify-between">
+                <a href="/auth/register/">Register</a>
+                <!-- <a href="/password/reset">Password reset</a> -->
+            </div>
+        </div>
     </div>
 
     <script type="module" src="./script.ts"></script>

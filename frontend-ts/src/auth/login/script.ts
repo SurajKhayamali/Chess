@@ -1,6 +1,7 @@
 import { fetchHelper } from 'scripts/helpers/fetch.helper';
+import '/styles/css/app.css';
 
-const loginForm = document.querySelector('#loginForm') as HTMLFormElement;
+const loginForm = document.querySelector('form')!;
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -14,15 +15,4 @@ loginForm.addEventListener('submit', async (e) => {
     body: JSON.stringify({ emailOrUsername, password }),
   });
   console.log(result);
-
-  // const result = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-  //   method: 'POST',
-  //   body: JSON.stringify({ emailOrUsername, password, rememberMe }),
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-
-  // const data = await result.json();
-  // console.log('data', data);
 });
