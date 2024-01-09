@@ -24,6 +24,6 @@ export default {
   },
   plugins: [tailwindcssTypography, tailwindcssForms, daisyui],
   daisyui: {
-    themes: ['light', 'dark', 'cupcake'],
+    themes: ['dark', 'light', 'cupcake'],
   },
 } satisfies Config;

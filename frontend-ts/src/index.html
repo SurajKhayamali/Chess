@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -12,11 +12,12 @@
 </head>
 
 <body>
-  <div class="navbar">
-    <div class="flex-1">
-      <a href="/" class="btn btn-ghost text-xl">Chess</a>
-    </div>
-    <!-- <div class="flex-none gap-2">
+  <div class="container">
+    <div class="navbar">
+      <div class="flex-1">
+        <a href="/" class="btn btn-ghost text-xl">Chess</a>
+      </div>
+      <!-- <div class="flex-none gap-2">
       <div class="form-control">
         <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
       </div>
@@ -40,12 +41,13 @@
       </div>
     </div> -->
 
-    <div class="navbar-end">
-      <a href="/auth/login/" class="btn btn-ghost">Login</a>
-      <a href="/auth/register/" class="btn btn-ghost">Register</a>
+      <div class="navbar-end">
+        <a href="/auth/login/" class="btn btn-ghost">Login</a>
+        <a href="/auth/register/" class="btn btn-ghost">Register</a>
+      </div>
     </div>
+    <div id="app"></div>
   </div>
-  <div id="app"></div>
 
   <script type="module" src="/scripts/router.ts"></script>
 </body>

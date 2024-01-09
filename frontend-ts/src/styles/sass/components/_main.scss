@@ -15,7 +15,6 @@
         flex-direction: column;
         align-items: center;
         gap: $gap-large;
-        color: $color-primary;
         font-size: $font-size-medium;
         font-weight: bold;
         overflow-y: auto;
@@ -34,24 +33,6 @@
             &:hover {
                 background-color: $color-hover;
             }
-        }
-
-        @include e("input") {
-            width: 100%;
-            padding: $padding-default;
-            box-sizing: border-box;
-            border-radius: $border-radius-default;
-            background-color: $color-white;
-            cursor: pointer;
-        }
-
-        .player-vs-player-mode-form,
-        .player-vs-computer-mode-form,
-        .computer-vs-computer-mode-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: $gap-default;
         }
 
         .form-group {
@@ -79,8 +60,6 @@
         gap: $gap-default;
         padding: $padding-default;
         border-radius: $border-radius-default;
-        background-color: $color-white;
-        color: $color-primary;
         font-size: $font-size-medium;
         cursor: pointer;
 
@@ -100,55 +79,10 @@
             align-items: center;
         }
 
-        @include e("status") {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: $gap-default;
-
-            @include e("text") {
-                font-size: $font-size-medium;
-                font-weight: normal;
-
-                @include m("winner") {
-                    color: $color-primary;
-                    font-weight: bold;
-                }
-
-                @include m("draw") {
-                    color: $color-secondary;
-                    font-weight: bold;
-                }
-            }
-        }
-
         @include e("buttons") {
             display: flex;
             align-items: center;
             gap: $gap-default;
-        }
-
-        @include e("button") {
-            padding: $padding-default;
-            border-radius: $border-radius-default;
-            border: 1px solid $color-primary;
-            background-color: $color-white;
-            color: $color-primary;
-            font-size: $font-size-default;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-
-            display: flex;
-            gap: $gap-default;
-            align-items: center;
-            justify-content: center;
-
-            &:hover {
-                background-color: $color-hover;
-                color: $color-white;
-            }
         }
 
         @include e("history") {

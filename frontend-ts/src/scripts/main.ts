@@ -18,7 +18,7 @@ import { generateBoardWithFENString } from './parseFEN';
 
 // board.render();
 
-console.log('rendering');
+// console.log('rendering');
 function render() {
   const board = generateBoardWithFENString(BOARD_ID);
   board.render();

@@ -36,13 +36,13 @@ export class UIControl {
       '.new-game'
     ) as HTMLDivElement;
     this.playerVsPlayerModeForm = document.querySelector(
-      '.player-vs-player-mode-form'
+      '#player-vs-player-mode-form'
     ) as HTMLFormElement;
     this.playerVsComputerModeForm = document.querySelector(
-      '.player-vs-computer-mode-form'
+      '#player-vs-computer-mode-form'
     ) as HTMLFormElement;
     this.computerVsComputerModeForm = document.querySelector(
-      '.computer-vs-computer-mode-form'
+      '#computer-vs-computer-mode-form'
     ) as HTMLFormElement;
     this.aiTypeForPlayer1 = document.querySelectorAll('.ai-type-for-player-1');
     this.aiTypeForPlayer2 = document.querySelectorAll('.ai-type-for-player-2');
@@ -207,9 +207,7 @@ export class UIControl {
    * When the button is clicked, the last move is undone.
    */
   initializeEventListenerForUndoButton() {
-    const undoButton = document.querySelector(
-      '.game-info__button--undo'
-    ) as HTMLButtonElement;
+    const undoButton = document.querySelector('#undoMove') as HTMLButtonElement;
     undoButton.addEventListener('click', () => {
       // log("Undo button clicked");
       this.gameState.undoLastMove();
@@ -222,7 +220,7 @@ export class UIControl {
    */
   initializeEventListenerForDrawButton() {
     const drawButton = document.querySelector(
-      '.game-info__button--draw'
+      '#offerDraw'
     ) as HTMLButtonElement;
     drawButton.addEventListener('click', () => {
       if (this.gameState.hasGameEnded) return;
@@ -239,9 +237,7 @@ export class UIControl {
    * The other player wins.
    */
   initializeEventListenerForResignButton() {
-    const resignButton = document.querySelector(
-      '.game-info__button--resign'
-    ) as HTMLButtonElement;
+    const resignButton = document.querySelector('#resign') as HTMLButtonElement;
     resignButton.addEventListener('click', () => {
       // log("Resign button clicked");
       if (this.gameState.hasGameEnded) return;
@@ -259,7 +255,7 @@ export class UIControl {
    */
   initializeEventListenerForNewGameButton() {
     const newGameButton = document.querySelector(
-      '.game-info__button--new'
+      '#newGame'
     ) as HTMLButtonElement;
     newGameButton.addEventListener('click', () => {
       // log("New game button clicked");
@@ -278,7 +274,7 @@ export class UIControl {
    */
   initializeEventListenerForRestartButton() {
     const restartButton = document.querySelector(
-      '.game-info__button--restart'
+      '#restart'
     ) as HTMLButtonElement;
     restartButton.addEventListener('click', () => {
       // log("Restart button clicked");
