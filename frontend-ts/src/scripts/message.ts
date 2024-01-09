@@ -1,5 +1,5 @@
 const message = document.querySelector(
-  '.game-info__status__text'
+  '#gameStatusText'
 ) as HTMLParagraphElement;
 
 /**
@@ -16,21 +16,26 @@ export function displayTurn(playerName: string) {
 }
 
 export function displayDraw() {
-  message.classList.add('game-info__status__text--draw');
+  message.classList.add('text-secondary');
   displayGameStatusText('Draw!');
 }
 
 export function displayCheckmate(winner: string, loser: string) {
-  message.classList.add('game-info__status__text--winner');
+  message.classList.add('text-primary');
   displayGameStatusText(`${winner} wins by capturing ${loser}'s king!`);
 }
 
 export function displayResignation(winner: string) {
-  message.classList.add('game-info__status__text--winner');
+  message.classList.add('text-primary');
   displayGameStatusText(`${winner} wins by resignation!`);
 }
 
 export function displayWinByTime(winner: string) {
-  message.classList.add('game-info__status__text--winner');
+  message.classList.add('text-primary');
   displayGameStatusText(`${winner} wins by time!`);
+}
+
+export function clearStatusTextClasses() {
+  message.classList.remove('text-primary');
+  message.classList.remove('text-secondary');
 }

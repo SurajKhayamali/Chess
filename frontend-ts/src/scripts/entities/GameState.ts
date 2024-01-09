@@ -1,5 +1,5 @@
 import { FILES_LENGTH, RANKS_LENGTH } from '../constants/game.constant';
-import { displayCheckmate } from '../message';
+import { clearStatusTextClasses, displayCheckmate } from '../message';
 import { checkIfSameColor, log } from '../utils';
 import { King, Pawn, Piece } from '../components/pieces';
 import { checkIfKingIsInCheck } from '../components/pieces/helpers/kingInCheck.helper';
@@ -124,6 +124,7 @@ export class GameState {
    * Starts a new game.
    */
   newGame() {
+    clearStatusTextClasses();
     this.currentBoardState = [...this.initialBoardState.map((arr) => [...arr])]; // 2D array of piece
 
     this.moves = [];

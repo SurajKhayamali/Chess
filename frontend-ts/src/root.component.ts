@@ -74,7 +74,7 @@ export const component = `
         </div>
 
         <div>
-          <p>Player 1 turn</p>
+          <p id="gameStatusText">Player 1 turn</p>
         </div>
 
         <div class="game-info__buttons during-game">
