@@ -18,6 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       scripts: path.resolve(__dirname, 'src/scripts'),
+      auth: path.resolve(__dirname, 'src/auth'),
     },
   },
 });

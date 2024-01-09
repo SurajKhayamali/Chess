@@ -26,6 +26,7 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "chess.js": "1.0.0-beta.7"
+    "chess.js": "1.0.0-beta.7",
+    "universal-router": "^9.2.0"
   }
 }

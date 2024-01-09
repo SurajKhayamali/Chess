@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-
-<body>
+export const component = `
     <div class="container w-screen h-screen flex justify-center items-center">
         <div class="p-12 bg-neutral rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Log in</h1>
@@ -45,6 +36,4 @@
     </div>
 
     <script type="module" src="./script.ts"></script>
-</body>
-
-</html>
+`;
