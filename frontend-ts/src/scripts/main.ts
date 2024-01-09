@@ -1,7 +1,10 @@
 // import { Chess } from 'chess.js';
 // import { Board } from './components/Board';
-import { BOARD_ID } from './constants/game.constant';
-import { generateBoardWithFENString } from './parseFEN';
+// import { BOARD_ID } from './constants/game.constant';
+// import { generateBoardWithFENString } from './parseFEN';
+// import { initialize } from './router';
+
+import { initialize } from './router';
 
 // const chess = new Chess();
 // console.log(chess.ascii());
@@ -19,10 +22,13 @@ import { generateBoardWithFENString } from './parseFEN';
 // board.render();
 
 // console.log('rendering');
-function render() {
-  const board = generateBoardWithFENString(BOARD_ID);
-  board.render();
-  board.reEvaluateGameState();
-}
+// function render() {
+//   const board = generateBoardWithFENString(BOARD_ID);
+//   board.render();
+//   board.reEvaluateGameState();
+// }
 
-render();
+// initialize().then(render);
+// render();
+
+initialize();

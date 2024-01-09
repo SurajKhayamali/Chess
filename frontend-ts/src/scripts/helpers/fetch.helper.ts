@@ -8,5 +8,9 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
       'Content-Type': 'application/json',
     },
   });
-  return res.json();
+  const result = await res.json();
+
+  if (result.error) throw new Error(result.error);
+
+  return result;
 }

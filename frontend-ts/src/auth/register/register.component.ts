@@ -1,3 +1,7 @@
+import { createScriptTag } from 'scripts/helpers/createScriptTag.helper';
+import { fetchHelper } from 'scripts/helpers/fetch.helper';
+import { handleNavigation } from 'scripts/router';
+
 export const component = `
     <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
@@ -50,3 +54,30 @@ export const component = `
         </div>
     </div>
 `;
+
+export const loadScripts = () => {
+  return createScriptTag('/auth/register/script.ts', 'module');
+};
+
+export const afterInitialize = () => {
+  const form = document.querySelector('form')!;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const body = Object.fromEntries(formData.entries());
+    // console.log('Body: ', body);
+
+    if (!body.middleName) delete body.middleName;
+    delete body.agree;
+
+    const response = await fetchHelper('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    console.log('Response: ', response);
+
+    handleNavigation('/', 'replace');
+  });
+};

@@ -10,17 +10,31 @@ const routes: IRoute[] = [rootRoute, authRoute];
 const router = new UniversalRouter(routes);
 
 /**
- * Returns the content to rendered for the given URL.
+ * Handles navigation to a URL.
  *
- * @param url The URL to render at.
+ * @param url The URL to navigate to.
+ * @param mode The navigation mode.
  */
-export function getRenderContent(url: string) {
-  //   router.resolve(url).then((html) => {
-  //     // app.innerHTML = html;
-  //     // window.history.pushState({}, '', url);
-  //   });
+export async function handleNavigation(
+  url: string,
+  mode: 'push' | 'replace' | 'pop' = 'push'
+) {
+  // if (url === window.location.pathname) return;
 
-  return router.resolve(url);
+  const content = await router.resolve(url);
+  if (!content) return;
+  // console.log(url, content);
+
+  const { component, loadScripts, afterInitialize } = content;
+  appContainer.innerHTML = component;
+  loadScripts && appContainer.appendChild(loadScripts());
+  afterInitialize && afterInitialize();
+
+  if (url === window.location.pathname) return;
+
+  if (mode === 'replace') window.history.replaceState({}, '', url);
+  else if (mode === 'push') window.history.pushState({}, '', url);
+  // else if (mode === 'pop') window.history.back();
 }
 
 /**
@@ -29,32 +43,25 @@ export function getRenderContent(url: string) {
  * @param link The link to intercept.
  */
 export function interceptLinkClick(link: HTMLAnchorElement) {
-  link.addEventListener('click', async (event) => {
+  link.addEventListener('click', (event) => {
     event.preventDefault();
     const href = link.getAttribute('href');
 
     if (!href) return;
     if (href === window.location.pathname) return;
 
-    const content = await getRenderContent(href);
-    if (!content) return;
-
-    const { component, loadScripts } = content;
-    appContainer.innerHTML = component;
-    loadScripts && appContainer.appendChild(loadScripts());
-    window.history.pushState({}, '', href);
+    handleNavigation(href, 'push');
   });
 }
 
-getRenderContent(window.location.pathname).then((content) => {
-  if (!content) return;
+export function initialize() {
+  // Intercept all link clicks.
+  const links = document.querySelectorAll<HTMLAnchorElement>('a');
+  links.forEach(interceptLinkClick);
 
-  const { component, loadScripts } = content;
-  appContainer.innerHTML = component;
-  loadScripts && appContainer.appendChild(loadScripts());
-  // window.history.pushState({}, '', url);
-});
+  window.addEventListener('popstate', () => {
+    handleNavigation(window.location.pathname, 'pop');
+  });
 
-// Intercept all link clicks.
-const links = document.querySelectorAll<HTMLAnchorElement>('a');
-links.forEach(interceptLinkClick);
+  return handleNavigation(window.location.pathname);
+}

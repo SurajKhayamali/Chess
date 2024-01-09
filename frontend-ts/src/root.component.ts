@@ -1,3 +1,6 @@
+import { BOARD_ID } from 'scripts/constants/game.constant';
+import { generateBoardWithFENString } from 'scripts/parseFEN';
+
 export const component = `
 <div class="container main">
       <section class="chess-board">
@@ -126,3 +129,17 @@ export const loadScripts = () => {
 
   return script;
 };
+
+export let message: HTMLParagraphElement;
+
+function render() {
+  const board = generateBoardWithFENString(BOARD_ID);
+  board.render();
+  board.reEvaluateGameState();
+
+  message = document.querySelector('#gameStatusText')!;
+}
+
+export function afterInitialize() {
+  render();
+}
