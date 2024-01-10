@@ -5,7 +5,7 @@ import { handleLogout } from 'services/auth.service';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { AUTH_MESSAGES } from 'constants/message.constant';
 
-export const renderNavComponent = (context: NavbarContext) => {
+export function renderNavComponent(context: NavbarContext) {
   const { isLoggedIn, userInfo } = context;
   navbarContainer.innerHTML = `
 <nav class="navbar">
@@ -55,4 +55,4 @@ ${
       });
     });
   }
-};
+}
