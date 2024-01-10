@@ -7,8 +7,9 @@ import { IRoute } from 'interfaces/router.interface';
 import { NavigationMode } from 'enums/route.enum';
 import { renderNavComponent } from 'components/navbar/navbar.component';
 import { checkIfAuthenticated } from 'helpers/auth.helper';
+import { notFoundRoute } from 'pages/notfound/notfound.route';
 
-const routes: IRoute[] = [rootRoute, authRoute];
+const routes: IRoute[] = [rootRoute, authRoute, notFoundRoute];
 
 const router = new UniversalRouter([
   {
