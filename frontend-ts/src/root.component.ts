@@ -116,6 +116,7 @@ export const component = `
         </div>
       </section>
     </div>
+    <script type="module" src="/scripts/main.ts"></script>
 `;
 
 export const loadScripts = () => {

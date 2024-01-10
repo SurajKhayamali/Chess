@@ -54,6 +54,7 @@ export const component = `
             </form>
         </div>
     </div>
+    <script type="module" src="/auth/register/script.ts"></script>
 `;
 
 export const loadScripts = () => {

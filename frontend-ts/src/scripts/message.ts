@@ -2,7 +2,8 @@
 //   '#gameStatusText'
 // ) as HTMLParagraphElement;
 
-import { message } from '../root.component';
+// import { message } from '../root.component';
+import { message } from './main';
 
 /**
  * Displays the given text in the game status text.

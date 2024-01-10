@@ -5,6 +5,7 @@ import { appContainer } from './constants/router.constant';
 import { rootRoute } from '../root.route';
 import { IRoute } from './interfaces/router.interface';
 import { NavigationMode } from './enums/route.enum';
+import { nodeScriptReplace } from './helpers/script.helper';
 
 const routes: IRoute[] = [rootRoute, authRoute];
 
@@ -26,10 +27,13 @@ export async function handleNavigation(
   if (!content) return;
   // console.log(url, content);
 
-  const { component, loadScripts, afterInitialize } = content;
+  const { component } = content;
+  // const { component, loadScripts, afterInitialize } = content;
   appContainer.innerHTML = component;
-  loadScripts && appContainer.appendChild(loadScripts());
-  afterInitialize && afterInitialize();
+  // loadScripts && appContainer.appendChild(loadScripts());
+  // afterInitialize && afterInitialize();
+  nodeScriptReplace(appContainer);
+  console.log('appContainer', appContainer);
 
   if (url === window.location.pathname) return;
 

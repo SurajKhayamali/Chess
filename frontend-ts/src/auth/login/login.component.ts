@@ -39,6 +39,7 @@ export const component = `
             </div>
         </div>
     </div>
+    <script type="module" src="/auth/login/script.ts"></script>
 `;
 
 export const loadScripts = () => {
