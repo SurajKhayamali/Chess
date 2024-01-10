@@ -1,8 +1,10 @@
+import { navbarContainer } from 'scripts/constants/router.constant';
 import { NavbarContext } from './navbar.interface';
+import { interceptLinkClicks } from 'scripts/router';
 
 export const renderNavComponent = (context: NavbarContext) => {
   const { isLoggedIn, userInfo } = context;
-  return `
+  navbarContainer.innerHTML = `
 <nav class="navbar">
 <div class="flex-1">
     <a href="/" class="btn btn-ghost text-xl">Chess</a>
@@ -10,7 +12,7 @@ export const renderNavComponent = (context: NavbarContext) => {
 ${
   isLoggedIn
     ? `
-<div class="flex-none gap-2 hidden">
+<div class="flex-none gap-2">
     <div class="form-control">
         <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
     </div>
@@ -43,4 +45,6 @@ ${
 }
 </nav>
 `;
+
+  interceptLinkClicks(navbarContainer);
 };

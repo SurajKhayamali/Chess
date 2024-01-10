@@ -55,10 +55,16 @@ export function interceptLinkClick(link: HTMLAnchorElement) {
   });
 }
 
+export function interceptLinkClicks(dom: Document | Element) {
+  const links = dom.querySelectorAll<HTMLAnchorElement>('a');
+  links.forEach(interceptLinkClick);
+}
+
 export function initialize() {
   // Intercept all link clicks.
-  const links = document.querySelectorAll<HTMLAnchorElement>('a');
-  links.forEach(interceptLinkClick);
+  // const links = document.querySelectorAll<HTMLAnchorElement>('a');
+  // links.forEach(interceptLinkClick);
+  interceptLinkClicks(document);
 
   window.addEventListener('popstate', () => {
     handleNavigation(window.location.pathname, NavigationMode.POP);

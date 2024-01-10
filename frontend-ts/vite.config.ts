@@ -19,6 +19,7 @@ export default defineConfig({
     alias: {
       scripts: path.resolve(__dirname, 'src/scripts'),
       auth: path.resolve(__dirname, 'src/auth'),
+      components: path.resolve(__dirname, 'src/components'),
     },
   },
 });
