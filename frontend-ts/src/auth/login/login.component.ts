@@ -48,7 +48,6 @@ export const loadScripts = () => {
 
 export const afterInitialize = () => {
   const loginForm = document.querySelector('form')!;
-  console.log('loginForm', loginForm);
 
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
