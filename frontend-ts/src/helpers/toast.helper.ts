@@ -1,4 +1,5 @@
 import { TOAST_DEFAULT_DURATION } from 'constants/toast.constant';
+import { debounce } from './debounce.helper';
 
 export enum ToastType {
   SUCCESS = 'success',
@@ -7,13 +8,21 @@ export enum ToastType {
   WARNING = 'warning',
 }
 
+let toastContainer: HTMLDivElement | null = null;
+
+const debouncedRemoveToastContainer = debounce(() => {
+  toastContainer?.remove();
+  toastContainer = null;
+}, TOAST_DEFAULT_DURATION);
+
 export function displayToast(
   message: string,
   type: ToastType = ToastType.SUCCESS,
   duration: number = TOAST_DEFAULT_DURATION
 ) {
-  const toast = document.createElement('div');
-  toast.classList.add('toast');
+  if (!toastContainer) toastContainer = document.createElement('div');
+
+  toastContainer.classList.add('toast');
 
   const alert = document.createElement('div');
   alert.classList.add('alert');
@@ -23,9 +32,12 @@ export function displayToast(
   span.innerText = message;
 
   alert.appendChild(span);
-  toast.appendChild(alert);
-  document.body.appendChild(toast);
+  toastContainer.appendChild(alert);
+  document.body.appendChild(toastContainer);
+
   setTimeout(() => {
-    toast.remove();
+    alert.remove();
   }, duration);
+
+  debouncedRemoveToastContainer();
 }
