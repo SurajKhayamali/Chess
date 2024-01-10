@@ -1,8 +1,9 @@
-export interface JwtDecodedPayload {
+import { User } from './user.interface';
+
+export interface JwtDecodedPayload
+  extends Pick<
+    User,
+    'firstName' | 'middleName' | 'lastName' | 'email' | 'username'
+  > {
   userId: number;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  email: string;
-  username: string;
 }

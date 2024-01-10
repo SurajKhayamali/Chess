@@ -1,8 +1,9 @@
+import { AUTH_MESSAGES } from 'scripts/constants/message.constant';
 import { NavigationMode } from 'scripts/enums/route.enum';
-import { setIsLoggedIn } from 'scripts/helpers/auth.helper';
 import { createScriptTag } from 'scripts/helpers/createScriptTag.helper';
-import { fetchHelper } from 'scripts/helpers/fetch.helper';
+import { ToastType, displayToast } from 'scripts/helpers/toast.helper';
 import { handleNavigation } from 'scripts/router';
+import { handleLogin } from 'services/auth.service';
 
 export const component = `
     <div class="container w-screen h-screen flex justify-center items-center">
@@ -56,13 +57,17 @@ export const afterInitialize = () => {
     const password = loginForm.password.value;
     // const rememberMe = loginForm.rememberMe.checked;
 
-    const result = await fetchHelper('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ emailOrUsername, password }),
-    });
-    console.log(result);
-    setIsLoggedIn(true);
+    try {
+      await handleLogin({ emailOrUsername, password });
+      displayToast(AUTH_MESSAGES.LOG_IN_SUCCESS, ToastType.SUCCESS);
 
-    handleNavigation('/', NavigationMode.REPLACE);
+      handleNavigation('/', NavigationMode.REPLACE);
+    } catch (error) {
+      if (error instanceof Error)
+        displayToast(
+          error.message || AUTH_MESSAGES.LOG_IN_FAILURE,
+          ToastType.ERROR
+        );
+    }
   });
 };

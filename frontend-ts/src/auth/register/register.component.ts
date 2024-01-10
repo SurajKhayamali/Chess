@@ -1,8 +1,10 @@
+import { AUTH_MESSAGES } from 'scripts/constants/message.constant';
 import { NavigationMode } from 'scripts/enums/route.enum';
-import { setIsLoggedIn } from 'scripts/helpers/auth.helper';
 import { createScriptTag } from 'scripts/helpers/createScriptTag.helper';
-import { fetchHelper } from 'scripts/helpers/fetch.helper';
+import { ToastType, displayToast } from 'scripts/helpers/toast.helper';
+import { SignupDto } from 'scripts/interfaces/auth.interface';
 import { handleNavigation } from 'scripts/router';
+import { handleRegister } from 'services/auth.service';
 
 export const component = `
     <div class="container w-full h-full flex justify-center items-center">
@@ -74,13 +76,17 @@ export const afterInitialize = () => {
     if (!body.middleName) delete body.middleName;
     delete body.agree;
 
-    const response = await fetchHelper('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
-    console.log('Response: ', response);
-    setIsLoggedIn(true);
+    try {
+      await handleRegister(body as SignupDto);
+      displayToast(AUTH_MESSAGES.REGISTER_SUCCESS, ToastType.SUCCESS);
 
-    handleNavigation('/', NavigationMode.REPLACE);
+      handleNavigation('/', NavigationMode.REPLACE);
+    } catch (error) {
+      if (error instanceof Error)
+        displayToast(
+          error.message || AUTH_MESSAGES.REGISTER_FAILURE,
+          ToastType.ERROR
+        );
+    }
   });
 };

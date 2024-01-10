@@ -1,15 +1,5 @@
-import { API_URL } from '../constants/api.constant';
-
-async function refreshToken() {
-  // INFO: Using fetch instead of fetchHelper to avoid infinite loop
-  const response = await fetch(`${API_URL}/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-  });
-  if (response.status !== 200) throw new Error('Failed to refresh token');
-
-  return response.json();
-}
+import { API_URL } from '../constants/config.constant';
+import { handleRefresh } from 'services/auth.service';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
@@ -22,7 +12,7 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
   });
   if (res.status === 401) {
     try {
-      await refreshToken();
+      await handleRefresh();
       console.log('Refreshed token');
 
       return fetchHelper(url, options);

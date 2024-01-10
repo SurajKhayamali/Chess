@@ -2,6 +2,8 @@ import { navbarContainer } from 'scripts/constants/router.constant';
 import { NavbarContext } from './navbar.interface';
 import { interceptLinkClicks } from 'scripts/router';
 import { handleLogout } from 'services/auth.service';
+import { ToastType, displayToast } from 'scripts/helpers/toast.helper';
+import { AUTH_MESSAGES } from 'scripts/constants/message.constant';
 
 export const renderNavComponent = (context: NavbarContext) => {
   const { isLoggedIn, userInfo } = context;
@@ -43,8 +45,9 @@ ${
 
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      handleLogout();
+    logoutBtn.addEventListener('click', async () => {
+      await handleLogout();
+      displayToast(AUTH_MESSAGES.LOG_OUT_SUCCESS, ToastType.SUCCESS);
 
       renderNavComponent({
         isLoggedIn: false,
