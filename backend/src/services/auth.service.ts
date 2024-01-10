@@ -32,7 +32,16 @@ export async function handleSignup(signupDto: SignupDto) {
     password: hashedPassword,
   });
 
-  return generateJWTTokens({ userId: user.id });
+  const { id, firstName, middleName, lastName, email, username } = user;
+
+  return generateJWTTokens({
+    userId: id,
+    firstName,
+    middleName,
+    lastName,
+    email,
+    username,
+  });
 }
 
 /**
@@ -56,7 +65,16 @@ export async function handleLogin(loginDto: LoginDto) {
     throw new BadRequestException('Invalid password!');
   }
 
-  return generateJWTTokens({ userId: user.id });
+  const { id, firstName, middleName, lastName, email, username } = user;
+
+  return generateJWTTokens({
+    userId: id,
+    firstName,
+    middleName,
+    lastName,
+    email,
+    username,
+  });
 }
 
 /**
@@ -72,7 +90,6 @@ export async function handleRefreshToken(refreshToken: string) {
     if (payload.tokenType !== 'refresh') throw new Error('Invalid token type!');
 
     return reGenerateJWTTokens(payload);
-    // return userService.getAllUsers();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
       throw new UnauthorizedException(error.message);

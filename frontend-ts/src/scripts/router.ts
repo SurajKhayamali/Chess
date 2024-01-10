@@ -4,6 +4,7 @@ import { authRoute } from 'auth/auth.route';
 import { appContainer } from './constants/router.constant';
 import { rootRoute } from '../root.route';
 import { IRoute } from './interfaces/router.interface';
+import { NavigationMode } from './enums/route.enum';
 
 const routes: IRoute[] = [rootRoute, authRoute];
 
@@ -17,7 +18,7 @@ const router = new UniversalRouter(routes);
  */
 export async function handleNavigation(
   url: string,
-  mode: 'push' | 'replace' | 'pop' = 'push'
+  mode: NavigationMode = NavigationMode.PUSH
 ) {
   // if (url === window.location.pathname) return;
 
@@ -32,9 +33,9 @@ export async function handleNavigation(
 
   if (url === window.location.pathname) return;
 
-  if (mode === 'replace') window.history.replaceState({}, '', url);
-  else if (mode === 'push') window.history.pushState({}, '', url);
-  // else if (mode === 'pop') window.history.back();
+  if (mode === NavigationMode.REPLACE) window.history.replaceState({}, '', url);
+  else if (mode === NavigationMode.PUSH) window.history.pushState({}, '', url);
+  // else if (mode === NavigationMode.POP) window.history.back();
 }
 
 /**
@@ -50,7 +51,7 @@ export function interceptLinkClick(link: HTMLAnchorElement) {
     if (!href) return;
     if (href === window.location.pathname) return;
 
-    handleNavigation(href, 'push');
+    handleNavigation(href, NavigationMode.PUSH);
   });
 }
 
@@ -60,7 +61,7 @@ export function initialize() {
   links.forEach(interceptLinkClick);
 
   window.addEventListener('popstate', () => {
-    handleNavigation(window.location.pathname, 'pop');
+    handleNavigation(window.location.pathname, NavigationMode.POP);
   });
 
   return handleNavigation(window.location.pathname);

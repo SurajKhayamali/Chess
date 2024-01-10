@@ -30,6 +30,8 @@ const serverConfig = {
     password: process.env.DB_PASSWORD || 'postgres',
     port: Number(process.env.DB_PORT) || 5432,
   },
+
+  clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
 };
 
 export default serverConfig;

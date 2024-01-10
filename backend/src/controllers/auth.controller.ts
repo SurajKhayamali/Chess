@@ -4,6 +4,8 @@ import * as authService from '../services/auth.service';
 import { LoginDto, SignupDto } from '../interfaces/auth.interface';
 import { extractJWTTokenFromRequest } from '../helpers/jwt.helper';
 import { clearCookie, setCookie } from '../helpers/cookie.helper';
+import { AuthenticatedRequest } from '../interfaces/jwt.interface';
+import { UnauthorizedException } from '../exceptions';
 
 /**
  * Handle signup request
@@ -103,4 +105,10 @@ export async function handleLogout(_req: Request, res: Response) {
   return res.json({
     message: 'Logout successful!',
   });
+}
+
+export async function checkAuth(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) throw new UnauthorizedException('User not found!');
+
+  return res.json(req.user);
 }

@@ -1,7 +1,7 @@
-import { Route } from 'universal-router';
+import { Route, RouteContext } from 'universal-router';
 
 export interface IRoute extends Route {
-  action?: () => Promise<{
+  action?: (context?: RouteContext) => Promise<{
     component: string;
     loadScripts?: () => HTMLScriptElement;
     afterInitialize?: () => void;

@@ -1,3 +1,4 @@
+import { NavigationMode } from 'scripts/enums/route.enum';
 import { createScriptTag } from 'scripts/helpers/createScriptTag.helper';
 import { fetchHelper } from 'scripts/helpers/fetch.helper';
 import { handleNavigation } from 'scripts/router';
@@ -34,7 +35,7 @@ export const component = `
                 </label>
                 <label class="block">
                     <span>Password*</span>
-                    <input type="current-password" class="input input-bordered w-full max-w-xs" name="password"
+                    <input type="password" class="input input-bordered w-full max-w-xs" name="password"
                         placeholder="Enter your password" required />
                 </label>
 
@@ -78,6 +79,6 @@ export const afterInitialize = () => {
     });
     console.log('Response: ', response);
 
-    handleNavigation('/', 'replace');
+    handleNavigation('/', NavigationMode.REPLACE);
   });
 };
