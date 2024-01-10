@@ -1,4 +1,5 @@
 import { BOARD_ID } from 'constants/game.constant';
+import { reInitializeMessage } from 'scripts/message';
 import { generateBoardWithFENString } from 'scripts/parseFEN';
 
 export const component = `
@@ -130,14 +131,12 @@ export const loadScripts = () => {
   return script;
 };
 
-export let message: HTMLParagraphElement;
-
 function render() {
   const board = generateBoardWithFENString(BOARD_ID);
   board.render();
   board.reEvaluateGameState();
 
-  message = document.querySelector('#gameStatusText')!;
+  reInitializeMessage();
 }
 
 export function afterInitialize() {

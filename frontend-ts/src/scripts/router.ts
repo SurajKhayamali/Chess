@@ -2,14 +2,15 @@ import UniversalRouter from 'universal-router';
 
 import { authRoute } from 'pages/auth/auth.route';
 import { appContainer } from 'constants/router.constant';
-import { rootRoute } from '../root.route';
+import { homeRoute } from '../pages/home/home.route';
 import { IRoute } from 'interfaces/router.interface';
 import { NavigationMode } from 'enums/route.enum';
 import { renderNavComponent } from 'components/navbar/navbar.component';
 import { checkIfAuthenticated } from 'helpers/auth.helper';
 import { notFoundRoute } from 'pages/notfound/notfound.route';
+import { offlineRoute } from 'pages/offline/offline.route';
 
-const routes: IRoute[] = [rootRoute, authRoute, notFoundRoute];
+const routes: IRoute[] = [homeRoute, authRoute, offlineRoute, notFoundRoute];
 
 const router = new UniversalRouter([
   {

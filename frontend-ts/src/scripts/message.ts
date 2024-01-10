@@ -1,8 +1,8 @@
-// const message = document.querySelector(
-//   '#gameStatusText'
-// ) as HTMLParagraphElement;
+let message = document.querySelector('#gameStatusText') as HTMLParagraphElement;
 
-import { message } from '../root.component';
+export function reInitializeMessage() {
+  message = document.querySelector('#gameStatusText') as HTMLParagraphElement;
+}
 
 /**
  * Displays the given text in the game status text.

@@ -38,6 +38,7 @@ ${
 </div>
 `
 }
+<a href="/offline" class="btn btn-ghost">Play offline</a>
 </nav>
 `;
 

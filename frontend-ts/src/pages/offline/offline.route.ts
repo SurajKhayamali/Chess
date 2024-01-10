@@ -1,11 +1,8 @@
-import { IRoute } from 'interfaces/router.interface';
-
-export const rootRoute: IRoute = {
-  path: '/',
+export const offlineRoute = {
+  path: '/offline',
   action: async () => {
-    // console.log('root route');
     const { component, loadScripts, afterInitialize } = await import(
-      './root.component'
+      './offline.component'
     );
     return { component, loadScripts, afterInitialize };
   },
