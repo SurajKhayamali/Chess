@@ -1,7 +1,7 @@
-import { GameState } from './entities/GameState';
-import { Piece } from './components/pieces';
-import { checkIfSameColor } from './utils';
-import { ValidMove } from './interfaces/game.interface';
+import { GameState } from 'entities/GameState';
+import { Piece } from 'components/pieces';
+import { checkIfSameColor } from 'scripts/utils';
+import { ValidMove } from 'interfaces/game.interface';
 
 export enum AI_TYPE {
   RANDOM = 'random', // randomly selects a move from all possible moves

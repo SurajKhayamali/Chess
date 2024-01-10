@@ -1,26 +1,23 @@
 // vite.config.js
-import path, { resolve } from 'path';
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: './src',
   base: './',
   publicDir: '../public',
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'src/index.html'),
-        login: resolve(__dirname, 'src/auth/login/index.html'),
-        register: resolve(__dirname, 'src/auth/register/index.html'),
-      },
-    },
-  },
   resolve: {
     alias: {
-      scripts: path.resolve(__dirname, 'src/scripts'),
-      auth: path.resolve(__dirname, 'src/auth'),
-      components: path.resolve(__dirname, 'src/components'),
-      services: path.resolve(__dirname, 'src/services'),
+      auth: resolve(__dirname, 'src/auth'),
+      components: resolve(__dirname, 'src/components'),
+      constants: resolve(__dirname, 'src/constants'),
+      entities: resolve(__dirname, 'src/entities'),
+      enums: resolve(__dirname, 'src/enums'),
+      helpers: resolve(__dirname, 'src/helpers'),
+      interfaces: resolve(__dirname, 'src/interfaces'),
+      pages: resolve(__dirname, 'src/pages'),
+      scripts: resolve(__dirname, 'src/scripts'),
+      services: resolve(__dirname, 'src/services'),
     },
   },
 });

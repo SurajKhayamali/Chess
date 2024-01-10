@@ -1,8 +1,8 @@
-import { API_URL } from 'scripts/constants/config.constant';
-import { AUTH_ENDPOINTS } from 'scripts/constants/endpoint.constant';
-import { setIsLoggedIn } from 'scripts/helpers/auth.helper';
-import { fetchHelper } from 'scripts/helpers/fetch.helper';
-import { LoginDto, SignupDto } from 'scripts/interfaces/auth.interface';
+import { API_URL } from 'constants/config.constant';
+import { AUTH_ENDPOINTS } from 'constants/endpoint.constant';
+import { setIsLoggedIn } from 'helpers/auth.helper';
+import { fetchHelper } from 'helpers/fetch.helper';
+import { LoginDto, SignupDto } from 'interfaces/auth.interface';
 
 export async function handleRegister(body: SignupDto) {
   await fetchHelper(AUTH_ENDPOINTS.REGISTER, {

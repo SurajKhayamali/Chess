@@ -4,9 +4,9 @@ import {
   MAX_INDEX,
   MIN_INDEX,
   RANKS,
-} from './constants/game.constant';
-import { SquareColor } from './enums/game.enum';
-import { SquareColorType } from './interfaces/game.interface';
+} from 'constants/game.constant';
+import { SquareColor } from 'enums/game.enum';
+import { SquareColorType } from 'interfaces/game.interface';
 
 /**
  * Returns if the index is out of bounds.

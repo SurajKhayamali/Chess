@@ -1,4 +1,4 @@
-import { BOARD_ID } from 'scripts/constants/game.constant';
+import { BOARD_ID } from 'constants/game.constant';
 import { generateBoardWithFENString } from 'scripts/parseFEN';
 
 export const component = `

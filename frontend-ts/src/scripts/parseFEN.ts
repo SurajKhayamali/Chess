@@ -2,8 +2,8 @@ import {
   FILES_LENGTH,
   RANKS_LENGTH,
   DEFAULT_FEN_STRING,
-} from './constants/game.constant';
-import { Board } from './components/Board';
+} from 'constants/game.constant';
+import { Board } from 'components/Board';
 import {
   Bishop,
   King,
@@ -12,7 +12,7 @@ import {
   Piece,
   Queen,
   Rook,
-} from './components/pieces';
+} from 'components/pieces';
 
 interface FENParsed {
   board: string[][];

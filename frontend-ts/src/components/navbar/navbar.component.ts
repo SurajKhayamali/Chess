@@ -1,9 +1,9 @@
-import { navbarContainer } from 'scripts/constants/router.constant';
+import { navbarContainer } from 'constants/router.constant';
 import { NavbarContext } from './navbar.interface';
 import { interceptLinkClicks } from 'scripts/router';
 import { handleLogout } from 'services/auth.service';
-import { ToastType, displayToast } from 'scripts/helpers/toast.helper';
-import { AUTH_MESSAGES } from 'scripts/constants/message.constant';
+import { ToastType, displayToast } from 'helpers/toast.helper';
+import { AUTH_MESSAGES } from 'constants/message.constant';
 
 export const renderNavComponent = (context: NavbarContext) => {
   const { isLoggedIn, userInfo } = context;

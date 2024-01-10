@@ -1,12 +1,12 @@
 import { IRoute } from 'interfaces/router.interface';
 
-export const rootRoute: IRoute = {
-  path: '/',
+export const loginRoute: IRoute = {
+  path: '/login',
   action: async () => {
-    // console.log('root route');
     const { component, loadScripts, afterInitialize } = await import(
-      './root.component'
+      './login.component'
     );
+
     return { component, loadScripts, afterInitialize };
   },
 };

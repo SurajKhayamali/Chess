@@ -1,12 +1,12 @@
 import UniversalRouter from 'universal-router';
 
-import { authRoute } from 'auth/auth.route';
-import { appContainer } from './constants/router.constant';
+import { authRoute } from 'pages/auth/auth.route';
+import { appContainer } from 'constants/router.constant';
 import { rootRoute } from '../root.route';
-import { IRoute } from './interfaces/router.interface';
-import { NavigationMode } from './enums/route.enum';
+import { IRoute } from 'interfaces/router.interface';
+import { NavigationMode } from 'enums/route.enum';
 import { renderNavComponent } from 'components/navbar/navbar.component';
-import { checkIfAuthenticated } from './helpers/auth.helper';
+import { checkIfAuthenticated } from 'helpers/auth.helper';
 
 const routes: IRoute[] = [rootRoute, authRoute];
 
