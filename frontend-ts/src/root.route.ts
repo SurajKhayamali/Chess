@@ -1,5 +1,3 @@
-import { renderNavComponent } from 'components/navbar/navbar.component';
-import { checkIfAuthenticated } from 'scripts/helpers/auth.helper';
 import { IRoute } from 'scripts/interfaces/router.interface';
 
 export const rootRoute: IRoute = {
@@ -9,9 +7,6 @@ export const rootRoute: IRoute = {
     const { component, loadScripts, afterInitialize } = await import(
       './root.component'
     );
-
-    const authContext = await checkIfAuthenticated();
-    renderNavComponent(authContext);
     return { component, loadScripts, afterInitialize };
   },
 };

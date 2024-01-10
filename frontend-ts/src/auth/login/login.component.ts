@@ -1,4 +1,5 @@
 import { NavigationMode } from 'scripts/enums/route.enum';
+import { setIsLoggedIn } from 'scripts/helpers/auth.helper';
 import { createScriptTag } from 'scripts/helpers/createScriptTag.helper';
 import { fetchHelper } from 'scripts/helpers/fetch.helper';
 import { handleNavigation } from 'scripts/router';
@@ -16,7 +17,7 @@ export const component = `
                 <label class="block">
                     <span>Password*</span>
                     <input type="password" class="input input-bordered w-full max-w-xs" name="password"
-                        placeholder="Enter your password" required />
+                        placeholder="Enter your password" autocomplete="on" required />
                 </label>
 
                 <div class="mt-2">
@@ -61,6 +62,7 @@ export const afterInitialize = () => {
       body: JSON.stringify({ emailOrUsername, password }),
     });
     console.log(result);
+    setIsLoggedIn(true);
 
     handleNavigation('/', NavigationMode.REPLACE);
   });

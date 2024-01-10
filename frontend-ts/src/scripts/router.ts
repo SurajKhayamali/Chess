@@ -5,10 +5,21 @@ import { appContainer } from './constants/router.constant';
 import { rootRoute } from '../root.route';
 import { IRoute } from './interfaces/router.interface';
 import { NavigationMode } from './enums/route.enum';
+import { renderNavComponent } from 'components/navbar/navbar.component';
+import { checkIfAuthenticated } from './helpers/auth.helper';
 
 const routes: IRoute[] = [rootRoute, authRoute];
 
-const router = new UniversalRouter(routes);
+const router = new UniversalRouter([
+  {
+    path: '/',
+    async action() {
+      const authContext = await checkIfAuthenticated();
+      renderNavComponent(authContext);
+    },
+    children: routes,
+  },
+]);
 
 /**
  * Handles navigation to a URL.
