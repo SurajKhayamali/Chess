@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import * as userService from '../services/user.service';
+import { UserAdapter } from '../adapters/user.adapter';
 
 /**
  * Create user
@@ -12,8 +13,9 @@ export async function create(req: Request, res: Response) {
   const createUserDto = req.body;
 
   const user = await userService.create(createUserDto);
+  const adaptedUser = UserAdapter.adaptForResponse(user);
 
-  res.status(201).json(user);
+  res.status(201).json(adaptedUser);
 }
 
 /**
@@ -24,8 +26,9 @@ export async function create(req: Request, res: Response) {
  */
 export async function getAll(_req: Request, res: Response) {
   const users = await userService.getAll();
+  const adaptedUsers = UserAdapter.adaptAllForResponse(users);
 
-  res.json(users);
+  res.json(adaptedUsers);
 }
 
 /**
@@ -39,9 +42,10 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
   const { id } = req.params;
 
   try {
-    const user = await userService.getById(parseInt(id));
+    const user = await userService.getByIdOrFail(parseInt(id));
+    const adaptedUser = UserAdapter.adaptForResponse(user);
 
-    res.json(user);
+    res.json(adaptedUser);
   } catch (error) {
     next(error);
   }
@@ -60,8 +64,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
   try {
     const user = await userService.update(parseInt(id), updateUserDto);
+    const adaptedUser = UserAdapter.adaptForResponse(user);
 
-    res.json(user);
+    res.json(adaptedUser);
   } catch (error) {
     next(error);
   }
@@ -79,8 +84,9 @@ export async function remove(req: Request, res: Response, next: NextFunction) {
 
   try {
     const user = await userService.remove(parseInt(id));
+    const adaptedUser = UserAdapter.adaptForResponse(user);
 
-    res.json(user);
+    res.json(adaptedUser);
   } catch (error) {
     next(error);
   }

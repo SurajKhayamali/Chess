@@ -13,3 +13,7 @@ export interface User {
 export interface CreateUserDto extends Omit<User, 'id'> {}
 
 export interface UpdateUserDto extends Partial<CreateUserDto> {}
+
+export interface UserResponse extends Omit<User, 'password'> {
+  fullName: string;
+}

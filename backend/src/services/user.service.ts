@@ -1,3 +1,4 @@
+import { NotFoundException } from '../exceptions';
 import { CreateUserDto } from '../interfaces/user.interface';
 import { UserRepository } from '../repositories/user.repository';
 
@@ -46,7 +47,7 @@ export async function getByIdOrFail(id: number) {
   const user = await getById(id);
 
   if (!user) {
-    throw new Error('User not found');
+    throw new NotFoundException('User not found');
   }
 
   return user;
