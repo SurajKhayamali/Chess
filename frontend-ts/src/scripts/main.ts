@@ -5,6 +5,7 @@
 // import { initialize } from './router';
 
 import { initialize } from './router';
+import './socket';
 
 // const chess = new Chess();
 // console.log(chess.ascii());
