@@ -1,13 +1,12 @@
 import { KEY_FOR_LOGGED_IN } from 'constants/localstorage.constant';
-import { fetchHelper } from './fetch.helper';
-import { AUTH_ENDPOINTS } from 'constants/endpoint.constant';
+import { handleCheckIfAuthenticated } from 'services/auth.service';
 
 export async function checkIfAuthenticated() {
   const isLoggedIn = localStorage.getItem(KEY_FOR_LOGGED_IN) === 'true';
   if (!isLoggedIn) return { isLoggedIn: false };
 
   try {
-    const response = await fetchHelper(AUTH_ENDPOINTS.ME);
+    const response = await handleCheckIfAuthenticated();
     return { isLoggedIn: true, userInfo: response };
   } catch (error) {
     console.log(error);

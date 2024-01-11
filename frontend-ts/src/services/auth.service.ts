@@ -44,3 +44,8 @@ export async function handleRefresh() {
   setIsLoggedIn(true);
   return response.json();
 }
+
+export async function handleCheckIfAuthenticated() {
+  const response = await fetchHelper(AUTH_ENDPOINTS.ME);
+  return response;
+}
