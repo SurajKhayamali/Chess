@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions';
 import { TypeORMError } from 'typeorm';
+import { HttpStatusCode } from '../enums/httpStatusCode.enum';
 
 /**
  * Error handler middleware
@@ -28,11 +29,11 @@ export async function errorHandlerMiddleware(
 
   if (error instanceof TypeORMError && error.name === 'QueryFailedError') {
     let message = 'Something went wrong!';
-    let statusCode = 500;
+    let statusCode = HttpStatusCode.INTERNAL_SERVER;
 
     if (error.message.includes('duplicate key value violates unique')) {
       message = 'Duplicate key error!';
-      statusCode = 400;
+      statusCode = HttpStatusCode.BAD_REQUEST;
     }
 
     return response.status(statusCode).json({
@@ -40,13 +41,13 @@ export async function errorHandlerMiddleware(
     });
   }
 
-  return response.status(statusCode || 500).json({
+  return response.status(statusCode || HttpStatusCode.INTERNAL_SERVER).json({
     error: message || 'Something went wrong!',
   });
 }
 
 export function notFoundHandlerMiddleware(_req: Request, res: Response) {
-  return res.status(404).json({
+  return res.status(HttpStatusCode.NOT_FOUND).json({
     error: 'Not found!',
   });
 }

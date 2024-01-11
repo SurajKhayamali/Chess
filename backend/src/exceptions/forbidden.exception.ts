@@ -1,7 +1,8 @@
+import { HttpStatusCode } from '../enums/httpStatusCode.enum';
 import { HttpException } from './http.exception';
 
 export class ForbiddenException extends HttpException {
   constructor(message?: string) {
-    super(403, message || 'Forbidden');
+    super(HttpStatusCode.FORBIDDEN, message || 'Forbidden');
   }
 }

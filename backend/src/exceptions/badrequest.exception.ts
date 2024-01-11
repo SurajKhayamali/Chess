@@ -1,7 +1,8 @@
+import { HttpStatusCode } from '../enums/httpStatusCode.enum';
 import { HttpException } from './http.exception';
 
 export class BadRequestException extends HttpException {
   constructor(message?: string) {
-    super(400, message || 'Bad request');
+    super(HttpStatusCode.BAD_REQUEST, message || 'Bad request');
   }
 }

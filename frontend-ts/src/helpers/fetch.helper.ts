@@ -1,4 +1,5 @@
 import { API_URL } from 'constants/config.constant';
+import { HttpStatusCode } from 'enums/httpStatusCode.enum';
 import { handleRefresh } from 'services/auth.service';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
@@ -10,7 +11,7 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
     },
     credentials: 'include',
   });
-  if (res.status === 401) {
+  if (res.status === HttpStatusCode.UNAUTHORIZED) {
     try {
       await handleRefresh();
       console.log('Refreshed token');
