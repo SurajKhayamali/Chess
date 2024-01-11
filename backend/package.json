@@ -34,6 +34,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@socket.io/redis-streams-adapter": "^0.1.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -43,6 +44,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
     "pino-http": "^9.0.0",
+    "redis": "^4.6.12",
     "reflect-metadata": "^0.2.1",
     "socket.io": "^4.7.3",
     "typeorm": "^0.3.19"

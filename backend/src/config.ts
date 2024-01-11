@@ -31,6 +31,12 @@ const serverConfig = {
     port: Number(process.env.DB_PORT) || 5432,
   },
 
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: Number(process.env.REDIS_PORT) || 6379,
+    password: process.env.REDIS_PASSWORD || '',
+  },
+
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
 };
 

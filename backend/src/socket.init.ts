@@ -1,8 +1,13 @@
 import { Server as HTTPServer } from 'node:http';
 import { Server } from 'socket.io';
-import serverConfig from './config';
+import { createAdapter } from '@socket.io/redis-streams-adapter';
 
-export const initializeSocket = (httpServer: HTTPServer) => {
+import serverConfig from './config';
+import { initializeRedis, redisClient } from './redis.init';
+
+export const initializeSocket = async (httpServer: HTTPServer) => {
+  await initializeRedis();
+
   const io = new Server(httpServer, {
     serveClient: false,
     connectionStateRecovery: {
@@ -15,11 +20,13 @@ export const initializeSocket = (httpServer: HTTPServer) => {
       origin: serverConfig.clientUrl,
       credentials: true,
     },
+    adapter: createAdapter(redisClient),
   });
 
   io.on('connection', (socket) => {
     // ...
-    console.log('a user connected', socket);
+    // console.log('a user connected', socket);
+    console.log('a user connected');
 
     if (socket.recovered) {
       // recovery was successful: socket.id, socket.rooms and socket.data were restored
