@@ -1,9 +1,10 @@
 import { Server as HTTPServer } from 'node:http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-streams-adapter';
 
 import serverConfig from './config';
 import { initializeRedis, redisClient } from './redis.init';
+import { registerUserHandlers } from './handlers/user.handler';
 
 export const initializeSocket = async (httpServer: HTTPServer) => {
   await initializeRedis();
@@ -23,15 +24,22 @@ export const initializeSocket = async (httpServer: HTTPServer) => {
     adapter: createAdapter(redisClient),
   });
 
-  io.on('connection', (socket) => {
-    // ...
-    // console.log('a user connected', socket);
-    console.log('a user connected');
+  const onConnection = (socket: Socket) => {
+    // registerOrderHandlers(io, socket);
+    registerUserHandlers(io, socket);
+  };
 
-    if (socket.recovered) {
-      // recovery was successful: socket.id, socket.rooms and socket.data were restored
-    } else {
-      // new or unrecoverable session
-    }
-  });
+  io.on('connection', onConnection);
+
+  // io.on('connection', (socket) => {
+  //   // ...
+  //   // console.log('a user connected', socket);
+  //   console.log('a user connected');
+
+  //   if (socket.recovered) {
+  //     // recovery was successful: socket.id, socket.rooms and socket.data were restored
+  //   } else {
+  //     // new or unrecoverable session
+  //   }
+  // });
 };

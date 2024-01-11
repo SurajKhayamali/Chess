@@ -1,8 +1,11 @@
 import { API_URL } from 'constants/config.constant';
 import { AUTH_ENDPOINTS } from 'constants/endpoint.constant';
+import { SocketEvent } from 'enums/socket.enum';
 import { setIsLoggedIn } from 'helpers/auth.helper';
 import { fetchHelper } from 'helpers/fetch.helper';
-import { LoginDto, SignupDto } from 'interfaces/auth.interface';
+import { emit } from 'helpers/socket.helper';
+import { LoginDto, SignupDto, UserOnlineDto } from 'interfaces/auth.interface';
+import { socket } from 'scripts/socket';
 
 export async function handleRegister(body: SignupDto) {
   await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
@@ -47,5 +50,12 @@ export async function handleRefresh() {
 
 export async function handleCheckIfAuthenticated() {
   const response = await fetchHelper(AUTH_ENDPOINTS.ME);
+  // console.log('Notified user online', response);
+  response.userId && notifyUserOnline(response.userId);
   return response;
+}
+
+// Socket methods
+function notifyUserOnline(userId: number) {
+  emit(socket, SocketEvent.USER_ONLINE, { userId } satisfies UserOnlineDto);
 }

@@ -91,3 +91,15 @@ export async function remove(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
+
+/**
+ * Get all online users
+ *
+ * @param req
+ * @param res
+ */
+export async function getOnlineUsers(_req: Request, res: Response) {
+  const onlineUsers = await userService.getOnlineUsers();
+
+  res.json(onlineUsers);
+}

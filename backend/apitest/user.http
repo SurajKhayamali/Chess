@@ -17,3 +17,6 @@ Content-Type: application/json
 
 ###
 DELETE {{BASE_URL}}/1
+
+###
+GET {{BASE_URL}}/online

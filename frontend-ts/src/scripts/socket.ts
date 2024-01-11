@@ -1,7 +1,7 @@
 import { API_URL } from 'constants/config.constant';
 import { io } from 'socket.io-client';
 
-const socket = io(API_URL, {
+export const socket = io(API_URL, {
   withCredentials: true,
 });
 

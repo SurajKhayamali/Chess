@@ -6,6 +6,7 @@ import {
   getById,
   update,
   remove,
+  getOnlineUsers,
 } from '../controllers/user.controller';
 import { validateReqBody } from '../middlewares/validator.middleware';
 import { updateUserSchema } from '../schemas/user.schema';
@@ -15,6 +16,8 @@ const router = Router();
 // router.post('/', create);
 
 router.get('/', getAll);
+
+router.get('/online', getOnlineUsers);
 
 router.get('/:id', getById);
 

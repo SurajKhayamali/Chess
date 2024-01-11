@@ -6,3 +6,7 @@ export interface LoginDto {
   emailOrUsername: string;
   password: string;
 }
+
+export interface UserOnlineDto {
+  userId: number;
+}

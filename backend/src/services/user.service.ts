@@ -1,5 +1,7 @@
+import { RedisKeys } from '../enums/redis.enum';
 import { NotFoundException } from '../exceptions';
 import { CreateUserDto } from '../interfaces/user.interface';
+import { redisClient } from '../redis.init';
 import { UserRepository } from '../repositories/user.repository';
 
 /**
@@ -118,4 +120,18 @@ export async function remove(id: number) {
   await UserRepository.remove(user);
 
   return user;
+}
+
+// Redis related functions
+export async function getOnlineUsers() {
+  const users = await redisClient.SMEMBERS(RedisKeys.ONLINE_USERS);
+  return users.map((user) => Number(user));
+}
+
+export async function addOnlineUser(userId: number) {
+  await redisClient.SADD(RedisKeys.ONLINE_USERS, String(userId));
+}
+
+export async function removeOnlineUser(userId: number) {
+  await redisClient.SREM(RedisKeys.ONLINE_USERS, String(userId));
 }
