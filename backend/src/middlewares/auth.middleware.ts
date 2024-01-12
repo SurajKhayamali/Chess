@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 
 import { extractJWTTokenFromRequest, verifyJWT } from '../helpers/jwt.helper';
 import { UnauthorizedException } from '../exceptions';
-import { JwtPayload } from '../interfaces/jwt.interface';
+import { AuthenticatedRequest } from '../interfaces/jwt.interface';
 
 export function auth(
-  req: Request & { user?: JwtPayload },
+  req: AuthenticatedRequest,
   _res: Response,
   next: NextFunction
 ) {

@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import * as userService from '../services/user.service';
 import { UserAdapter } from '../adapters/user.adapter';
 import { HttpStatusCode } from '../enums/httpStatusCode.enum';
+import { AuthenticatedRequest } from '../interfaces/jwt.interface';
+import { NotFoundException } from '../exceptions';
 
 /**
  * Create user
@@ -53,6 +55,32 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
+ * Get logged in user profile
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function getLoggedInUserProfile(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = req.user?.userId;
+
+  if (!userId) throw new NotFoundException('User not found');
+
+  try {
+    const user = await userService.getByIdOrFail(userId);
+    const adaptedUser = UserAdapter.adaptForResponse(user);
+
+    return res.json(adaptedUser);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+/**
  * Update user
  *
  * @param req
@@ -65,6 +93,33 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
   try {
     const user = await userService.update(parseInt(id), updateUserDto);
+    const adaptedUser = UserAdapter.adaptForResponse(user);
+
+    res.json(adaptedUser);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Update logged in user profile
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function updateLoggedInUserProfile(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = req.user?.userId;
+  const updateUserDto = req.body;
+
+  if (!userId) throw new NotFoundException('User not found');
+
+  try {
+    const user = await userService.update(userId, updateUserDto);
     const adaptedUser = UserAdapter.adaptForResponse(user);
 
     res.json(adaptedUser);
