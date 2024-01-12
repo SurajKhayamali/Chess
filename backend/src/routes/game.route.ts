@@ -7,12 +7,12 @@ import {
   update,
   remove,
 } from '../controllers/game.controller';
-// import { validateReqBody } from '../middlewares/validator.middleware';
-// import { updateUserSchema } from '../schemas/game.schema';
+import { validateReqBody } from '../middlewares/validator.middleware';
+import { createGameSchema } from '../schemas/game.schema';
 
 const router = Router();
 
-router.post('/', create);
+router.post('/', validateReqBody(createGameSchema), create);
 
 router.get('/', getAll);
 
