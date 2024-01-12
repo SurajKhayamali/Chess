@@ -14,7 +14,11 @@ export class Game extends BaseEntity {
   @ManyToOne(() => User, { nullable: true })
   blackPlayer?: User;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: GameMode,
+    default: GameMode.PLAYER_VS_PLAYER,
+  })
   gameMode: GameMode = GameMode.PLAYER_VS_PLAYER;
 
   @Column({ nullable: true })

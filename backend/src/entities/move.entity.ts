@@ -8,7 +8,10 @@ export class Move extends BaseEntity {
   @ManyToOne(() => Game)
   game: Game;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: PieceType,
+  })
   pieceType: PieceType;
 
   @Column()

@@ -1,6 +1,9 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 import serverConfig from '../config';
+import { Game } from '../entities/game.entity';
+import { Move } from '../entities/move.entity';
+import { Chat } from '../entities/chat.entity';
 
 // type DatabaseType =
 //   | 'mysql'
@@ -35,7 +38,7 @@ export const AppDataSource = new DataSource({
   database: databaseName,
   synchronize: !isProduction,
   logging: !isProduction,
-  entities: [User],
+  entities: [User, Game, Move, Chat],
   subscribers: [],
   migrations: [],
 } as DataSourceOptions);
