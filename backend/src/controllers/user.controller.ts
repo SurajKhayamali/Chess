@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import * as userService from '../services/user.service';
 import { UserAdapter } from '../adapters/user.adapter';
+import { HttpStatusCode } from '../enums/httpStatusCode.enum';
 
 /**
  * Create user
@@ -15,7 +16,7 @@ export async function create(req: Request, res: Response) {
   const user = await userService.create(createUserDto);
   const adaptedUser = UserAdapter.adaptForResponse(user);
 
-  res.status(201).json(adaptedUser);
+  res.status(HttpStatusCode.CREATED).json(adaptedUser);
 }
 
 /**

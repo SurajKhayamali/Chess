@@ -1,0 +1,30 @@
+@BASE_URL={{baseUrl}}/games
+
+###
+GET {{BASE_URL}}
+
+###
+POST {{BASE_URL}}
+Content-Type: application/json
+
+{
+    "slug": "abc-123",
+    "whitePlayer": 1,
+    "gameMode": "PvC",
+    "initialBoardState": ""
+}
+
+###
+GET {{BASE_URL}}/1
+
+###
+PATCH {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+    "isGameOver": true
+}
+
+
+###
+DELETE {{BASE_URL}}/1

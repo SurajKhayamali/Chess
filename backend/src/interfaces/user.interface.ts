@@ -1,16 +1,7 @@
-export interface User {
-  id: number;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { User } from '../entities/user.entity';
+import { BaseColumnsToOmit } from './base.interface';
 
-export interface CreateUserDto extends Omit<User, 'id'> {}
+export interface CreateUserDto extends Omit<User, BaseColumnsToOmit> {}
 
 export interface UpdateUserDto extends Partial<CreateUserDto> {}
 

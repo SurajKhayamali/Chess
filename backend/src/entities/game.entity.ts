@@ -31,5 +31,5 @@ export class Game extends BaseEntity {
   isGameOver: boolean = false;
 
   @Column({ nullable: true })
-  hasWhitePlayerWon: boolean;
+  hasWhitePlayerWon?: boolean;
 }
