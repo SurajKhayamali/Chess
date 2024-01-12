@@ -2,9 +2,16 @@
 // import { reInitializeMessage } from 'scripts/message';
 // import { generateBoardWithFENString } from 'scripts/parseFEN';
 
-import { renderChatListComponent } from 'components/chat/chat.component';
+import {
+  renderChatListComponent,
+  renderNewChat,
+} from 'components/chat/chat.component';
+import { Chat } from 'entities/Chat';
+import { ChatList } from 'entities/ChatList';
+import { SocketEvent } from 'enums/socket.enum';
+import { socket } from 'scripts/socket';
 
-const chats = [
+const dummyInitialChats = [
   {
     sender: 'Obi-Wan Kenobi',
     message: 'You were the Chosen One!',
@@ -31,6 +38,8 @@ const chats = [
   },
 ];
 
+const chats = new ChatList(dummyInitialChats);
+
 export const component = `
 <div class="container">
   <h2>Play a New Online Game</h2>
@@ -50,5 +59,18 @@ export const component = `
 export function afterInitialize() {
   // render();
 
-  renderChatListComponent(chats);
+  renderChatListComponent(chats.getChats());
+
+  socket.on(SocketEvent.USER_MESSAGE, (message: unknown) => {
+    console.log('Message received:', message);
+    const chat = new Chat({
+      message: message as string,
+      sender: 'Backend',
+      time: new Date().toLocaleTimeString(),
+      isSeen: false,
+    });
+    chats.addChat(chat);
+
+    renderNewChat(chat);
+  });
 }

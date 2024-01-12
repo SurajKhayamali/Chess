@@ -5,11 +5,38 @@ import { createAdapter } from '@socket.io/redis-streams-adapter';
 import serverConfig from './config';
 import { initializeRedis, redisClient } from './redis.init';
 import { registerUserHandlers } from './handlers/user.handler';
+import { extractJWTTokenFromHeaders, verifyJWT } from './helpers/jwt.helper';
+import { getUserSocketRoom } from './helpers/socket.helper';
+import { instrument } from '@socket.io/admin-ui';
+
+let io: Server;
+
+const onConnection = (socket: Socket) => {
+  // const token = extractJWTTokenFromRequest(socket.handshake)
+  const token = extractJWTTokenFromHeaders(socket.handshake.headers);
+  if (token) {
+    try {
+      const payload = verifyJWT(token);
+      if (!payload) return;
+
+      if (payload.tokenType !== 'access') return;
+
+      const { userId } = payload;
+
+      // console.log('a user connected', userId, getUserSocketRoom(userId));
+      socket.join(getUserSocketRoom(userId));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // registerOrderHandlers(io, socket);
+  registerUserHandlers(io, socket);
+};
 
 export const initializeSocket = async (httpServer: HTTPServer) => {
   await initializeRedis();
 
-  const io = new Server(httpServer, {
+  io = new Server(httpServer, {
     serveClient: false,
     connectionStateRecovery: {
       // the backup duration of the sessions and the packets
@@ -18,16 +45,17 @@ export const initializeSocket = async (httpServer: HTTPServer) => {
       skipMiddlewares: true,
     },
     cors: {
-      origin: serverConfig.clientUrl,
+      origin: [serverConfig.clientUrl, 'https://admin.socket.io'],
       credentials: true,
     },
     adapter: createAdapter(redisClient),
   });
 
-  const onConnection = (socket: Socket) => {
-    // registerOrderHandlers(io, socket);
-    registerUserHandlers(io, socket);
-  };
+  !serverConfig.isProduction &&
+    instrument(io, {
+      auth: false,
+      mode: 'development',
+    });
 
   io.on('connection', onConnection);
 
@@ -42,4 +70,20 @@ export const initializeSocket = async (httpServer: HTTPServer) => {
   //     // new or unrecoverable session
   //   }
   // });
+
+  // io.of('/').adapter.on('create-room', (room) => {
+  //   console.log(`room ${room} was created`);
+  // });
+
+  // io.of('/').adapter.on('join-room', (room, id) => {
+  //   console.log(`socket ${id} has joined room ${room}`);
+  // });
+};
+
+export const getSocketIO = () => {
+  if (!io) {
+    throw new Error('Socket.io not initialized');
+  }
+
+  return io;
 };

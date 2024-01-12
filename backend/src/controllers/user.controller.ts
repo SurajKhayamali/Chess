@@ -103,3 +103,18 @@ export async function getOnlineUsers(_req: Request, res: Response) {
 
   res.json(onlineUsers);
 }
+
+/**
+ * Message user
+ *
+ * @param req
+ * @param res
+ */
+export async function messageUser(req: Request, res: Response) {
+  const { id } = req.params;
+  const { message } = req.body;
+
+  const user = await userService.messageUser(parseInt(id), message);
+
+  res.json(user);
+}

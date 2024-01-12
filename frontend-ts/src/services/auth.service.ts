@@ -50,8 +50,12 @@ export async function handleRefresh() {
 
 export async function handleCheckIfAuthenticated() {
   const response = await fetchHelper(AUTH_ENDPOINTS.ME);
-  // console.log('Notified user online', response);
-  response.userId && notifyUserOnline(response.userId);
+
+  // console.log('Notifying user online', response);
+  if (response.userId) {
+    socket.connect();
+    notifyUserOnline(response.userId);
+  }
   return response;
 }
 

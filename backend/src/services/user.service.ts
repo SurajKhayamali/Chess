@@ -1,8 +1,11 @@
 import { RedisKeys } from '../enums/redis.enum';
+import { SocketEvent } from '../enums/socket.enum';
 import { NotFoundException } from '../exceptions';
+import { getUserSocketRoom } from '../helpers/socket.helper';
 import { CreateUserDto } from '../interfaces/user.interface';
 import { redisClient } from '../redis.init';
 import { UserRepository } from '../repositories/user.repository';
+import { getSocketIO } from '../socket.init';
 
 /**
  * Create a new user
@@ -134,4 +137,16 @@ export async function addOnlineUser(userId: number) {
 
 export async function removeOnlineUser(userId: number) {
   await redisClient.SREM(RedisKeys.ONLINE_USERS, String(userId));
+}
+
+export async function messageUser(userId: number, message: string) {
+  // await redisClient.PUBLISH(RedisKeys.USER_MESSAGE(userId), message);
+
+  const io = getSocketIO();
+  // console.log('sending message to user', userId, getUserSocketRoom(userId));
+  io.to(getUserSocketRoom(userId)).emit(SocketEvent.USER_MESSAGE, message);
+
+  return {
+    message: 'Message sent',
+  };
 }

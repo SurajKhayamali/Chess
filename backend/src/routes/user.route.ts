@@ -7,6 +7,7 @@ import {
   update,
   remove,
   getOnlineUsers,
+  messageUser,
 } from '../controllers/user.controller';
 import { validateReqBody } from '../middlewares/validator.middleware';
 import { updateUserSchema } from '../schemas/user.schema';
@@ -20,6 +21,8 @@ router.get('/', getAll);
 router.get('/online', getOnlineUsers);
 
 router.get('/:id', getById);
+
+router.post('/:id/message', messageUser);
 
 router.patch('/:id', validateReqBody(updateUserSchema), update);
 

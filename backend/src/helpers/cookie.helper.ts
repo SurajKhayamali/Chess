@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
+import cookieParser from 'cookie-parser';
+import cookie from 'cookie';
 import config from '../config';
+import { IncomingHttpHeaders } from 'http';
 
 const COOKIE_KEY = 'jwt';
 const COOKIE_REFRESH_KEY = 'jwt-refresh';
@@ -63,4 +66,27 @@ export const clearCookie = (res: Response) => {
   // res.clearCookie(isRefreshCookie ? COOKIE_REFRESH_KEY : COOKIE_KEY);
   res.clearCookie(COOKIE_REFRESH_KEY);
   res.clearCookie(COOKIE_KEY);
+};
+
+export const parseCookieFromHeaders = (
+  headers: IncomingHttpHeaders,
+  isRefreshCookie = false
+) => {
+  const cookieFromHeader = headers.cookie;
+  if (!cookieFromHeader) return null;
+
+  const cookies = cookie.parse(cookieFromHeader as string);
+  if (!cookies) return null;
+
+  const cookieToParse = isRefreshCookie
+    ? cookies[COOKIE_REFRESH_KEY]
+    : cookies[COOKIE_KEY];
+
+  const parsedCookies = cookieParser.signedCookie(
+    cookieToParse,
+    config.cookieSecret
+  );
+  if (!parsedCookies) return null;
+
+  return parsedCookies;
 };

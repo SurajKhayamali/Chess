@@ -4,7 +4,7 @@ import { Request } from 'express';
 
 import config from '../config';
 import { JwtPayload } from '../interfaces/jwt.interface';
-import { getCookie } from './cookie.helper';
+import { getCookie, parseCookieFromHeaders } from './cookie.helper';
 
 /**
  * Sign JWT
@@ -73,7 +73,7 @@ export function reGenerateJWTTokens(payload: JwtPayload) {
  *
  * @returns token
  */
-function extractJWTTokenFromRequestHeaders(headers: IncomingHttpHeaders) {
+function extractJWTTokenFromAuthorizationHeader(headers: IncomingHttpHeaders) {
   const authHeader = headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
@@ -94,10 +94,28 @@ export function extractJWTTokenFromRequest(
   req: Request,
   isRefreshToken = false
 ) {
-  let token = extractJWTTokenFromRequestHeaders(req.headers);
+  let token = extractJWTTokenFromAuthorizationHeader(req.headers);
 
   if (!token) {
     token = getCookie(req, isRefreshToken);
+  }
+
+  return token;
+}
+
+/**
+ * Extract JWT token from headers,
+ * @description works for both http and socket requests headers
+ *
+ * @param headers
+ *
+ * @returns token
+ */
+export function extractJWTTokenFromHeaders(headers: IncomingHttpHeaders) {
+  let token = extractJWTTokenFromAuthorizationHeader(headers);
+
+  if (!token) {
+    token = parseCookieFromHeaders(headers, false);
   }
 
   return token;

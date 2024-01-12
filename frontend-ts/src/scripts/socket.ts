@@ -1,12 +1,12 @@
 import { API_URL } from 'constants/config.constant';
+// import { registerMessageHandlers } from 'handlers/message.handler';
 import { io } from 'socket.io-client';
 
 export const socket = io(API_URL, {
   withCredentials: true,
 });
 
-// client-side
-socket.on('connect', () => {
+const onConnect = () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
 
   if (socket.recovered) {
@@ -14,7 +14,12 @@ socket.on('connect', () => {
   } else {
     // new or unrecoverable session
   }
-});
+
+  // registerMessageHandlers(socket);
+};
+
+// client-side
+socket.on('connect', onConnect);
 
 // socket.on('disconnect', () => {
 //   console.log(socket.id); // undefined

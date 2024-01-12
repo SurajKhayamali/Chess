@@ -32,3 +32,12 @@ export function renderChatListComponent(chats: Chat[]) {
 
   chatContainer.innerHTML = chats.map(renderChatComponent).join('');
 }
+
+export function renderNewChat(chat: Chat) {
+  const chatContainer = document.querySelector('#chat-list-container');
+  if (!chatContainer) {
+    return;
+  }
+
+  chatContainer.innerHTML += renderChatComponent(chat);
+}

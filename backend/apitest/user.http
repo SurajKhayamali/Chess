@@ -20,3 +20,12 @@ DELETE {{BASE_URL}}/1
 
 ###
 GET {{BASE_URL}}/online
+
+
+###
+POST {{BASE_URL}}/1/message
+Content-Type: application/json
+
+{
+    "message": "Hello World"
+}
