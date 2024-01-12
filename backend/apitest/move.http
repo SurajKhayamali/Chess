@@ -1,0 +1,33 @@
+@BASE_URL={{baseUrl}}/moves
+
+###
+GET {{BASE_URL}}
+
+###
+POST {{BASE_URL}}
+Content-Type: application/json
+
+{
+    "game": 1,
+    "pieceType": "P",
+    "isWhite": true,
+    "oldFileIndex": 1,
+    "oldRankIndex": 1,
+    "newFileIndex": 1,
+    "newRankIndex": 3
+}
+
+###
+GET {{BASE_URL}}/1
+
+###
+PATCH {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+    "isWhite": false
+}
+
+
+###
+DELETE {{BASE_URL}}/1

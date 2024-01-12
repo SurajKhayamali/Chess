@@ -28,4 +28,7 @@ export class Move extends BaseEntity {
 
   @Column()
   newRankIndex: number;
+
+  @Column({ nullable: true })
+  capturedPieceType?: PieceType; // nullable for non-capturing moves
 }
