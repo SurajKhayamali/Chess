@@ -8,19 +8,23 @@ import { LoginDto, SignupDto, UserOnlineDto } from 'interfaces/auth.interface';
 import { socket } from 'scripts/socket';
 
 export async function handleRegister(body: SignupDto) {
-  await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
+  const response = await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
     method: 'POST',
     body: JSON.stringify(body),
   });
+
+  reconnectAsAuthenticatedUser(response.data.user.id);
 
   setIsLoggedIn(true);
 }
 
 export async function handleLogin(body: LoginDto) {
-  await fetchHelper(AUTH_ENDPOINTS.LOG_IN, {
+  const response = await fetchHelper(AUTH_ENDPOINTS.LOG_IN, {
     method: 'POST',
     body: JSON.stringify(body),
   });
+
+  reconnectAsAuthenticatedUser(response.data.user.id);
 
   setIsLoggedIn(true);
 }
@@ -29,6 +33,8 @@ export async function handleLogout() {
   await fetchHelper(AUTH_ENDPOINTS.LOG_OUT, {
     method: 'POST',
   });
+
+  reconnectAsUnauthenticatedUser();
 
   setIsLoggedIn(false);
 }
@@ -53,8 +59,7 @@ export async function handleCheckIfAuthenticated() {
 
   // console.log('Notifying user online', response);
   if (response.userId) {
-    socket.connect();
-    notifyUserOnline(response.userId);
+    reconnectAsAuthenticatedUser(response.userId);
   }
   return response;
 }
@@ -62,4 +67,15 @@ export async function handleCheckIfAuthenticated() {
 // Socket methods
 function notifyUserOnline(userId: number) {
   emit(socket, SocketEvent.USER_ONLINE, { userId } satisfies UserOnlineDto);
+}
+
+function reconnectAsAuthenticatedUser(userId: number) {
+  socket.disconnect();
+  socket.connect();
+  notifyUserOnline(userId);
+}
+
+function reconnectAsUnauthenticatedUser() {
+  socket.disconnect();
+  socket.connect();
 }

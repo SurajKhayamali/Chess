@@ -16,16 +16,15 @@ import { UnauthorizedException } from '../exceptions';
 export async function handleSignup(req: Request, res: Response) {
   const signupDto = req.body as SignupDto;
 
-  const { accessToken, refreshToken } = await authService.handleSignup(
-    signupDto
-  );
+  const { user, tokens } = await authService.handleSignup(signupDto);
+  const { accessToken, refreshToken } = tokens;
 
   setCookie(res, accessToken);
   setCookie(res, refreshToken, true);
 
   return res.json({
     message: 'Signup successful!',
-    data: { accessToken },
+    data: { user, accessToken },
   });
 }
 
@@ -44,16 +43,15 @@ export async function handleLogin(
   const loginDto = req.body;
 
   try {
-    const { accessToken, refreshToken } = await authService.handleLogin(
-      loginDto
-    );
+    const { user, tokens } = await authService.handleLogin(loginDto);
+    const { accessToken, refreshToken } = tokens;
 
     setCookie(res, accessToken);
     setCookie(res, refreshToken, true);
 
     return res.json({
       message: 'Login successful!',
-      data: { accessToken },
+      data: { user, accessToken },
     });
   } catch (error) {
     next(error);

@@ -34,7 +34,7 @@ export async function handleSignup(signupDto: SignupDto) {
 
   const { id, firstName, middleName, lastName, email, username } = user;
 
-  return generateJWTTokens({
+  const tokens = generateJWTTokens({
     userId: id,
     firstName,
     middleName,
@@ -42,6 +42,11 @@ export async function handleSignup(signupDto: SignupDto) {
     email,
     username,
   });
+
+  return {
+    user,
+    tokens,
+  };
 }
 
 /**
@@ -67,7 +72,7 @@ export async function handleLogin(loginDto: LoginDto) {
 
   const { id, firstName, middleName, lastName, email, username } = user;
 
-  return generateJWTTokens({
+  const tokens = generateJWTTokens({
     userId: id,
     firstName,
     middleName,
@@ -75,6 +80,11 @@ export async function handleLogin(loginDto: LoginDto) {
     email,
     username,
   });
+
+  return {
+    user,
+    tokens,
+  };
 }
 
 /**
