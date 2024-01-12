@@ -7,18 +7,18 @@ import {
   update,
   remove,
 } from '../controllers/chat.controller';
-// import { validateReqBody } from '../middlewares/validator.middleware';
-// import { updateUserSchema } from '../schemas/chat.schema';
+import { validateReqBody } from '../middlewares/validator.middleware';
+import { createChatSchema, updateChatSchema } from '../schemas/chat.schema';
 
 const router = Router();
 
-router.post('/', create);
+router.post('/', validateReqBody(createChatSchema), create);
 
 router.get('/', getAll);
 
 router.get('/:id', getById);
 
-router.patch('/:id', update);
+router.patch('/:id', validateReqBody(updateChatSchema), update);
 
 router.delete('/:id', remove);
 
