@@ -46,6 +46,7 @@ export const component = `
 </div>
 
 <div id="chat-list-container" class="mt-32"></div>
+<input id="chat-input" class="input input-bordered w-full mt-32" type="text" placeholder="Type a message" />
 `;
 
 // function render() {
