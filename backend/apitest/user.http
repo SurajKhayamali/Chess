@@ -29,3 +29,15 @@ Content-Type: application/json
 {
     "message": "Hello World"
 }
+
+# After restrictions to current user only access
+###
+GET {{BASE_URL}}
+
+###
+PATCH {{BASE_URL}}
+Content-Type: application/json
+
+{
+    "middleName": null
+}

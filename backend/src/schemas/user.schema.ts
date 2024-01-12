@@ -8,7 +8,7 @@ export const updateUserSchema = Joi.object({
       'First name must contain at least one space character',
     'any.required': 'First name is required',
   }),
-  middleName: Joi.string().max(30).messages({
+  middleName: Joi.string().max(30).allow(null).messages({
     'string.min': 'First name must be at least 3 characters long',
     'string.max': 'First name must be at most 30 characters long',
     'string.pattern.base':
