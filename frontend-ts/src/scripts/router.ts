@@ -9,8 +9,15 @@ import { renderNavComponent } from 'components/navbar/navbar.component';
 import { checkIfAuthenticated } from 'helpers/auth.helper';
 import { notFoundRoute } from 'pages/notfound/notfound.route';
 import { offlineRoute } from 'pages/offline/offline.route';
+import { profileRoute } from 'pages/profile/profile.route';
 
-const routes: IRoute[] = [homeRoute, authRoute, offlineRoute, notFoundRoute];
+const routes: IRoute[] = [
+  homeRoute,
+  authRoute,
+  profileRoute,
+  offlineRoute,
+  notFoundRoute,
+];
 
 const router = new UniversalRouter([
   {

@@ -23,7 +23,7 @@ ${
             ${userInfo?.username}
           </summary>
           <ul class="p-2 bg-base-100 rounded-t-none">
-            <li><a>Profile</a></li>
+            <li><a href="/profile">Profile</a></li>
             <li><a id="logoutBtn">Logout</a></li>
           </ul>
         </details>
