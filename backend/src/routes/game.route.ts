@@ -8,7 +8,7 @@ import {
   remove,
 } from '../controllers/game.controller';
 import { validateReqBody } from '../middlewares/validator.middleware';
-import { createGameSchema } from '../schemas/game.schema';
+import { createGameSchema, updateGameSchema } from '../schemas/game.schema';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.get('/', getAll);
 
 router.get('/:id', getById);
 
-router.patch('/:id', update);
+router.patch('/:id', validateReqBody(updateGameSchema), update);
 
 router.delete('/:id', remove);
 
