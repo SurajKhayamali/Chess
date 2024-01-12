@@ -7,18 +7,18 @@ import {
   update,
   remove,
 } from '../controllers/move.controller';
-// import { validateReqBody } from '../middlewares/validator.middleware';
-// import { updateUserSchema } from '../schemas/move.schema';
+import { validateReqBody } from '../middlewares/validator.middleware';
+import { createMoveSchema, updateMoveSchema } from '../schemas/move.schema';
 
 const router = Router();
 
-router.post('/', create);
+router.post('/', validateReqBody(createMoveSchema), create);
 
 router.get('/', getAll);
 
 router.get('/:id', getById);
 
-router.patch('/:id', update);
+router.patch('/:id', validateReqBody(updateMoveSchema), update);
 
 router.delete('/:id', remove);
 
