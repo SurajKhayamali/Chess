@@ -36,7 +36,8 @@ export async function createByUser(
     sender: userId as unknown as User,
   });
   await ChatRepository.save(chat);
-  return chat;
+
+  return getByIdOrFail(chat.id, userId);
 }
 
 /**
@@ -60,6 +61,8 @@ export async function getAllByUserId(userId: number) {
   const chats = await ChatRepository.createQueryBuilder('chat')
     .where('chat.sender_id = :userId', { userId })
     .orWhere('chat.receiver_id = :userId', { userId })
+    .leftJoinAndSelect('chat.sender', 'sender')
+    .leftJoinAndSelect('chat.receiver', 'receiver')
     .getMany();
   return chats;
 }
@@ -79,6 +82,8 @@ export async function getById(id: number, userId?: number) {
     .where('chat.id = :id', { id })
     .andWhere('chat.sender_id = :userId', { userId })
     .orWhere('chat.receiver_id = :userId', { userId })
+    .leftJoinAndSelect('chat.sender', 'sender')
+    .leftJoinAndSelect('chat.receiver', 'receiver')
     .getOne();
 }
 

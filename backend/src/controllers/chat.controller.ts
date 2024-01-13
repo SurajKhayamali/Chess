@@ -8,6 +8,7 @@ import {
   CreateChatDto,
   CreateChatByUserDto,
 } from '../interfaces/chat.interface';
+import { ChatAdapter } from '../adapters/chat.adapter';
 
 /**
  * Create chat
@@ -36,8 +37,9 @@ export async function createByUser(req: AuthenticatedRequest, res: Response) {
   const createChatByUserDto = req.body as CreateChatByUserDto;
 
   const chat = await chatService.createByUser(userId, createChatByUserDto);
+  const adaptedChat = ChatAdapter.adaptForResponse(chat);
 
-  res.status(HttpStatusCode.CREATED).json(chat);
+  res.status(HttpStatusCode.CREATED).json(adaptedChat);
 }
 
 /**
@@ -64,8 +66,9 @@ export async function getAllByUserId(req: AuthenticatedRequest, res: Response) {
   const { userId } = req.user;
 
   const chats = await chatService.getAllByUserId(userId);
+  const adaptedChats = ChatAdapter.adaptAllForResponse(chats);
 
-  res.json(chats);
+  res.json(adaptedChats);
 }
 
 /**
@@ -106,8 +109,9 @@ export async function getByIdByUserId(
 
   try {
     const chat = await chatService.getByIdOrFail(parseInt(id), userId);
+    const adaptedChat = ChatAdapter.adaptForResponse(chat);
 
-    res.json(chat);
+    res.json(adaptedChat);
   } catch (error) {
     next(error);
   }
@@ -157,8 +161,9 @@ export async function updateByUser(
       updateChatByUserDto,
       userId
     );
+    const adaptedChat = ChatAdapter.adaptForResponse(chat);
 
-    res.json(chat);
+    res.json(adaptedChat);
   } catch (error) {
     next(error);
   }
@@ -202,8 +207,9 @@ export async function removeByUser(
 
   try {
     const chat = await chatService.remove(parseInt(id), userId);
+    const adaptedChat = ChatAdapter.adaptForResponse(chat);
 
-    res.json(chat);
+    res.json(adaptedChat);
   } catch (error) {
     next(error);
   }

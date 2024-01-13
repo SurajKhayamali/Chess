@@ -1,4 +1,5 @@
 import { Chat } from 'entities/Chat';
+import { getIsLoggedIn } from 'helpers/auth.helper';
 import { CreateChatDto, UpdateChatDto } from 'interfaces/chat.interface';
 import { createChat, getChats, updateChat } from 'services/chat.service';
 
@@ -10,6 +11,11 @@ class ChatRepository {
   }
 
   async getChats(): Promise<Chat[]> {
+    const isLoggedIn = getIsLoggedIn();
+    if (!isLoggedIn) {
+      return [];
+    }
+
     const chats = await getChats();
     this.chats = chats;
     return chats;

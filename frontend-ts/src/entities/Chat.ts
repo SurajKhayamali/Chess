@@ -1,9 +1,10 @@
 import { IChat } from 'interfaces/chat.interface';
 import { BaseEntity } from './Base.entity';
+import { User } from 'interfaces/user.interface';
 
 export class Chat extends BaseEntity implements IChat {
-  sender: number;
-  receiver?: number;
+  sender: User;
+  receiver?: User;
   game?: number;
   channel?: string;
   message: string;

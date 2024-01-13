@@ -8,7 +8,7 @@ import { emit } from 'helpers/socket.helper';
 import { chatRepository } from 'repositories/chat.repository';
 import { socket } from 'scripts/socket';
 
-export function renderChatContainer(
+export async function renderChatContainer(
   constainerId: string,
   channelId: string = SocketEvent.PUBLIC_MESSAGE
 ) {
@@ -24,7 +24,8 @@ export function renderChatContainer(
     </div>
   `;
 
-  renderChatListComponent(chatRepository.chats);
+  await chatRepository.getChats();
+  renderChatListComponent(await chatRepository.getAllChatByChannel(channelId));
 
   socket.on(channelId, (message: unknown) => {
     // console.log('Message received:', message);

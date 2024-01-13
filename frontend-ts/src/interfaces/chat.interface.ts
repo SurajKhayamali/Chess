@@ -1,9 +1,10 @@
 import { Chat } from 'entities/Chat';
+import { User } from './user.interface';
 
 export interface IChat {
   id: number;
-  sender: number;
-  receiver?: number; // only exists if private message
+  sender: User;
+  receiver?: User; // only exists if private message
   game?: number; // only exists if game message
   channel?: string; // only exists if channel message, e.g. 'public-message'
   message: string;
