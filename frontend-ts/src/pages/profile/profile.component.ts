@@ -1,3 +1,6 @@
+import { UpdateUserDto, User } from 'interfaces/user.interface';
+import { getUserInfo, updateUserInfo } from 'services/user.service';
+
 export const component = /* html */ `
 <div class="container mx-auto flex flex-col gap-8">
   <h1 class="text-3xl font-bold">User settings</h1>
@@ -86,7 +89,7 @@ const tooglePassordVisibility = (
   }
 };
 
-const tootlePasswordVisibilityByIds = (inputId: string, btnId: string) => {
+const tooglePasswordVisibilityByIds = (inputId: string, btnId: string) => {
   const input = document.getElementById(inputId) as HTMLInputElement;
   const btn = document.getElementById(btnId) as HTMLButtonElement;
 
@@ -97,32 +100,23 @@ const tootlePasswordVisibilityByIds = (inputId: string, btnId: string) => {
   });
 };
 
-export const afterInitialize = () => {
-  // const oldPasswordInput = document.getElementById(
-  //   'oldPassword'
-  // ) as HTMLInputElement;
-  // const oldPasswordVissiblityToogleBtn = document.getElementById(
-  //   'oldPasswordVissiblityToogleBtn'
-  // ) as HTMLButtonElement;
-  // oldPasswordVissiblityToogleBtn.addEventListener('click', (e) => {
-  //   e.preventDefault();
+const resetGneralInfoFormWithInitialValues = async (
+  generalInfoForm: HTMLFormElement,
+  userInfo?: User
+) => {
+  generalInfoForm.reset();
 
-  //   tooglePassordVisibility(oldPasswordInput, oldPasswordVissiblityToogleBtn);
-  // });
+  if (!userInfo) userInfo = await getUserInfo();
 
-  tootlePasswordVisibilityByIds(
-    'oldPassword',
-    'oldPasswordVissiblityToogleBtn'
-  );
-  tootlePasswordVisibilityByIds(
-    'newPassword',
-    'newPasswordVissiblityToogleBtn'
-  );
-  tootlePasswordVisibilityByIds(
-    'confirmPassword',
-    'confirmPasswordVissiblityToogleBtn'
-  );
+  for (const key in userInfo) {
+    const input = document.getElementById(key) as HTMLInputElement;
+    if (input) {
+      input.value = userInfo[key as keyof User] as string;
+    }
+  }
+};
 
+const initializeGeneralInfoForm = async () => {
   // General info form
   const generalInfoForm = document.getElementById(
     'generalInfoForm'
@@ -140,6 +134,7 @@ export const afterInitialize = () => {
     'cancelEditInfoBtn'
   ) as HTMLButtonElement;
 
+  // Add event listeners
   editInfoBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -148,11 +143,29 @@ export const afterInitialize = () => {
     updateInfoBtn.classList.remove('hidden');
     cancelEditInfoBtn.classList.remove('hidden');
   });
-
   cancelEditInfoBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    generalInfoForm.reset();
+    resetGneralInfoFormWithInitialValues(generalInfoForm);
+
+    generalInfoFieldset.setAttribute('disabled', '');
+    editInfoBtn.classList.remove('hidden');
+    updateInfoBtn.classList.add('hidden');
+    cancelEditInfoBtn.classList.add('hidden');
+  });
+  updateInfoBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(generalInfoForm);
+    const payload: UpdateUserDto = {};
+
+    for (const [key, value] of formData.entries()) {
+      if (value) payload[key as keyof UpdateUserDto] = value as string;
+    }
+
+    const result = await updateUserInfo(payload);
+
+    resetGneralInfoFormWithInitialValues(generalInfoForm, result);
 
     generalInfoFieldset.setAttribute('disabled', '');
     editInfoBtn.classList.remove('hidden');
@@ -160,6 +173,21 @@ export const afterInitialize = () => {
     cancelEditInfoBtn.classList.add('hidden');
   });
 
+  // Load user info
+  // const userInfo = await getUserInfo();
+  // console.log('userInfo', userInfo);
+
+  // Populate user info
+  // for (const key in userInfo) {
+  //   const input = document.getElementById(key) as HTMLInputElement;
+  //   if (input) {
+  //     input.value = userInfo[key as keyof User] as string;
+  //   }
+  // }
+  resetGneralInfoFormWithInitialValues(generalInfoForm);
+};
+
+const initializePasswordForm = () => {
   // Password form
   const passwordForm = document.getElementById(
     'passwordForm'
@@ -196,4 +224,34 @@ export const afterInitialize = () => {
     updatePasswordBtn.classList.add('hidden');
     cancelEditPasswordBtn.classList.add('hidden');
   });
+};
+
+export const afterInitialize = () => {
+  // const oldPasswordInput = document.getElementById(
+  //   'oldPassword'
+  // ) as HTMLInputElement;
+  // const oldPasswordVissiblityToogleBtn = document.getElementById(
+  //   'oldPasswordVissiblityToogleBtn'
+  // ) as HTMLButtonElement;
+  // oldPasswordVissiblityToogleBtn.addEventListener('click', (e) => {
+  //   e.preventDefault();
+
+  //   tooglePassordVisibility(oldPasswordInput, oldPasswordVissiblityToogleBtn);
+  // });
+
+  tooglePasswordVisibilityByIds(
+    'oldPassword',
+    'oldPasswordVissiblityToogleBtn'
+  );
+  tooglePasswordVisibilityByIds(
+    'newPassword',
+    'newPasswordVissiblityToogleBtn'
+  );
+  tooglePasswordVisibilityByIds(
+    'confirmPassword',
+    'confirmPasswordVissiblityToogleBtn'
+  );
+
+  initializeGeneralInfoForm();
+  initializePasswordForm();
 };

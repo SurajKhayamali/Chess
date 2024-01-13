@@ -5,3 +5,9 @@ export const AUTH_ENDPOINTS = {
   REFRESH: '/auth/refresh',
   ME: '/auth/me',
 };
+
+export const USER_ENDPOINTS = {
+  GET_USER_INFO: '/users',
+  UPDATE_USER_INFO: '/users',
+  UPDATE_USER_PASSWORD: '/users/password',
+};

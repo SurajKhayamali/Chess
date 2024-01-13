@@ -17,6 +17,8 @@ export async function errorHandlerMiddleware(
   response: Response,
   next: NextFunction
 ) {
+  if (!error) return next();
+
   const { statusCode, message, stack } = error;
 
   if (stack) {
