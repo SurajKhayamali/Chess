@@ -53,9 +53,10 @@ export const component = /* html */ `
                 <div class="mt-2">
                     <div>
                         <label class="inline-flex items-center">
-                            <input type="checkbox" class="checkbox" name="agree" required />
+                            <input type="checkbox" class="checkbox" name="agree" />
                             <span class="ml-2 label cursor-pointer">I agree to the terms and privacy.</span>
                         </label>
+                        <p class="text text-error max-w-xs"></p>
                     </div>
                 </div>
 

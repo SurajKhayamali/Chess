@@ -29,6 +29,7 @@ export const signupSchema = yup.object().shape({
     .string()
     .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
+  agree: yup.string().required('You must agree to the terms and privacy'),
 });
 
 export const loginSchema = yup.object().shape({

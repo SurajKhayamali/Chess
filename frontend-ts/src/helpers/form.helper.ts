@@ -26,7 +26,7 @@ export function validateForm(form: HTMLFormElement, schema: AnyObjectSchema) {
         acc[curr.path as string] = curr.message;
         return acc;
       }, {} as Record<string, string>);
-      console.log('errors: ', errors);
+      // console.log('errors: ', errors);
 
       for (const [key, value] of Object.entries(errors)) {
         if (!value) continue;
@@ -56,7 +56,6 @@ export function clearErrorsOnChange(form: HTMLFormElement) {
   const inputs = form.querySelectorAll('input')!;
   inputs.forEach((input) => {
     input.addEventListener('input', () => {
-      console.log('remove error');
       input.classList.remove('input-error');
 
       let errorMessage = input.parentElement?.querySelector(
