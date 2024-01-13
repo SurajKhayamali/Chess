@@ -1,4 +1,5 @@
 import { USER_ENDPOINTS } from 'constants/endpoint.constant';
+import { HttpMethods } from 'enums/http.enum';
 import { fetchHelper } from 'helpers/fetch.helper';
 import { UpdateUserDto, User } from 'interfaces/user.interface';
 
@@ -10,19 +11,9 @@ export async function getUserInfo(): Promise<User> {
 
 export async function updateUserInfo(body: UpdateUserDto): Promise<User> {
   const response = await fetchHelper(USER_ENDPOINTS.UPDATE_USER_INFO, {
-    method: 'PATCH',
+    method: HttpMethods.PATCH,
     body: JSON.stringify(body),
   });
 
   return response;
-}
-
-export async function updateUserPassword(body: {
-  oldPassword: string;
-  newPassword: string;
-}): Promise<void> {
-  await fetchHelper(USER_ENDPOINTS.UPDATE_USER_PASSWORD, {
-    method: 'PATCH',
-    body: JSON.stringify(body),
-  });
 }

@@ -1,15 +1,21 @@
 import { API_URL } from 'constants/config.constant';
 import { AUTH_ENDPOINTS } from 'constants/endpoint.constant';
+import { HttpMethods } from 'enums/http.enum';
 import { SocketEvent } from 'enums/socket.enum';
 import { setIsLoggedIn } from 'helpers/auth.helper';
 import { fetchHelper } from 'helpers/fetch.helper';
 import { emit } from 'helpers/socket.helper';
-import { LoginDto, SignupDto, UserOnlineDto } from 'interfaces/auth.interface';
+import {
+  ChangePasswordDto,
+  LoginDto,
+  SignupDto,
+  UserOnlineDto,
+} from 'interfaces/auth.interface';
 import { socket } from 'scripts/socket';
 
 export async function handleRegister(body: SignupDto) {
   const response = await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
-    method: 'POST',
+    method: HttpMethods.POST,
     body: JSON.stringify(body),
   });
 
@@ -20,7 +26,7 @@ export async function handleRegister(body: SignupDto) {
 
 export async function handleLogin(body: LoginDto) {
   const response = await fetchHelper(AUTH_ENDPOINTS.LOG_IN, {
-    method: 'POST',
+    method: HttpMethods.POST,
     body: JSON.stringify(body),
   });
 
@@ -31,7 +37,7 @@ export async function handleLogin(body: LoginDto) {
 
 export async function handleLogout() {
   await fetchHelper(AUTH_ENDPOINTS.LOG_OUT, {
-    method: 'POST',
+    method: HttpMethods.POST,
   });
 
   reconnectAsUnauthenticatedUser();
@@ -42,7 +48,7 @@ export async function handleLogout() {
 export async function handleRefresh() {
   // INFO: Using fetch instead of fetchHelper to avoid infinite loop
   const response = await fetch(`${API_URL}${AUTH_ENDPOINTS.REFRESH}`, {
-    method: 'POST',
+    method: HttpMethods.POST,
     credentials: 'include',
   });
   if (response.status !== 200) {
@@ -62,6 +68,13 @@ export async function handleCheckIfAuthenticated() {
     reconnectAsAuthenticatedUser(response.userId);
   }
   return response;
+}
+
+export async function changePassword(body: ChangePasswordDto): Promise<void> {
+  await fetchHelper(AUTH_ENDPOINTS.CHANGE_PASSWORD, {
+    method: HttpMethods.PATCH,
+    body: JSON.stringify(body),
+  });
 }
 
 // Socket methods

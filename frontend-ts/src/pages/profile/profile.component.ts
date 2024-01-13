@@ -1,5 +1,6 @@
 import { extractDataFromForm } from 'helpers/formdata.helper';
 import { User } from 'interfaces/user.interface';
+import { changePassword } from 'services/auth.service';
 import { getUserInfo, updateUserInfo } from 'services/user.service';
 
 export const component = /* html */ `
@@ -212,6 +213,38 @@ const initializePasswordForm = () => {
 
   cancelEditPasswordBtn.addEventListener('click', (e) => {
     e.preventDefault();
+
+    passwordForm.reset();
+
+    passwordFieldset.setAttribute('disabled', '');
+    editPasswordBtn.classList.remove('hidden');
+    updatePasswordBtn.classList.add('hidden');
+    cancelEditPasswordBtn.classList.add('hidden');
+  });
+
+  updatePasswordBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const oldPassword = document.getElementById(
+      'oldPassword'
+    ) as HTMLInputElement;
+    const newPassword = document.getElementById(
+      'newPassword'
+    ) as HTMLInputElement;
+    const confirmPassword = document.getElementById(
+      'confirmPassword'
+    ) as HTMLInputElement;
+
+    const isPasswordMatch = newPassword.value === confirmPassword.value;
+    if (!isPasswordMatch) {
+      alert('Password does not match');
+      return;
+    }
+
+    await changePassword({
+      oldPassword: oldPassword.value,
+      newPassword: newPassword.value,
+    });
 
     passwordForm.reset();
 

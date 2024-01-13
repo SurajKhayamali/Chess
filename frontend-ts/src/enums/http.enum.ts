@@ -5,3 +5,10 @@ export enum HttpStatusCode {
   NOT_FOUND = 404,
   INTERNAL_SERVER = 500,
 }
+
+export enum HttpMethods {
+  GET = 'GET',
+  POST = 'POST',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
+}

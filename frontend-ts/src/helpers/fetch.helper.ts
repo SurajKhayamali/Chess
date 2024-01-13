@@ -1,5 +1,5 @@
 import { API_URL } from 'constants/config.constant';
-import { HttpStatusCode } from 'enums/httpStatusCode.enum';
+import { HttpStatusCode } from 'enums/http.enum';
 import { handleRefresh } from 'services/auth.service';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
