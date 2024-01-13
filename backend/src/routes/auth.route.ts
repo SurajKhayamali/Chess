@@ -36,7 +36,7 @@ router.patch(
   '/password',
   auth,
   validateReqBody(updatePasswordSchema),
-  updatePassword
+  asyncHandler(updatePassword)
 );
 
 export default router;
