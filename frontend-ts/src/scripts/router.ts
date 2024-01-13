@@ -10,11 +10,13 @@ import { checkIfAuthenticated } from 'helpers/auth.helper';
 import { notFoundRoute } from 'pages/notfound/notfound.route';
 import { offlineRoute } from 'pages/offline/offline.route';
 import { profileRoute } from 'pages/profile/profile.route';
+import { messagesRoute } from 'pages/messages/messages.route';
 
 const routes: IRoute[] = [
   homeRoute,
   authRoute,
   profileRoute,
+  messagesRoute,
   offlineRoute,
   notFoundRoute,
 ];

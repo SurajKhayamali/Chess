@@ -5,7 +5,7 @@ interface Chat {
   isSeen: boolean;
 }
 
-const currentUser = 'John Doe';
+const currentUser = 'You';
 function renderChatComponent(chat: Chat) {
   const sentByCurrentUser = chat.sender === currentUser;
   const chatAlignClass = sentByCurrentUser ? 'chat-end' : 'chat-start';

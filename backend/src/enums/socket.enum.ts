@@ -8,6 +8,9 @@ export enum SocketEvent {
 
   // From server to client
   USER_MESSAGE = 'user-message',
+
+  // Bidirectional
+  PUBLIC_MESSAGE = 'public-message',
 }
 
 export enum SockerRoomPrefix {

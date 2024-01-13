@@ -30,6 +30,7 @@ ${
       </li>
     </ul>
   </div>
+  <a href="/messages" class="btn btn-ghost">Messages</a>
 `
     : `
 <div class="navbar-end">
