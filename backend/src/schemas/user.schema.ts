@@ -4,23 +4,16 @@ export const updateUserSchema = Joi.object({
   firstName: Joi.string().min(3).max(30).messages({
     'string.min': 'First name must be at least 3 characters long',
     'string.max': 'First name must be at most 30 characters long',
-    'string.pattern.base':
-      'First name must contain at least one space character',
     'any.required': 'First name is required',
   }),
   middleName: Joi.string().max(30).allow(null).messages({
-    'string.min': 'First name must be at least 3 characters long',
-    'string.max': 'First name must be at most 30 characters long',
-    'string.pattern.base':
-      'First name must contain at least one space character',
-    'any.required': 'First name is required',
+    'string.min': 'Middle name must be at least 3 characters long',
+    'string.max': 'Middle name must be at most 30 characters long',
   }),
   lastName: Joi.string().min(3).max(30).messages({
-    'string.min': 'First name must be at least 3 characters long',
-    'string.max': 'First name must be at most 30 characters long',
-    'string.pattern.base':
-      'First name must contain at least one space character',
-    'any.required': 'First name is required',
+    'string.min': 'Last name must be at least 3 characters long',
+    'string.max': 'Last name must be at most 30 characters long',
+    'any.required': 'Last name is required',
   }),
   email: Joi.string().email().messages({
     'string.email': 'Email must be a valid email',
