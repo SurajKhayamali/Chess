@@ -4,6 +4,7 @@ import {
   extractDataFromForm,
   validateForm,
 } from 'helpers/form.helper';
+import { ToastType, displayToast } from 'helpers/toast.helper';
 import { User } from 'interfaces/user.interface';
 import { changePasswordSchema } from 'schemas/auth.schema';
 import { changePassword } from 'services/auth.service';
@@ -176,6 +177,8 @@ const initializeGeneralInfoForm = async () => {
 
     const result = await updateUserInfo(payload);
 
+    displayToast('User info updated successfully', ToastType.SUCCESS);
+
     resetGneralInfoFormWithInitialValues(generalInfoForm, result);
 
     generalInfoFieldset.setAttribute('disabled', '');
@@ -258,6 +261,8 @@ const initializePasswordForm = () => {
       oldPassword: oldPassword.value,
       newPassword: newPassword.value,
     });
+
+    displayToast('Password updated successfully', ToastType.SUCCESS);
 
     passwordForm.reset();
 
