@@ -44,7 +44,6 @@ export async function handleNavigation(
 
   const content = await router.resolve(url);
   if (!content) return;
-  // console.log(url, content);
 
   const { component, loadScripts, afterInitialize } = content;
   appContainer.innerHTML = component;
@@ -82,8 +81,6 @@ export function interceptLinkClicks(dom: Document | Element) {
 
 export function initialize() {
   // Intercept all link clicks.
-  // const links = document.querySelectorAll<HTMLAnchorElement>('a');
-  // links.forEach(interceptLinkClick);
   interceptLinkClicks(document);
 
   window.addEventListener('popstate', () => {

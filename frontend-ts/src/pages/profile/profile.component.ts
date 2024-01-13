@@ -187,17 +187,6 @@ const initializeGeneralInfoForm = async () => {
     cancelEditInfoBtn.classList.add('hidden');
   });
 
-  // Load user info
-  // const userInfo = await getUserInfo();
-  // console.log('userInfo', userInfo);
-
-  // Populate user info
-  // for (const key in userInfo) {
-  //   const input = document.getElementById(key) as HTMLInputElement;
-  //   if (input) {
-  //     input.value = userInfo[key as keyof User] as string;
-  //   }
-  // }
   resetGneralInfoFormWithInitialValues(generalInfoForm);
 };
 
@@ -274,18 +263,6 @@ const initializePasswordForm = () => {
 };
 
 export const afterInitialize = () => {
-  // const oldPasswordInput = document.getElementById(
-  //   'oldPassword'
-  // ) as HTMLInputElement;
-  // const oldPasswordVissiblityToogleBtn = document.getElementById(
-  //   'oldPasswordVissiblityToogleBtn'
-  // ) as HTMLButtonElement;
-  // oldPasswordVissiblityToogleBtn.addEventListener('click', (e) => {
-  //   e.preventDefault();
-
-  //   tooglePassordVisibility(oldPasswordInput, oldPasswordVissiblityToogleBtn);
-  // });
-
   tooglePasswordVisibilityByIds(
     'oldPassword',
     'oldPasswordVissiblityToogleBtn'

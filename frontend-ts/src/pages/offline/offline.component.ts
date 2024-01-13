@@ -119,18 +119,6 @@ export const component = `
     </div>
 `;
 
-export const loadScripts = () => {
-  const script = document.createElement('script');
-  script.setAttribute('type', 'module');
-  script.setAttribute('src', '/scripts/main.ts');
-
-  // script.onload = () => {
-  //   console.log('loaded');
-  // };
-
-  return script;
-};
-
 function render() {
   const board = generateBoardWithFENString(BOARD_ID);
   board.render();

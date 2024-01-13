@@ -1,6 +1,5 @@
 import { AUTH_MESSAGES } from 'constants/message.constant';
 import { NavigationMode } from 'enums/route.enum';
-import { createScriptTag } from 'helpers/createScriptTag.helper';
 import { clearErrorsOnChange, validateForm } from 'helpers/form.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { SignupDto } from 'interfaces/auth.interface';
@@ -68,10 +67,6 @@ export const component = /* html */ `
     </div>
 `;
 
-export const loadScripts = () => {
-  return createScriptTag('/auth/register/script.ts', 'module');
-};
-
 export const afterInitialize = () => {
   const form = document.querySelector('form')!;
   clearErrorsOnChange(form);
@@ -81,9 +76,7 @@ export const afterInitialize = () => {
     const formData = new FormData(form);
 
     const body = Object.fromEntries(formData.entries());
-    // console.log('Body: ', body);
     const isValid = validateForm(form, signupSchema);
-    // console.log('isValid: ', isValid);
     if (!isValid) return;
 
     if (!body.middleName) delete body.middleName;

@@ -26,7 +26,6 @@ export function validateForm(form: HTMLFormElement, schema: AnyObjectSchema) {
         acc[curr.path as string] = curr.message;
         return acc;
       }, {} as Record<string, string>);
-      // console.log('errors: ', errors);
 
       for (const [key, value] of Object.entries(errors)) {
         if (!value) continue;

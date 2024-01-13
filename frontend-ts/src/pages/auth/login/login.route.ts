@@ -3,10 +3,8 @@ import { IRoute } from 'interfaces/router.interface';
 export const loginRoute: IRoute = {
   path: '/login',
   action: async () => {
-    const { component, loadScripts, afterInitialize } = await import(
-      './login.component'
-    );
+    const { component, afterInitialize } = await import('./login.component');
 
-    return { component, loadScripts, afterInitialize };
+    return { component, afterInitialize };
   },
 };

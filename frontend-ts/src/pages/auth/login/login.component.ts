@@ -1,6 +1,5 @@
 import { AUTH_MESSAGES } from 'constants/message.constant';
 import { NavigationMode } from 'enums/route.enum';
-import { createScriptTag } from 'helpers/createScriptTag.helper';
 import { clearErrorsOnChange, validateForm } from 'helpers/form.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { loginSchema } from 'schemas/auth.schema';
@@ -39,17 +38,15 @@ export const component = /*html*/ `
                 </button>
             </form>
 
-            <div class="flex justify-between">
-                <a href="/auth/register/">Register</a>
+            <div class="flex justify-between mt-4">
+                <a href="/auth/register/">
+                    Don't have an account? <span class="text-primary underline">Register</span>
+                </a>
                 <!-- <a href="/password/reset">Password reset</a> -->
             </div>
         </div>
     </div>
 `;
-
-export const loadScripts = () => {
-  return createScriptTag('/auth/login/script.ts', 'module');
-};
 
 export const afterInitialize = () => {
   const loginForm = document.querySelector('form')!;
