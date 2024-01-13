@@ -32,19 +32,25 @@ export const signupSchema = yup.object().shape({
 });
 
 export const loginSchema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(30, 'Username must be at most 30 characters')
-    .matches(
-      /^[a-zA-Z0-9_]*$/,
-      'Username must only contain letters, numbers, and underscores'
-    ),
-  email: yup.string().email('Email must be a valid email'),
   emailOrUsername: yup
     .string()
-    .oneOf(['email', 'username'])
+    .test({
+      name: 'emailOrUsername',
+      message: 'Email or username must be either a valid email or a username',
+      test: (value) => {
+        if (!value) return false;
+        const isEmail = yup.string().email().isValidSync(value);
+        const isUsername = yup
+          .string()
+          .min(3)
+          .max(30)
+          .matches(/^[a-zA-Z0-9_]*$/)
+          .isValidSync(value);
+        return isEmail || isUsername;
+      },
+    })
     .required('Email or username is required'),
+
   password: yup
     .string()
     .min(8, 'Password must be at least 8 characters')
