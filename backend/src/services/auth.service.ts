@@ -1,7 +1,7 @@
 import {
   LoginDto,
   SignupDto,
-  UpdatePasswordDto,
+  ChangePasswordDto,
 } from '../interfaces/auth.interface';
 import * as userService from './user.service';
 import {
@@ -115,11 +115,11 @@ export async function handleRefreshToken(refreshToken: string) {
   }
 }
 
-export async function updatePassword(
+export async function changePassword(
   userId: number,
-  updatePasswordDto: UpdatePasswordDto
+  changePasswordDto: ChangePasswordDto
 ) {
-  const { oldPassword, newPassword } = updatePasswordDto;
+  const { oldPassword, newPassword } = changePasswordDto;
 
   const user = await userService.getByIdOrFail(userId);
 
@@ -131,5 +131,5 @@ export async function updatePassword(
 
   const hashedPassword = await hashPassowrd(newPassword);
 
-  await userService.updatePassword(userId, hashedPassword);
+  await userService.changePassword(userId, hashedPassword);
 }

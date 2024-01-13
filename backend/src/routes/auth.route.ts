@@ -5,12 +5,12 @@ import {
   handleRefreshToken,
   handleLogout,
   checkAuth,
-  updatePassword,
+  changePassword,
 } from '../controllers/auth.controller';
 import {
   loginSchema,
   signUpSchema,
-  updatePasswordSchema,
+  changePasswordSchema,
 } from '../schemas/auth.schema';
 import { validateReqBody } from '../middlewares/validator.middleware';
 import { asyncHandler } from '../helpers/async.helper';
@@ -35,8 +35,8 @@ router.get('/me', auth, checkAuth);
 router.patch(
   '/password',
   auth,
-  validateReqBody(updatePasswordSchema),
-  asyncHandler(updatePassword)
+  validateReqBody(changePasswordSchema),
+  asyncHandler(changePassword)
 );
 
 export default router;

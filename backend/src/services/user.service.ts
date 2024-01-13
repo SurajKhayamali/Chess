@@ -118,7 +118,7 @@ export async function update(id: number, updateUserDto: UpdateUserDto) {
  * @param id
  * @param password
  */
-export async function updatePassword(id: number, password: string) {
+export async function changePassword(id: number, password: string) {
   const user = await getByIdOrFail(id);
 
   user.password = password;

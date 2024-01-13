@@ -7,7 +7,7 @@ export interface LoginDto {
   password: string;
 }
 
-export interface UpdatePasswordDto {
+export interface ChangePasswordDto {
   oldPassword: string;
   newPassword: string;
 }

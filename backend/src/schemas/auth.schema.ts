@@ -60,7 +60,7 @@ export const loginSchema = Joi.object({
   }),
 });
 
-export const updatePasswordSchema = Joi.object({
+export const changePasswordSchema = Joi.object({
   oldPassword: Joi.string().min(8).required().messages({
     'string.min': 'Old password must be at least 8 characters long',
     'any.required': 'Old password is required',
