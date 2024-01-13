@@ -16,6 +16,9 @@ export class Chat extends BaseEntity {
   @ManyToOne(() => Game, { nullable: true, onDelete: 'SET NULL' })
   game?: Game; // nullable for private chat between two users
 
+  @Column({ nullable: true })
+  channel?: string; // nullable for non group chats
+
   @Column()
   message: string;
 }

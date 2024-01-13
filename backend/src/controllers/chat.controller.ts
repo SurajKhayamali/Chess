@@ -2,6 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 
 import * as chatService from '../services/chat.service';
 import { HttpStatusCode } from '../enums/httpStatusCode.enum';
+import { AuthenticatedRequest } from '../interfaces/jwt.interface';
+import { NotFoundException } from '../exceptions';
+import {
+  CreateChatDto,
+  CreateChatByUserDto,
+} from '../interfaces/chat.interface';
 
 /**
  * Create chat
@@ -10,9 +16,26 @@ import { HttpStatusCode } from '../enums/httpStatusCode.enum';
  * @param res
  */
 export async function create(req: Request, res: Response) {
-  const createGameDto = req.body;
+  const createGameDto = req.body as CreateChatDto;
 
   const chat = await chatService.create(createGameDto);
+
+  res.status(HttpStatusCode.CREATED).json(chat);
+}
+
+/**
+ * Create chat by user
+ *
+ * @param req
+ * @param res
+ */
+export async function createByUser(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) throw new NotFoundException('User not found');
+
+  const { userId } = req.user;
+  const createChatByUserDto = req.body as CreateChatByUserDto;
+
+  const chat = await chatService.createByUser(userId, createChatByUserDto);
 
   res.status(HttpStatusCode.CREATED).json(chat);
 }
@@ -30,6 +53,22 @@ export async function getAll(_req: Request, res: Response) {
 }
 
 /**
+ * Get all chats by user id
+ *
+ * @param req
+ * @param res
+ */
+export async function getAllByUserId(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) throw new NotFoundException('User not found');
+
+  const { userId } = req.user;
+
+  const chats = await chatService.getAllByUserId(userId);
+
+  res.json(chats);
+}
+
+/**
  * Get chat by id
  *
  * @param req
@@ -41,6 +80,32 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 
   try {
     const chat = await chatService.getByIdOrFail(parseInt(id));
+
+    res.json(chat);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Get chat by id by user id
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function getByIdByUserId(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) throw new NotFoundException('User not found');
+
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  try {
+    const chat = await chatService.getByIdOrFail(parseInt(id), userId);
 
     res.json(chat);
   } catch (error) {
@@ -69,6 +134,37 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
+ * Update chat by user
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function updateByUser(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) throw new NotFoundException('User not found');
+
+  const { userId } = req.user;
+  const { id } = req.params;
+  const updateChatByUserDto = req.body;
+
+  try {
+    const chat = await chatService.update(
+      parseInt(id),
+      updateChatByUserDto,
+      userId
+    );
+
+    res.json(chat);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Delete chat
  *
  * @param req
@@ -80,6 +176,32 @@ export async function remove(req: Request, res: Response, next: NextFunction) {
 
   try {
     const chat = await chatService.remove(parseInt(id));
+
+    res.json(chat);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Delete chat by user
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function removeByUser(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) throw new NotFoundException('User not found');
+
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  try {
+    const chat = await chatService.remove(parseInt(id), userId);
 
     res.json(chat);
   } catch (error) {

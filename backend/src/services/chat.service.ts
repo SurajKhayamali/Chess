@@ -1,5 +1,10 @@
+import { User } from '../entities/user.entity';
 import { NotFoundException } from '../exceptions';
-import { CreateChatDto, UpdateChatDto } from '../interfaces/chat.interface';
+import {
+  CreateChatByUserDto,
+  CreateChatDto,
+  UpdateChatDto,
+} from '../interfaces/chat.interface';
 import { ChatRepository } from '../repositories/chat.repository';
 
 /**
@@ -16,6 +21,25 @@ export async function create(createChatDto: CreateChatDto) {
 }
 
 /**
+ * Create a new chat by user
+ *
+ * @param createChatByUserDto
+ *
+ * @returns chat
+ */
+export async function createByUser(
+  userId: number,
+  createByUserChatDto: CreateChatByUserDto
+) {
+  const chat = ChatRepository.create({
+    ...createByUserChatDto,
+    sender: userId as unknown as User,
+  });
+  await ChatRepository.save(chat);
+  return chat;
+}
+
+/**
  * Get all chats
  *
  * @returns chats
@@ -26,25 +50,48 @@ export async function getAll() {
 }
 
 /**
+ * Get all chats by user id
+ *
+ * @param userId
+ *
+ * @returns chats
+ */
+export async function getAllByUserId(userId: number) {
+  const chats = await ChatRepository.createQueryBuilder('chat')
+    .where('chat.sender_id = :userId', { userId })
+    .orWhere('chat.receiver_id = :userId', { userId })
+    .execute();
+  return chats;
+}
+
+/**
  * Get chat by id
  *
  * @param id
+ * @param userId
  *
  * @returns chat
  */
-export async function getById(id: number) {
-  return ChatRepository.findOneBy({ id });
+export async function getById(id: number, userId?: number) {
+  if (!userId) return ChatRepository.findOneBy({ id });
+
+  return ChatRepository.createQueryBuilder('chat')
+    .where('chat.id = :id', { id })
+    .andWhere('chat.sender_id = :userId', { userId })
+    .orWhere('chat.receiver_id = :userId', { userId })
+    .getOne();
 }
 
 /**
  * Get chat by id or fail
  *
  * @param id
+ * @param userId
  *
  * @returns chat
  */
-export async function getByIdOrFail(id: number) {
-  const chat = await getById(id);
+export async function getByIdOrFail(id: number, userId?: number) {
+  const chat = await getById(id, userId);
 
   if (!chat) {
     throw new NotFoundException('Chat not found');
@@ -61,8 +108,12 @@ export async function getByIdOrFail(id: number) {
  *
  * @returns chat
  */
-export async function update(id: number, updateChatDto: UpdateChatDto) {
-  const chat = await getByIdOrFail(id);
+export async function update(
+  id: number,
+  updateChatDto: UpdateChatDto,
+  userId?: number
+) {
+  const chat = await getByIdOrFail(id, userId);
 
   ChatRepository.merge(chat, updateChatDto);
 
@@ -76,8 +127,8 @@ export async function update(id: number, updateChatDto: UpdateChatDto) {
  *
  * @param id
  */
-export async function remove(id: number) {
-  const chat = await getByIdOrFail(id);
+export async function remove(id: number, userId?: number) {
+  const chat = await getByIdOrFail(id, userId);
 
   await ChatRepository.remove(chat);
 

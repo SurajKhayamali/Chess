@@ -27,3 +27,41 @@ Content-Type: application/json
 
 ###
 DELETE {{BASE_URL}}/1
+
+
+# After restrictions to current user only access
+###
+GET {{BASE_URL}}
+
+###
+POST {{BASE_URL}}
+Content-Type: application/json
+
+{
+    "channel": "public-message",
+    "message": "Hello World"
+}
+
+###
+GET {{BASE_URL}}/1
+
+###
+PATCH {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+    "message": "Hello World 2"
+}
+
+# Should not be allowed
+###
+PATCH {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+    "channel": "public-message-2"
+}
+
+
+###
+DELETE {{BASE_URL}}/1
