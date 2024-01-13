@@ -12,10 +12,6 @@ export interface ChangePasswordDto {
   newPassword: string;
 }
 
-export interface ChangePasswordFormValues extends ChangePasswordDto {
-  confirmPassword: string;
-}
-
 export interface UserOnlineDto {
   userId: number;
 }

@@ -1,12 +1,12 @@
 import { AUTH_MESSAGES } from 'constants/message.constant';
 import { NavigationMode } from 'enums/route.enum';
 import { createScriptTag } from 'helpers/createScriptTag.helper';
+import { clearErrorsOnChange, validateForm } from 'helpers/form.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { SignupDto } from 'interfaces/auth.interface';
 import { signupSchema } from 'schemas/auth.schema';
 import { handleNavigation } from 'scripts/router';
 import { handleRegister } from 'services/auth.service';
-import { AnyObjectSchema, ValidationError } from 'yup';
 
 export const component = /* html */ `
     <div class="container w-full h-full flex justify-center items-center">
@@ -69,53 +69,6 @@ export const component = /* html */ `
 
 export const loadScripts = () => {
   return createScriptTag('/auth/register/script.ts', 'module');
-};
-
-const validateForm = (form: HTMLFormElement, schema: AnyObjectSchema) => {
-  const formData = new FormData(form);
-  const body = Object.fromEntries(formData.entries());
-
-  try {
-    schema.validateSync(body, {
-      abortEarly: false,
-    });
-    return true;
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      const errors = error.inner.reduce((acc, curr) => {
-        acc[curr.path as string] = curr.message;
-        return acc;
-      }, {} as Record<string, string>);
-      console.log('errors: ', errors);
-
-      for (const [key, value] of Object.entries(errors)) {
-        if (!value) continue;
-        const input = form.querySelector(`[name="${key}"]`)!;
-        if (!input) continue;
-
-        input.classList.add('input-error');
-
-        const errorMessage = input.parentElement?.querySelector(
-          '.text-error'
-        ) as HTMLParagraphElement;
-        if (errorMessage) errorMessage.innerText = value;
-      }
-    }
-    return false;
-  }
-};
-
-const clearErrorsOnChange = (form: HTMLFormElement) => {
-  const inputs = form.querySelectorAll('input')!;
-  inputs.forEach((input) => {
-    input.addEventListener('input', () => {
-      input.classList.remove('input-error');
-      const errorMessage = input.parentElement?.querySelector(
-        '.text-error'
-      ) as HTMLParagraphElement;
-      if (errorMessage) errorMessage.innerText = '';
-    });
-  });
 };
 
 export const afterInitialize = () => {

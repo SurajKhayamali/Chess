@@ -1,10 +1,12 @@
-import { extractDataFromForm } from 'helpers/formdata.helper';
-import { ChangePasswordFormValues } from 'interfaces/auth.interface';
+import {
+  clearErrorsOnChange,
+  extractDataFromForm,
+  validateForm,
+} from 'helpers/form.helper';
 import { User } from 'interfaces/user.interface';
 import { changePasswordSchema } from 'schemas/auth.schema';
 import { changePassword } from 'services/auth.service';
 import { getUserInfo, updateUserInfo } from 'services/user.service';
-import { ValidationError } from 'yup';
 
 export const component = /* html */ `
 <div class="container mx-auto flex flex-col gap-8">
@@ -195,89 +197,6 @@ const initializeGeneralInfoForm = async () => {
   resetGneralInfoFormWithInitialValues(generalInfoForm);
 };
 
-const clearErrorsOnChange = (input: HTMLInputElement) => {
-  const inputEl = document.getElementById(input.name) as HTMLInputElement;
-  if (inputEl) {
-    inputEl.classList.remove('input-error');
-  }
-
-  const errMsg = document.getElementById(input.name + 'ErrMsg');
-  if (errMsg) {
-    errMsg.innerText = '';
-  }
-};
-
-const validateChangePassword = async (values: ChangePasswordFormValues) => {
-  try {
-    await changePasswordSchema.validate(values, { abortEarly: false });
-    return {
-      isValid: true,
-    };
-  } catch (error) {
-    const errors: Partial<ChangePasswordFormValues> = {};
-    if (error instanceof ValidationError) {
-      error.inner.forEach((err) => {
-        errors[err.path as keyof ChangePasswordFormValues] = err.message;
-      });
-
-      for (const key in errors) {
-        const input = document.getElementById(key) as HTMLInputElement;
-        if (input) {
-          input.classList.add('input-error');
-        }
-
-        const inputErrMsg = document.getElementById(
-          key + 'ErrMsg'
-        ) as HTMLParagraphElement;
-        if (inputErrMsg) {
-          inputErrMsg.innerText = errors[
-            key as keyof ChangePasswordFormValues
-          ] as string;
-        }
-      }
-    }
-    return {
-      isValid: false,
-      errors,
-    };
-  }
-
-  //   console.log('values', values, changePasswordSchema.validate(values));
-  //   const { oldPassword, newPassword, confirmPassword } = values;
-  //   const errors: Partial<ChangePasswordFormValues> = {};
-  //   if (!oldPassword) {
-  //     errors.oldPassword = 'Old password is required';
-  //   }
-  //   if (!newPassword) {
-  //     errors.newPassword = 'New password is required';
-  //   }
-  //   if (!confirmPassword) {
-  //     errors.confirmPassword = 'Confirm password is required';
-  //   }
-  //   if (newPassword !== confirmPassword) {
-  //     errors.confirmPassword = 'Confirm password does not match';
-  //   }
-  //   if (Object.keys(errors).length > 0) {
-  //     for (const key in errors) {
-  //       const input = document.getElementById(
-  //         key + 'ErrMsg'
-  //       ) as HTMLParagraphElement;
-  //       if (input) {
-  //         input.innerText = errors[
-  //           key as keyof ChangePasswordFormValues
-  //         ] as string;
-  //       }
-  //     }
-  //     return {
-  //       isValid: false,
-  //       errors,
-  //     };
-  //   }
-  //   return {
-  //     isValid: true,
-  //   };
-};
-
 const initializePasswordForm = () => {
   // Password form
   const passwordForm = document.getElementById(
@@ -302,20 +221,9 @@ const initializePasswordForm = () => {
   const newPassword = document.getElementById(
     'newPassword'
   ) as HTMLInputElement;
-  const confirmPassword = document.getElementById(
-    'confirmPassword'
-  ) as HTMLInputElement;
 
   // Add event listeners
-  oldPassword.addEventListener('input', () => {
-    clearErrorsOnChange(oldPassword);
-  });
-  newPassword.addEventListener('input', () => {
-    clearErrorsOnChange(newPassword);
-  });
-  confirmPassword.addEventListener('input', () => {
-    clearErrorsOnChange(confirmPassword);
-  });
+  clearErrorsOnChange(passwordForm);
 
   editPasswordBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -340,15 +248,8 @@ const initializePasswordForm = () => {
   updatePasswordBtn.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const { isValid, errors } = await validateChangePassword({
-      oldPassword: oldPassword.value,
-      newPassword: newPassword.value,
-      confirmPassword: confirmPassword.value,
-    });
-    if (!isValid) {
-      console.error('errors', errors);
-      return;
-    }
+    const isValid = validateForm(passwordForm, changePasswordSchema);
+    if (!isValid) return;
 
     await changePassword({
       oldPassword: oldPassword.value,
