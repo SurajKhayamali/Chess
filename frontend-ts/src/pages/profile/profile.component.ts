@@ -1,4 +1,5 @@
 import {
+  clearErrorsOnAllInputs,
   clearErrorsOnChange,
   extractDataFromForm,
   validateForm,
@@ -238,6 +239,8 @@ const initializePasswordForm = () => {
     e.preventDefault();
 
     passwordForm.reset();
+
+    clearErrorsOnAllInputs(passwordForm);
 
     passwordFieldset.setAttribute('disabled', '');
     editPasswordBtn.classList.remove('hidden');

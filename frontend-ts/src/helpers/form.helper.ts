@@ -35,9 +35,16 @@ export function validateForm(form: HTMLFormElement, schema: AnyObjectSchema) {
 
         input.classList.add('input-error');
 
-        const errorMessage = input.parentElement?.querySelector(
+        let errorMessage = input.parentElement?.querySelector(
           '.text-error'
         ) as HTMLParagraphElement;
+
+        // Search up to 2 levels up, covering the case of using join in profile as well
+        if (!errorMessage)
+          errorMessage = input.parentElement?.parentElement?.querySelector(
+            '.text-error'
+          ) as HTMLParagraphElement;
+
         if (errorMessage) errorMessage.innerText = value;
       }
     }
@@ -49,11 +56,39 @@ export function clearErrorsOnChange(form: HTMLFormElement) {
   const inputs = form.querySelectorAll('input')!;
   inputs.forEach((input) => {
     input.addEventListener('input', () => {
+      console.log('remove error');
       input.classList.remove('input-error');
-      const errorMessage = input.parentElement?.querySelector(
+
+      let errorMessage = input.parentElement?.querySelector(
         '.text-error'
       ) as HTMLParagraphElement;
+
+      // Search up to 2 levels up, covering the case of using join in profile as well
+      if (!errorMessage)
+        errorMessage = input.parentElement?.parentElement?.querySelector(
+          '.text-error'
+        ) as HTMLParagraphElement;
+
       if (errorMessage) errorMessage.innerText = '';
     });
+  });
+}
+
+export function clearErrorsOnAllInputs(form: HTMLFormElement) {
+  const inputs = form.querySelectorAll('input')!;
+  inputs.forEach((input) => {
+    input.classList.remove('input-error');
+
+    let errorMessage = input.parentElement?.querySelector(
+      '.text-error'
+    ) as HTMLParagraphElement;
+
+    // Search up to 2 levels up, covering the case of using join in profile as well
+    if (!errorMessage)
+      errorMessage = input.parentElement?.parentElement?.querySelector(
+        '.text-error'
+      ) as HTMLParagraphElement;
+
+    if (errorMessage) errorMessage.innerText = '';
   });
 }
