@@ -4,6 +4,7 @@ import serverConfig from '../config';
 import { Game } from '../entities/game.entity';
 import { Move } from '../entities/move.entity';
 import { Chat } from '../entities/chat.entity';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 // type DatabaseType =
 //   | 'mysql'
@@ -41,6 +42,7 @@ export const AppDataSource = new DataSource({
   entities: [User, Game, Move, Chat],
   subscribers: [],
   migrations: [],
+  namingStrategy: new SnakeNamingStrategy(),
 } as DataSourceOptions);
 
 // // to initialize the initial connection with the database, register all entities

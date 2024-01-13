@@ -3,9 +3,11 @@ import { BaseEntity } from './base.entity';
 import { Game } from './game.entity';
 import { PieceType } from '../enums/pieceType.enum';
 
-@Entity()
+@Entity('moves')
 export class Move extends BaseEntity {
-  @ManyToOne(() => Game)
+  @ManyToOne(() => Game, {
+    onDelete: 'CASCADE',
+  })
   game: Game;
 
   @Column({

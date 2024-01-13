@@ -3,15 +3,17 @@ import { BaseEntity } from './base.entity';
 import { Game } from './game.entity';
 import { User } from './user.entity';
 
-@Entity()
+@Entity('chats')
 export class Chat extends BaseEntity {
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, {
+    onDelete: 'SET NULL',
+  })
   sender: User;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
   receiver?: User; // nullable for game chat
 
-  @ManyToOne(() => Game, { nullable: true })
+  @ManyToOne(() => Game, { nullable: true, onDelete: 'SET NULL' })
   game?: Game; // nullable for private chat between two users
 
   @Column()
