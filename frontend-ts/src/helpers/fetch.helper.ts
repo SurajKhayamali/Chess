@@ -1,6 +1,7 @@
 import { API_URL } from 'constants/config.constant';
 import { HttpStatusCode } from 'enums/http.enum';
 import { handleRefresh } from 'services/auth.service';
+import { getIsLoggedIn } from './auth.helper';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
@@ -11,7 +12,7 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
     },
     credentials: 'include',
   });
-  if (res.status === HttpStatusCode.UNAUTHORIZED) {
+  if (res.status === HttpStatusCode.UNAUTHORIZED && getIsLoggedIn()) {
     try {
       await handleRefresh();
       console.log('Refreshed token');
