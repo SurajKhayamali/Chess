@@ -18,7 +18,7 @@ export const component = `
                 <label class="block">
                     <span>Password*</span>
                     <input type="password" class="input input-bordered w-full max-w-xs" name="password"
-                        placeholder="Enter your password" autocomplete="on" required />
+                        placeholder="Enter your password" autocomplete="on" />
                 </label>
 
                 <div class="mt-2">
