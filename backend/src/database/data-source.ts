@@ -4,7 +4,7 @@ import serverConfig from '../config';
 import { Game } from '../entities/game.entity';
 import { Move } from '../entities/move.entity';
 import { Chat } from '../entities/chat.entity';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { SnakeNamingStrategy } from './snake-naming.strategy';
 
 // type DatabaseType =
 //   | 'mysql'

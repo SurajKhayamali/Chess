@@ -60,7 +60,7 @@ export async function getAllByUserId(userId: number) {
   const chats = await ChatRepository.createQueryBuilder('chat')
     .where('chat.sender_id = :userId', { userId })
     .orWhere('chat.receiver_id = :userId', { userId })
-    .execute();
+    .getMany();
   return chats;
 }
 
