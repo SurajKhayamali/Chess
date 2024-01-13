@@ -44,12 +44,17 @@ export const component = /* html */ `
 
   <form id="passwordForm" class="bg-neutral p-8 rounded-lg">
     <fieldset disabled id="passwordFieldset" class="p-0">
-      <h2 class="text-xl font-bold mt-4">Password Information</h2>
+      <h2 class="text-xl font-bold mb-4">Password Information</h2>
+
+      <div class="form-control hidden">
+        <label for="username" class="label">Username</label>
+        <input type="text" placeholder="Username" class="input input-bordered" autocomplete="username" />
+      </div>
 
       <div class="form-control">
         <label for="oldPassword" class="label">Old Password</label>
         <div class="join">
-          <input type="password" name="oldPassword" id="oldPassword" placeholder="Old Password" class="input input-bordered join-item w-full" />
+          <input type="password" name="oldPassword" id="oldPassword" placeholder="Old Password" class="input input-bordered join-item w-full" autocomplete="current-password" />
           <button id="oldPasswordVissiblityToogleBtn" class="btn join-item rounded-r-full"><i class="fa-solid fa-eye"></i></button>
         </div>
       </div>
@@ -57,7 +62,7 @@ export const component = /* html */ `
       <div class="form-control">
         <label for="newPassword" class="label">New Password</label>
         <div class="join">
-          <input type="password" name="newPassword" id="newPassword" placeholder="New Password" class="input input-bordered join-item w-full" />
+          <input type="password" name="newPassword" id="newPassword" placeholder="New Password" class="input input-bordered join-item w-full" autocomplete="new-password" />
           <button id="newPasswordVissiblityToogleBtn" class="btn join-item rounded-r-full"><i class="fa-solid fa-eye"></i></button>
         </div>
       </div>
@@ -65,7 +70,7 @@ export const component = /* html */ `
       <div class="form-control">
         <label for="confirmPassword" class="label">Confirm Password</label>
         <div class="join">
-          <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="input input-bordered join-item w-full" />
+          <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="input input-bordered join-item w-full" autocomplete="new-password" />
           <button id="confirmPasswordVissiblityToogleBtn" class="btn join-item rounded-r-full"><i class="fa-solid fa-eye"></i></button>
         </div>
       </div>
