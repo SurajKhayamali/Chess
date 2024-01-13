@@ -1,4 +1,5 @@
-import { UpdateUserDto, User } from 'interfaces/user.interface';
+import { extractDataFromForm } from 'helpers/formdata.helper';
+import { User } from 'interfaces/user.interface';
 import { getUserInfo, updateUserInfo } from 'services/user.service';
 
 export const component = /* html */ `
@@ -156,12 +157,7 @@ const initializeGeneralInfoForm = async () => {
   updateInfoBtn.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(generalInfoForm);
-    const payload: UpdateUserDto = {};
-
-    for (const [key, value] of formData.entries()) {
-      if (value) payload[key as keyof UpdateUserDto] = value as string;
-    }
+    const payload = extractDataFromForm(generalInfoForm);
 
     const result = await updateUserInfo(payload);
 
