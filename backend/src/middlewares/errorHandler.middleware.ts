@@ -22,7 +22,7 @@ export async function errorHandlerMiddleware(
   const { statusCode, message, stack } = error;
 
   if (stack) {
-    request.log.error(stack);
+    request.log?.error(stack);
   }
 
   if (response.headersSent) {
