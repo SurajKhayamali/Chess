@@ -2,7 +2,12 @@ import { API_URL } from 'constants/config.constant';
 import { AUTH_ENDPOINTS } from 'constants/endpoint.constant';
 import { HttpMethods } from 'enums/http.enum';
 import { SocketEvent } from 'enums/socket.enum';
-import { setIsLoggedIn } from 'helpers/auth.helper';
+import {
+  clearUserInfo,
+  getUserInfo,
+  setIsLoggedIn,
+  setUserInfo,
+} from 'helpers/auth.helper';
 import { fetchHelper } from 'helpers/fetch.helper';
 import { emit } from 'helpers/socket.helper';
 import {
@@ -12,8 +17,6 @@ import {
   UserOnlineDto,
 } from 'interfaces/auth.interface';
 import { socket } from 'scripts/socket';
-
-let currentlyLoggedInUserId: number | null = null;
 
 export async function handleRegister(body: SignupDto) {
   const response = await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
@@ -45,6 +48,7 @@ export async function handleLogout() {
   reconnectAsUnauthenticatedUser();
 
   setIsLoggedIn(false);
+  clearUserInfo();
 }
 
 export async function handleRefresh() {
@@ -55,22 +59,26 @@ export async function handleRefresh() {
   });
   if (response.status !== 200) {
     setIsLoggedIn(false);
+    clearUserInfo();
     throw new Error('Failed to refresh token');
   }
 
   setIsLoggedIn(true);
+
   return response.json();
 }
 
 export async function handleCheckIfAuthenticated() {
   const response = await fetchHelper(AUTH_ENDPOINTS.ME);
 
-  // console.log('Notifying user online', response);
-  if (response.userId !== currentlyLoggedInUserId) {
-    currentlyLoggedInUserId = response.userId;
-    // console.log('Notifying user online', currentlyLoggedInUserId);
+  const currentUserInfo = getUserInfo();
+
+  if (response.userId !== currentUserInfo?.userId) {
     reconnectAsAuthenticatedUser(response.userId);
   }
+
+  setUserInfo(response);
+
   return response;
 }
 

@@ -3,9 +3,9 @@ import {
   renderNewChat,
 } from 'components/chat/chat.component';
 import { Chat } from 'entities/Chat';
-import { ChatList } from 'entities/ChatList';
 import { SocketEvent } from 'enums/socket.enum';
 import { emit } from 'helpers/socket.helper';
+import { chatRepository } from 'repositories/chat.repository';
 import { socket } from 'scripts/socket';
 
 export function renderChatContainer(
@@ -24,34 +24,25 @@ export function renderChatContainer(
     </div>
   `;
 
-  const chats = new ChatList();
-  renderChatListComponent(chats.getChats());
+  renderChatListComponent(chatRepository.chats);
 
   socket.on(channelId, (message: unknown) => {
     // console.log('Message received:', message);
-    const chat = new Chat({
-      message: message as string,
-      sender: 'Backend',
-      time: new Date().toLocaleTimeString(),
-      isSeen: false,
-    });
-    chats.addChat(chat);
+    const chat = new Chat(message as Chat);
+    chatRepository.appendChat(chat);
 
     renderNewChat(chat);
   });
 
   const chatInput = document.getElementById('chat-input') as HTMLInputElement;
-  chatInput.addEventListener('keypress', (e) => {
+  chatInput.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter') {
       const message = chatInput.value;
       emit(socket, SocketEvent.PUBLIC_MESSAGE, message);
-      const chat = new Chat({
+      const chat = await chatRepository.addChat({
         message,
-        sender: 'You',
-        time: new Date().toLocaleTimeString(),
-        isSeen: false,
+        channel: channelId,
       });
-      chats.addChat(chat);
       renderNewChat(chat);
       chatInput.value = '';
     }

@@ -16,6 +16,7 @@ export default defineConfig({
       helpers: resolve(__dirname, 'src/helpers'),
       interfaces: resolve(__dirname, 'src/interfaces'),
       pages: resolve(__dirname, 'src/pages'),
+      repositories: resolve(__dirname, 'src/repositories'),
       schemas: resolve(__dirname, 'src/schemas'),
       scripts: resolve(__dirname, 'src/scripts'),
       services: resolve(__dirname, 'src/services'),

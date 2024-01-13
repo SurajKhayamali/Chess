@@ -1,25 +1,20 @@
-interface Chat {
-  sender: string;
-  message: string;
-  time: string;
-  isSeen: boolean;
-}
+import { Chat } from 'entities/Chat';
+import { getUserInfo } from 'helpers/auth.helper';
 
-const currentUser = 'You';
 function renderChatComponent(chat: Chat) {
-  const sentByCurrentUser = chat.sender === currentUser;
+  const userInfo = getUserInfo();
+  if (!userInfo) return '';
+
+  const sentByCurrentUser = chat.sender === userInfo.userId;
   const chatAlignClass = sentByCurrentUser ? 'chat-end' : 'chat-start';
 
   return `
     <div class="chat ${chatAlignClass}">
         <div class="chat-header">
             ${chat.sender}
-            <time class="text-xs opacity-50">${chat.time}</time>
+            <time class="text-xs opacity-50">${chat.createdAt}</time>
         </div>
         <div class="chat-bubble">${chat.message}</div>
-        <div class="chat-footer opacity-50">
-            ${chat.isSeen ? 'Seen' : 'Delivered'}
-        </div>
     </div>
     `;
 }

@@ -18,10 +18,4 @@ export class ChatList {
   getChats() {
     return this.chats;
   }
-
-  //   static instance = new ChatList();
-
-  //   static getInstance() {
-  //     return this.instance;
-  //   }
 }
