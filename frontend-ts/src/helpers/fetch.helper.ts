@@ -1,7 +1,7 @@
 import { API_URL } from 'constants/config.constant';
 import { HttpStatusCode } from 'enums/http.enum';
-import { handleRefresh } from 'services/auth.service';
-import { getIsLoggedIn } from './auth.helper';
+import { handleLogout, handleRefresh } from 'services/auth.service';
+import { getIsLoggedIn, loggedInOnlyGuard } from './auth.helper';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
@@ -15,14 +15,15 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
   if (res.status === HttpStatusCode.UNAUTHORIZED && getIsLoggedIn()) {
     try {
       await handleRefresh();
-      console.log('Refreshed token');
+      // console.log('Refreshed token');
 
       return fetchHelper(url, options);
     } catch (error) {
-      // throw new Error(error as string);
-      console.log('Failed to refresh token');
+      // console.log('Failed to refresh token');
 
-      // TODO: Hit backend logout endpoint and Redirect to login page
+      await handleLogout();
+      loggedInOnlyGuard();
+      // console.log('Logged out');
     }
   }
   const result = await res.json();
