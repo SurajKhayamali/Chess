@@ -13,6 +13,8 @@ import {
 } from 'interfaces/auth.interface';
 import { socket } from 'scripts/socket';
 
+let currentlyLoggedInUserId: number | null = null;
+
 export async function handleRegister(body: SignupDto) {
   const response = await fetchHelper(AUTH_ENDPOINTS.REGISTER, {
     method: HttpMethods.POST,
@@ -64,7 +66,9 @@ export async function handleCheckIfAuthenticated() {
   const response = await fetchHelper(AUTH_ENDPOINTS.ME);
 
   // console.log('Notifying user online', response);
-  if (response.userId) {
+  if (response.userId !== currentlyLoggedInUserId) {
+    currentlyLoggedInUserId = response.userId;
+    // console.log('Notifying user online', currentlyLoggedInUserId);
     reconnectAsAuthenticatedUser(response.userId);
   }
   return response;
