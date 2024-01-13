@@ -2,7 +2,7 @@ import { RedisKeys } from '../enums/redis.enum';
 import { SocketEvent } from '../enums/socket.enum';
 import { NotFoundException } from '../exceptions';
 import { getUserSocketRoom } from '../helpers/socket.helper';
-import { CreateUserDto } from '../interfaces/user.interface';
+import { CreateUserDto, UpdateUserDto } from '../interfaces/user.interface';
 import { redisClient } from '../redis.init';
 import { UserRepository } from '../repositories/user.repository';
 import { getSocketIO } from '../socket.init';
@@ -102,7 +102,7 @@ export async function getByEmailOrUsername(emailOrUsername: string) {
  *
  * @returns user
  */
-export async function update(id: number, updateUserDto: CreateUserDto) {
+export async function update(id: number, updateUserDto: UpdateUserDto) {
   const user = await getByIdOrFail(id);
 
   UserRepository.merge(user, updateUserDto);
@@ -110,6 +110,20 @@ export async function update(id: number, updateUserDto: CreateUserDto) {
   await UserRepository.save(user);
 
   return user;
+}
+
+/**
+ * Update user password by id
+ *
+ * @param id
+ * @param password
+ */
+export async function updatePassword(id: number, password: string) {
+  const user = await getByIdOrFail(id);
+
+  user.password = password;
+
+  await UserRepository.save(user);
 }
 
 /**

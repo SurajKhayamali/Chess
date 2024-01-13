@@ -7,6 +7,11 @@ export interface LoginDto {
   password: string;
 }
 
+export interface UpdatePasswordDto {
+  oldPassword: string;
+  newPassword: string;
+}
+
 export interface UserOnlineDto {
   userId: number;
 }

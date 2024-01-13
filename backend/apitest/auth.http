@@ -50,3 +50,12 @@ POST {{BASE_URL}}/logout
 
 ###
 GET {{BASE_URL}}/me
+
+###
+PATCH {{BASE_URL}}/password
+Content-Type: application/json
+
+{
+    "oldPassword": "oldPasswordValue",
+    "newPassword": "newPasswordValue"
+}

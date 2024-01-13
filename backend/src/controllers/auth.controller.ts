@@ -110,3 +110,16 @@ export async function checkAuth(req: AuthenticatedRequest, res: Response) {
 
   return res.json(req.user);
 }
+
+export async function updatePassword(req: AuthenticatedRequest, res: Response) {
+  const userId = req.user?.userId;
+  const updateUserPasswordDto = req.body;
+
+  if (!userId) throw new UnauthorizedException('User not found!');
+
+  await authService.updatePassword(userId, updateUserPasswordDto);
+
+  return res.json({
+    message: 'Password updated!',
+  });
+}

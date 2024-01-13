@@ -1,4 +1,8 @@
-import { LoginDto, SignupDto } from '../interfaces/auth.interface';
+import {
+  LoginDto,
+  SignupDto,
+  UpdatePasswordDto,
+} from '../interfaces/auth.interface';
 import * as userService from './user.service';
 import {
   BadRequestException,
@@ -109,4 +113,23 @@ export async function handleRefreshToken(refreshToken: string) {
       (error as Error)?.message || 'Invalid refresh token!'
     );
   }
+}
+
+export async function updatePassword(
+  userId: number,
+  updatePasswordDto: UpdatePasswordDto
+) {
+  const { oldPassword, newPassword } = updatePasswordDto;
+
+  const user = await userService.getByIdOrFail(userId);
+
+  const isPasswordValid = await comparePassword(oldPassword, user.password);
+
+  if (!isPasswordValid) {
+    throw new BadRequestException('Invalid password!');
+  }
+
+  const hashedPassword = await hashPassowrd(newPassword);
+
+  await userService.updatePassword(userId, hashedPassword);
 }
