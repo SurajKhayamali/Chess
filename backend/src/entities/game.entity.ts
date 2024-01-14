@@ -5,7 +5,9 @@ import { GameMode } from '../enums/gameMode.enum';
 
 @Entity('games')
 export class Game extends BaseEntity {
-  @Column()
+  @Column({
+    unique: true,
+  })
   slug: string;
 
   @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })

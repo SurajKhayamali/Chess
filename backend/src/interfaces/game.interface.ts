@@ -10,3 +10,7 @@ export interface JoinGameQueueDto {
 }
 
 export interface LeaveGameQueueDto extends JoinGameQueueDto {}
+
+export interface QueryGameDto {
+  slug?: string;
+}

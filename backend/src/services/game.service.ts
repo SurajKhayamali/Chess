@@ -8,6 +8,7 @@ import { getUserSocketRoom } from '../helpers/socket.helper';
 import {
   CreateGameDto,
   JoinGameQueueDto,
+  QueryGameDto,
   UpdateGameDto,
 } from '../interfaces/game.interface';
 import { redisClient } from '../redis.init';
@@ -38,6 +39,53 @@ export async function getAll() {
 }
 
 /**
+ * Get all games by user
+ *
+ * @returns games
+ */
+export async function getAllByUser(userId: number) {
+  const games = await GameRepository.createQueryBuilder('game')
+    .where('game.white_player_id = :userId', { userId })
+    .orWhere('game.black_player_id = :userId', { userId })
+    .leftJoinAndSelect('game.whitePlayer', 'whitePlayer')
+    .leftJoinAndSelect('game.blackPlayer', 'blackPlayer')
+    .getMany();
+  return games;
+}
+
+/**
+ * Get all filtered games by query
+ *
+ * @param query
+ *
+ * @returns games
+ */
+export async function getAllFiltered(query: QueryGameDto) {
+  const { slug } = query;
+  if (!slug) return getAll();
+
+  return getBySlugOrFail(slug);
+}
+/**
+ * Get all filtered games by query
+ *
+ * @param query
+ *
+ * @returns games
+ */
+export async function getAllFilteredByUser(
+  userId: number,
+  query: QueryGameDto
+) {
+  const { slug } = query;
+  if (!slug) {
+    return getAllByUser(userId);
+  }
+
+  return getBySlugOrFail(slug, userId);
+}
+
+/**
  * Get game by id
  *
  * @param id
@@ -54,9 +102,47 @@ export async function getById(id: number) {
  * @param id
  *
  * @returns game
+ * @throws NotFoundException
  */
 export async function getByIdOrFail(id: number) {
   const game = await getById(id);
+
+  if (!game) {
+    throw new NotFoundException('Game not found');
+  }
+
+  return game;
+}
+
+/**
+ * Get game by slug
+ *
+ * @param slug
+ *
+ * @returns game
+ */
+export async function getBySlug(slug: string, userId?: number) {
+  if (!userId) return GameRepository.findOneBy({ slug });
+
+  return GameRepository.createQueryBuilder('game')
+    .where('game.slug = :slug', { slug })
+    .where('game.white_player_id = :userId', { userId })
+    .orWhere('game.black_player_id = :userId', { userId })
+    .leftJoinAndSelect('game.whitePlayer', 'whitePlayer')
+    .leftJoinAndSelect('game.blackPlayer', 'blackPlayer')
+    .getOne();
+}
+
+/**
+ * Get game by slug or fail
+ *
+ * @param slug
+ *
+ * @returns game
+ * @throws NotFoundException
+ */
+export async function getBySlugOrFail(slug: string, userId?: number) {
+  const game = await getBySlug(slug, userId);
 
   if (!game) {
     throw new NotFoundException('Game not found');

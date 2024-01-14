@@ -36,6 +36,13 @@ Content-Type: application/json
     "isGameOver": true
 }
 
-
 ###
 DELETE {{BASE_URL}}/1
+
+
+# After restrictions to current user only access
+###
+GET {{BASE_URL}}
+
+###
+GET {{BASE_URL}}?slug=RB8W0IyP-lrddmh63

@@ -19,3 +19,12 @@ export const CHAT_ENDPOINTS = {
   UPDATE_BY_ID: (id: number) => `/chats/${id}`,
   DELETE_BY_ID: (id: number) => `/chats/${id}`,
 };
+
+export const GAMES_ENDPOINTS = {
+  CREATE: '/games',
+  GET_ALL: '/games',
+  GET_BY_ID: (id: number) => `/games/${id}`,
+  GET_BY_SLUG: (slug: string) => `/games?slug=${slug}`,
+  UPDATE_BY_ID: (id: number) => `/games/${id}`,
+  DELETE_BY_ID: (id: number) => `/games/${id}`,
+};
