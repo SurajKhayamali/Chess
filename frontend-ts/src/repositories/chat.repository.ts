@@ -63,7 +63,7 @@ class ChatRepository {
 
   async getAllChatWithUserId(userId: number): Promise<Chat[]> {
     return this.chats.filter(
-      (chat) => chat.sender === userId || chat.receiver === userId
+      (chat) => chat.sender.id === userId || chat.receiver?.id === userId
     );
   }
 }

@@ -20,6 +20,9 @@ export default {
       fontFamily: {
         sans: ['Custom Font', 'Nunito'],
       },
+      height: {
+        '1/8': '12.5%',
+      },
     },
   },
   plugins: [tailwindcssTypography, tailwindcssForms, daisyui],

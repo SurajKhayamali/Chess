@@ -120,6 +120,17 @@ export function checkIfSameColor(color1: boolean, color2: boolean): boolean {
   return color1 === color2;
 }
 
+export function getSquareIndex(fileIndex: number, rankIndex: number): string {
+  if (
+    checkFileIndexOutOfBounds(fileIndex) ||
+    checkRankIndexOutOfBounds(rankIndex)
+  ) {
+    throw new Error('Invalid square index');
+  }
+
+  return `${FILES[fileIndex]}${RANKS[rankIndex]}`;
+}
+
 /**
  * Logs to the console if the debug flag is set.
  * @param args The arguments to log.

@@ -19,6 +19,9 @@ export const renderGame = () => /*html*/ `
 
 export const afterInitializeGame = async (slug: string) => {
   const game = await getGameBySlug(slug);
-  console.log('game: ', game);
-  renderBoard('boardContainer');
+  // console.log('game: ', game);
+
+  const fen = game.initialBoardState;
+
+  renderBoard('boardContainer', fen);
 };
