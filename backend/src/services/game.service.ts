@@ -1,5 +1,9 @@
 import { NotFoundException } from '../exceptions';
-import { CreateGameDto, UpdateGameDto } from '../interfaces/game.interface';
+import {
+  CreateGameDto,
+  JoinGameQueueDto,
+  UpdateGameDto,
+} from '../interfaces/game.interface';
 import { GameRepository } from '../repositories/game.repository';
 
 /**
@@ -82,4 +86,13 @@ export async function remove(id: number) {
   await GameRepository.remove(game);
 
   return game;
+}
+
+// Redis related functions
+export async function handleJoinQueueByUser(
+  userId: number,
+  data: JoinGameQueueDto
+) {
+  console.log('handleJoinQueueByUser', userId, data);
+  return 'OK';
 }

@@ -1,9 +1,19 @@
 import { Schema } from 'joi';
 import { SockerRoomPrefix } from '../enums/socket.enum';
 import { validateSchema } from './joi.helper';
+import { Socket } from 'socket.io';
+import { JwtPayload } from '../interfaces/jwt.interface';
 
 export function getUserSocketRoom(userId: number) {
   return `${SockerRoomPrefix.USER}-${userId}`;
+}
+
+export function setUserDataInSocket(socket: Socket, user: JwtPayload) {
+  socket.data.user = user;
+}
+
+export function getUserDataFromSocket(socket: Socket) {
+  return socket.data.user;
 }
 
 export function handleWithAck<T>(
@@ -19,12 +29,13 @@ export function handleWithAck<T>(
 
 export function handleAfterValidation<T>(
   schema: Schema,
-  callback: (data: T) => void
+  callback: (data: T) => unknown
 ) {
-  return (data: T, ack?: (response: unknown) => void) => {
+  return async (data: T, ack?: (response: unknown) => void) => {
     try {
       const value = validateSchema(schema, data);
-      callback(value);
+      const response = await callback(value);
+      ack && ack(response);
     } catch (error) {
       ack && ack({ error: (error as Error).message });
     }

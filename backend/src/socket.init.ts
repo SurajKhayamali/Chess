@@ -6,7 +6,10 @@ import serverConfig from './config';
 import { initializeRedis, redisClient } from './redis.init';
 import { registerUserHandlers } from './handlers/user.handler';
 import { extractJWTTokenFromHeaders, verifyJWT } from './helpers/jwt.helper';
-import { getUserSocketRoom } from './helpers/socket.helper';
+import {
+  getUserSocketRoom,
+  setUserDataInSocket,
+} from './helpers/socket.helper';
 import { instrument } from '@socket.io/admin-ui';
 import { registerChatHandlers } from './handlers/chat.handler';
 import { registerGameHandlers } from './handlers/game.handler';
@@ -22,6 +25,8 @@ const onConnection = (socket: Socket) => {
       if (!payload) return;
 
       if (payload.tokenType !== 'access') return;
+
+      setUserDataInSocket(socket, payload);
 
       const { userId } = payload;
 
