@@ -1,3 +1,4 @@
+import { TimeVariant } from 'interfaces/game.interface';
 import {
   SquareHighlightModifiers,
   PieceHighlightModifiers,
@@ -30,3 +31,36 @@ export const SUPPORTED_PIECE_HIGHLIGHT_MODIFIERS = [
 export const AI_THINKING_TIME = 1 * 1000; // 1 second, in milliseconds
 
 export const DEBUG = false;
+
+export const TIME_VARIANTS: TimeVariant[] = [
+  {
+    title: '1 + 0',
+    description: 'Bullet',
+    value: 60,
+  },
+  {
+    title: '3 + 0',
+    description: 'Blitz',
+    value: 180,
+  },
+  {
+    title: '5 + 0',
+    description: 'Blitz',
+    value: 300,
+  },
+  {
+    title: '10 + 0',
+    description: 'Rapid',
+    value: 600,
+  },
+  {
+    title: '30 + 0',
+    description: 'Classical',
+    value: 1800,
+  },
+  {
+    title: 'No Time Limit',
+    description: 'Casual',
+    value: 0,
+  },
+];

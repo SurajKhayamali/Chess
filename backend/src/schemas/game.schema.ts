@@ -54,3 +54,5 @@ export const joinGameQueueSchema = Joi.object({
     'number.base': 'Time limit must be a numeric value',
   }),
 });
+
+export const leaveGameQueueSchema = joinGameQueueSchema;

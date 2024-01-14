@@ -8,3 +8,5 @@ export interface UpdateGameDto extends Partial<CreateGameDto> {}
 export interface JoinGameQueueDto {
   timeLimit: number;
 }
+
+export interface LeaveGameQueueDto extends JoinGameQueueDto {}

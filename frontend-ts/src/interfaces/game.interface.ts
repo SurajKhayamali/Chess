@@ -25,3 +25,9 @@ export interface Game {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface TimeVariant {
+  title: string;
+  description?: string;
+  value?: number;
+}

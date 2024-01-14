@@ -1,19 +1,29 @@
+import { TIME_VARIANTS } from 'constants/game.constant';
 import { SocketEvent } from 'enums/socket.enum';
 import { emit } from 'helpers/socket.helper';
 import { Game } from 'interfaces/game.interface';
 import { handleNavigation } from 'scripts/router';
 import { socket } from 'scripts/socket';
 
-export const renderGameQueue = (timeLimit: number) => /*html*/ `
+const getTimeVaraintByTimeLimit = (timeLimit: number) =>
+  TIME_VARIANTS.find((timeVariant) => timeVariant.value === timeLimit);
+
+export const renderGameQueue = (timeLimit: number) => {
+  const timeVariant = getTimeVaraintByTimeLimit(timeLimit);
+
+  return /*html*/ `
 	<div class="card bg-base-300">
 		<div class="card-body">
 		<div class="flex flex-col items-center">
-            <p class="text-2xl">Game Queue for mode with ${timeLimit}</p>
-			<div class="spinner w-32 h-32 mt-4"></div>
+      <p class="text-2xl">Game Queue for mode:  ${timeVariant?.title} (${timeVariant?.description})</p>
+			<div class="spinne mt-4"><span class="loading loading-dots loading-lg"></span></div>
+      <p class="text-xl mt-4">Waiting for opponent...</p>
+      <button id="cancelQueueBtn" class="btn btn-ghost mt-4">Cancel</button>
 		</div>
 		</div>
 	</div>
 `;
+};
 
 export const afterInitialize = async (timeLimit: number) => {
   // Mocking a 3 second wait time before the game starts
@@ -27,4 +37,12 @@ export const afterInitialize = async (timeLimit: number) => {
   if (slug) {
     handleNavigation(`/games/${slug}`);
   }
+
+  const cancelQueueBtn = document.getElementById('cancelQueueBtn');
+  cancelQueueBtn?.addEventListener('click', async () => {
+    await emit(socket, SocketEvent.GAME_LEAVE_QUEUE, {
+      timeLimit: timeLimit,
+    });
+    handleNavigation('/');
+  });
 };
