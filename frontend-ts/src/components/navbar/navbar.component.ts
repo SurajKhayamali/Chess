@@ -31,6 +31,7 @@ ${
     </ul>
   </div>
   <a href="/messages" class="btn btn-ghost">Messages</a>
+  <a href="/games" class="btn btn-ghost">Games</a>
 `
     : `
 <div class="navbar-end">

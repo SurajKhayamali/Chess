@@ -15,12 +15,16 @@ import { notFoundRoute } from 'pages/notfound/notfound.route';
 import { offlineRoute } from 'pages/offline/offline.route';
 import { profileRoute } from 'pages/profile/profile.route';
 import { messagesRoute } from 'pages/messages/messages.route';
+import { gameQueueRoute } from 'pages/gameQueue/gameQueue.route';
+import { gamesRoute } from 'pages/games/games.route';
 
 const routes: IRoute[] = [
   homeRoute,
   authRoute,
   profileRoute,
   messagesRoute,
+  gameQueueRoute,
+  gamesRoute,
   offlineRoute,
   notFoundRoute,
 ];
@@ -28,8 +32,7 @@ const routes: IRoute[] = [
 const router = new UniversalRouter([
   {
     path: '/',
-    async action() {
-      const authContext = await checkIfAuthenticated();
+    async action({ authContext }) {
       renderNavComponent(authContext);
     },
     children: routes,
@@ -48,7 +51,8 @@ export async function handleNavigation(
 ) {
   // if (url === window.location.pathname) return;
 
-  const content = await router.resolve(url);
+  const authContext = await checkIfAuthenticated();
+  const content = await router.resolve({ pathname: url, authContext });
   if (!content) return;
 
   const { component, loadScripts, afterInitialize, authRequired } = content;

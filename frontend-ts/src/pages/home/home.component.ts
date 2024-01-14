@@ -2,48 +2,68 @@
 // import { reInitializeMessage } from 'scripts/message';
 // import { generateBoardWithFENString } from 'scripts/parseFEN';
 
+import { handleNavigation } from 'scripts/router';
+
 // import { renderChatContainer } from 'components/chat/chatContainer.component';
 // import { SocketEvent } from 'enums/socket.enum';
 
+interface GameMode {
+  title: string;
+  description?: string;
+  value?: number;
+}
+
+const gameModes: GameMode[] = [
+  {
+    title: '1 + 0',
+    description: 'Bullet',
+    value: 60,
+  },
+  {
+    title: '3 + 0',
+    description: 'Blitz',
+    value: 180,
+  },
+  {
+    title: '5 + 0',
+    description: 'Blitz',
+    value: 300,
+  },
+  {
+    title: '10 + 0',
+    description: 'Rapid',
+    value: 600,
+  },
+  {
+    title: '30 + 0',
+    description: 'Classical',
+    value: 1800,
+  },
+  {
+    title: 'No Time Limit',
+    description: 'Casual',
+    value: 0,
+  },
+];
+
+const renderGameMode = ({ title, description, value }: GameMode) => /*html*/ `
+  <div class="card card-compact cursor-pointer bg-base-300 transition-colors hover:bg-primary" data-value="${value}">
+    <div class="card-body items-center">
+      <p class="card-title">${title}</p>
+      ${description ? `<p class="card-description">${description}</p>` : ''}
+    </div>
+  </div>
+`;
+
+const renderGameModes = () => /*html*/ `
+  <div id="gameModeOptions" class="grid grid-cols-3 gap-4">
+    ${gameModes.map(renderGameMode).join('')}
+  </div>
+`;
+
 export const component = /*html*/ `
   <div class="container">
-    <div class="grid grid-cols-3 gap-4">
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">1 + 0</p>
-          <p class="card-description">Bullet</p>
-        </div>
-      </div>
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">3 + 0</p>
-          <p class="card-description">Blitz</p>
-        </div>
-      </div>
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">5 + 0</p>
-          <p class="card-description">Blitz</p>
-        </div>
-      </div>
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">10 + 0</p>
-          <p class="card-description">Rapid</p>
-        </div>
-      </div>
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">30 + 0</p>
-          <p class="card-description">Classical</p>
-        </div>
-      </div>
-      <div class="card card-compact bg-base-300 transition-colors hover:bg-primary">
-        <div class="card-body items-center">
-          <p class="card-title">No Time Limit</p>
-        </div>
-      </div>
-    </div>
+    ${renderGameModes()}
     <!-- <div id="home-chat-container"></div> -->
   </div>
 `;
@@ -58,4 +78,17 @@ export const component = /*html*/ `
 
 export function afterInitialize() {
   // renderChatContainer('home-chat-container', SocketEvent.PUBLIC_MESSAGE);
+
+  const gameModeOptions = document.querySelectorAll('#gameModeOptions .card');
+
+  gameModeOptions.forEach((gameModeOption) => {
+    gameModeOption.addEventListener('click', () => {
+      const timeLimit = gameModeOption.getAttribute('data-value');
+
+      console.log('Lets play a game with time limit: ', timeLimit);
+      // TODO: Create a new game
+
+      handleNavigation(`/gameQueue/${timeLimit}`);
+    });
+  });
 }
