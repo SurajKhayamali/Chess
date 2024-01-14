@@ -17,8 +17,14 @@ export const gamesRoute: IRoute = {
         const slug = context?.params.slug;
         if (!slug) return;
 
-        const { renderGame } = await import('./games.component');
-        return { component: renderGame(slug as string), authRequired: true };
+        const { renderGame, afterInitializeGame } = await import(
+          './games.component'
+        );
+        return {
+          component: renderGame(),
+          afterInitialize: afterInitializeGame,
+          authRequired: true,
+        };
       },
     },
   ],
