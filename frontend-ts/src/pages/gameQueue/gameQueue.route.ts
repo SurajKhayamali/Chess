@@ -10,7 +10,7 @@ export const gameQueueRoute: IRoute = {
     );
     return {
       component: renderGameQueue(timeLimit),
-      afterInitialize,
+      afterInitialize: () => afterInitialize(timeLimit),
       authRequired: true,
     };
   },

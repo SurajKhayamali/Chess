@@ -8,10 +8,19 @@ import { Socket } from 'socket.io-client';
  * @param arg
  */
 export function emit(socket: Socket, event: string, arg: unknown) {
-  socket.timeout(5000).emit(event, arg, (err: Error) => {
-    if (err) {
-      // no ack from the server, let's retry
-      emit(socket, event, arg);
-    }
+  return new Promise((resolve, reject) => {
+    socket.timeout(5000).emit(event, arg, async (err: Error, res: unknown) => {
+      // console.log('ack', err, res);
+      if (err) {
+        // no ack from the server, let's retry
+        resolve(await emit(socket, event, arg));
+      }
+
+      if ((res as { error: unknown })?.error) {
+        reject(res);
+      } else {
+        resolve(res);
+      }
+    });
   });
 }

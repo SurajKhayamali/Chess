@@ -9,6 +9,7 @@ import { extractJWTTokenFromHeaders, verifyJWT } from './helpers/jwt.helper';
 import { getUserSocketRoom } from './helpers/socket.helper';
 import { instrument } from '@socket.io/admin-ui';
 import { registerChatHandlers } from './handlers/chat.handler';
+import { registerGameHandlers } from './handlers/game.handler';
 
 let io: Server;
 
@@ -33,6 +34,7 @@ const onConnection = (socket: Socket) => {
   // registerOrderHandlers(io, socket);
   registerUserHandlers(io, socket);
   registerChatHandlers(io, socket);
+  registerGameHandlers(io, socket);
 };
 
 export const initializeSocket = async (httpServer: HTTPServer) => {

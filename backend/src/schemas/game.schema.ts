@@ -48,3 +48,9 @@ export const createGameSchema = Joi.object({
 export const updateGameSchema = createGameSchema.fork(['slug'], (schema) =>
   schema.optional()
 );
+
+export const joinGameQueueSchema = Joi.object({
+  timeLimit: Joi.number().messages({
+    'number.base': 'Time limit must be a numeric value',
+  }),
+});
