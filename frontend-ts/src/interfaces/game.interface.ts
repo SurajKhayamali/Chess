@@ -1,5 +1,6 @@
 import { Piece } from 'components/pieces';
 import { GameMode, SquareColor } from 'enums/game.enum';
+import { User } from './user.interface';
 
 export type SquareColorType = SquareColor.LIGHT | SquareColor.DARK;
 
@@ -15,8 +16,8 @@ export type Moves = Move[];
 export interface Game {
   id: number;
   slug: string;
-  whitePlayer?: number;
-  blackPlayer?: number;
+  whitePlayer?: User;
+  blackPlayer?: User;
   mode: GameMode;
   timeLimit?: number;
   initialBoardState: string; // FEN notation

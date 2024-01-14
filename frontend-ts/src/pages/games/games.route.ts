@@ -23,7 +23,7 @@ export const gamesRoute: IRoute = {
         return {
           component: renderGame(),
           afterInitialize: () => afterInitializeGame(slug as string),
-          authRequired: true,
+          // authRequired: true,
         };
       },
     },

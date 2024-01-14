@@ -5,7 +5,9 @@ import {
   FILES_LENGTH,
   RANKS_LENGTH,
 } from 'constants/game.constant';
+import { getUserInfo } from 'helpers/auth.helper';
 import { getSquareIndex } from 'scripts/utils';
+import { getGameBySlug } from 'services/game.service';
 
 const renderSquares = (boardDiv: HTMLDivElement, allowMove: boolean) => {
   for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
@@ -88,11 +90,16 @@ const renderPieces = (
   }
 };
 
-export const renderBoard = (
-  boardContainerId: string,
-  fen: string,
-  allowMove = false
-) => {
+export const renderBoard = async (boardContainerId: string, slug: string) => {
+  const game = await getGameBySlug(slug);
+  // console.log('game: ', game);
+
+  const fen = game.initialBoardState;
+  const userId = getUserInfo()?.userId;
+  const allowMove =
+    Boolean(userId) &&
+    (game.whitePlayer?.id === userId || game.blackPlayer?.id === userId);
+
   const boardContainer = document.getElementById(boardContainerId);
   if (!boardContainer) return;
 

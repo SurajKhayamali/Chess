@@ -1,5 +1,4 @@
 import { renderBoard } from 'components/board/board.component';
-import { getGameBySlug } from 'services/game.service';
 
 export const renderGames = () => /*html*/ `
   <div class="container">
@@ -18,10 +17,5 @@ export const renderGame = () => /*html*/ `
 `;
 
 export const afterInitializeGame = async (slug: string) => {
-  const game = await getGameBySlug(slug);
-  // console.log('game: ', game);
-
-  const fen = game.initialBoardState;
-
-  renderBoard('boardContainer', fen);
+  renderBoard('boardContainer', slug);
 };

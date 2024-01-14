@@ -27,4 +27,6 @@ export const GAMES_ENDPOINTS = {
   GET_BY_SLUG: (slug: string) => `/games?slug=${slug}`,
   UPDATE_BY_ID: (id: number) => `/games/${id}`,
   DELETE_BY_ID: (id: number) => `/games/${id}`,
+
+  GET_SPECTATE_BY_SLUG: (slug: string) => `/games-spectate/${slug}`,
 };
