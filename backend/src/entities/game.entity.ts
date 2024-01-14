@@ -25,11 +25,11 @@ export class Game extends BaseEntity {
   timeLimit?: number; // in seconds
 
   @Column()
-  initialBoardState: string =
+  initialBoardState?: string =
     'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // FEN notation
 
   @Column()
-  isOver: boolean = false;
+  isOver?: boolean = false;
 
   @Column({ nullable: true })
   hasWhitePlayerWon?: boolean;

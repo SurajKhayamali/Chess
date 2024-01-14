@@ -1,5 +1,5 @@
 import { Piece } from 'components/pieces';
-import { SquareColor } from 'enums/game.enum';
+import { GameMode, SquareColor } from 'enums/game.enum';
 
 export type SquareColorType = SquareColor.LIGHT | SquareColor.DARK;
 
@@ -11,3 +11,17 @@ export interface ValidMove {
 
 export type Move = number[];
 export type Moves = Move[];
+
+export interface Game {
+  id: number;
+  slug: string;
+  whitePlayer?: number;
+  blackPlayer?: number;
+  mode: GameMode;
+  timeLimit?: number;
+  initialBoardState: string; // FEN notation
+  isOver?: boolean;
+  hasWhitePlayerWon?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}

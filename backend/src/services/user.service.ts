@@ -141,16 +141,16 @@ export async function remove(id: number) {
 
 // Redis related functions
 export async function getOnlineUsers() {
-  const users = await redisClient.SMEMBERS(RedisKeys.ONLINE_USERS);
+  const users = await redisClient.SMEMBERS(RedisKeys.USERS_ONLINE);
   return users.map((user) => Number(user));
 }
 
 export async function addOnlineUser(userId: number) {
-  await redisClient.SADD(RedisKeys.ONLINE_USERS, String(userId));
+  await redisClient.SADD(RedisKeys.USERS_ONLINE, String(userId));
 }
 
 export async function removeOnlineUser(userId: number) {
-  await redisClient.SREM(RedisKeys.ONLINE_USERS, String(userId));
+  await redisClient.SREM(RedisKeys.USERS_ONLINE, String(userId));
 }
 
 export async function messageUser(userId: number, message: string) {

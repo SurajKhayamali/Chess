@@ -1,4 +1,7 @@
 export enum RedisKeys {
-  ONLINE_USERS = 'online-users',
-  USER_MESSAGE = 'user-message',
+  USERS_ONLINE = 'users:online',
+
+  USER_MESSAGE = 'user:message',
+
+  GAMES_QUEUE = 'games:queue',
 }

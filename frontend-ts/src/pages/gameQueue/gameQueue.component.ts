@@ -1,6 +1,7 @@
 import { SocketEvent } from 'enums/socket.enum';
 import { emit } from 'helpers/socket.helper';
-// import { handleNavigation } from 'scripts/router';
+import { Game } from 'interfaces/game.interface';
+import { handleNavigation } from 'scripts/router';
 import { socket } from 'scripts/socket';
 
 export const renderGameQueue = (timeLimit: number) => /*html*/ `
@@ -22,7 +23,8 @@ export const afterInitialize = async (timeLimit: number) => {
   const res = await emit(socket, SocketEvent.GAME_JOIN_QUEUE, {
     timeLimit: timeLimit,
   });
-  console.log('res', res);
-
-  // TODO: Communicate with backend using socket.io to handle game queue
+  const slug = (res as Game)?.slug;
+  if (slug) {
+    handleNavigation(`/games/${slug}`);
+  }
 };
