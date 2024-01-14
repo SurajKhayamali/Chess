@@ -43,16 +43,6 @@ export function clearUserInfo() {
   localStorage.removeItem(KEY_FOR_USER_INFO);
 }
 
-export async function loggedInOnlyGuard() {
-  const isLoggedIn = getIsLoggedIn();
-  if (isLoggedIn) return;
-
+export function redirectToLogin() {
   handleNavigation('/auth/login', NavigationMode.REPLACE);
-}
-
-export async function loggedOutOnlyGuard() {
-  const isLoggedIn = getIsLoggedIn();
-  if (!isLoggedIn) return;
-
-  handleNavigation('/', NavigationMode.REPLACE);
 }

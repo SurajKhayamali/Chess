@@ -5,6 +5,7 @@ export interface IRoute extends Route {
     component: string;
     loadScripts?: () => HTMLScriptElement;
     afterInitialize?: () => void;
+    authRequired?: boolean;
   } | void>;
   children?: IRoute[];
 }

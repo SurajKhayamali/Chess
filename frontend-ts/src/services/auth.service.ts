@@ -5,6 +5,7 @@ import { SocketEvent } from 'enums/socket.enum';
 import {
   clearUserInfo,
   getUserInfo,
+  redirectToLogin,
   setIsLoggedIn,
   setUserInfo,
 } from 'helpers/auth.helper';
@@ -49,6 +50,7 @@ export async function handleLogout() {
 
   setIsLoggedIn(false);
   clearUserInfo();
+  redirectToLogin();
 }
 
 export async function handleRefresh() {

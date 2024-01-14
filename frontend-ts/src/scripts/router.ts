@@ -6,7 +6,11 @@ import { homeRoute } from '../pages/home/home.route';
 import { IRoute } from 'interfaces/router.interface';
 import { NavigationMode } from 'enums/route.enum';
 import { renderNavComponent } from 'components/navbar/navbar.component';
-import { checkIfAuthenticated } from 'helpers/auth.helper';
+import {
+  checkIfAuthenticated,
+  getIsLoggedIn,
+  redirectToLogin,
+} from 'helpers/auth.helper';
 import { notFoundRoute } from 'pages/notfound/notfound.route';
 import { offlineRoute } from 'pages/offline/offline.route';
 import { profileRoute } from 'pages/profile/profile.route';
@@ -47,7 +51,23 @@ export async function handleNavigation(
   const content = await router.resolve(url);
   if (!content) return;
 
-  const { component, loadScripts, afterInitialize } = content;
+  const { component, loadScripts, afterInitialize, authRequired } = content;
+
+  const isLoggedIn = getIsLoggedIn();
+  // console.log(
+  //   'Auth required',
+  //   authRequired,
+  //   isLoggedIn,
+  //   authRequired && !isLoggedIn,
+  //   authRequired ?? (!authRequired && isLoggedIn),
+  //   !authRequired && isLoggedIn
+  // );
+  if (authRequired && !isLoggedIn) return redirectToLogin();
+  // if (authRequired ?? (!authRequired && isLoggedIn))
+  //   return handleNavigation('/', NavigationMode.REPLACE);
+  if (authRequired === false && isLoggedIn)
+    return handleNavigation('/', NavigationMode.REPLACE);
+
   appContainer.innerHTML = component;
   loadScripts && appContainer.appendChild(loadScripts());
   afterInitialize && afterInitialize();

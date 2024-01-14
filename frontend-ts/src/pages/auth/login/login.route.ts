@@ -5,6 +5,6 @@ export const loginRoute: IRoute = {
   action: async () => {
     const { component, afterInitialize } = await import('./login.component');
 
-    return { component, afterInitialize };
+    return { component, afterInitialize, authRequired: false };
   },
 };

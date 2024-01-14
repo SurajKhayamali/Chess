@@ -1,7 +1,7 @@
 import { API_URL } from 'constants/config.constant';
 import { HttpStatusCode } from 'enums/http.enum';
 import { handleLogout, handleRefresh } from 'services/auth.service';
-import { getIsLoggedIn, loggedInOnlyGuard } from './auth.helper';
+import { getIsLoggedIn } from './auth.helper';
 
 export async function fetchHelper(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
@@ -22,7 +22,6 @@ export async function fetchHelper(url: string, options: RequestInit = {}) {
       // console.log('Failed to refresh token');
 
       await handleLogout();
-      loggedInOnlyGuard();
       // console.log('Logged out');
     }
   }
