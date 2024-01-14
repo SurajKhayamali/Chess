@@ -8,10 +8,10 @@ import {
 import { getSquareIndex } from 'scripts/utils';
 
 const renderSquares = (boardDiv: HTMLDivElement) => {
-  for (let rankIndex = RANKS_LENGTH - 1; rankIndex >= 0; rankIndex--) {
+  for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
     const rank = document.createElement('div');
     rank.classList.add('h-1/8', 'w-full');
-    for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
+    for (let rankIndex = RANKS_LENGTH - 1; rankIndex >= 0; rankIndex--) {
       const square = document.createElement('div');
       square.classList.add('h-full', 'w-full');
       // square.classList.add('min-h-12', 'min-w-12');
@@ -27,25 +27,21 @@ const renderSquares = (boardDiv: HTMLDivElement) => {
   }
 };
 
-const renderPieces = (boardDiv: HTMLDivElement, fen: string) => {
-  // console.log('fen: ', fen);
-  // Render pieces
-  const chess = new Chess(fen);
-  // console.log('chess: ', chess);
-  const board = chess.board();
-  // console.log('board: ', board);
-
+const renderPieces = (
+  boardDiv: HTMLDivElement,
+  board: ReturnType<Chess['board']>
+) => {
   for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
     for (let rankIndex = 0; rankIndex < RANKS_LENGTH; rankIndex++) {
-      const square = board[fileIndex][rankIndex];
+      const square = board[RANKS_LENGTH - rankIndex - 1][fileIndex];
       if (!square) continue;
 
-      const squareDiv = boardDiv.querySelector(
-        `[data-square="${getSquareIndex(fileIndex, rankIndex)}"]`
-      );
+      // const squareId = getSquareIndex(fileIndex, rankIndex);
+      // console.log('square: ', squareId, square.square, fileIndex, rankIndex);
+      const { type, color, square: squareId } = square;
+      const squareDiv = boardDiv.querySelector(`[data-square="${squareId}"]`);
       if (!squareDiv) continue;
 
-      const { type, color } = square;
       const piece = document.createElement('img');
       const fileName = `${color}${type.toUpperCase()}`;
       piece.src = `/images/${fileName}.png`;
@@ -75,5 +71,8 @@ export const renderBoard = (boardContainerId: string, fen: string) => {
   renderSquares(boardDiv);
   boardContainer.appendChild(boardDiv);
 
-  renderPieces(boardDiv, fen);
+  const chess = new Chess(fen);
+  const board = chess.board();
+
+  renderPieces(boardDiv, board);
 };
