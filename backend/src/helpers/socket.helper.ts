@@ -4,7 +4,7 @@ import { validateSchema } from './joi.helper';
 import { Socket } from 'socket.io';
 import { JwtPayload } from '../interfaces/jwt.interface';
 
-export function getUserSocketRoom(userId: number) {
+export function getUserSocketRoom(userId: number | string) {
   return `${SockerRoomPrefix.USER}-${userId}`;
 }
 

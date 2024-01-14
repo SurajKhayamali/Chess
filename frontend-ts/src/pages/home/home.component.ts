@@ -52,9 +52,6 @@ export function afterInitialize() {
     gameModeOption.addEventListener('click', () => {
       const timeLimit = gameModeOption.getAttribute('data-value');
 
-      console.log('Lets play a game with time limit: ', timeLimit);
-      // TODO: Create a new game
-
       handleNavigation(`/gameQueue/${timeLimit}`);
     });
   });

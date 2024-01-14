@@ -45,4 +45,8 @@ export const afterInitialize = async (timeLimit: number) => {
     });
     handleNavigation('/');
   });
+
+  socket.on(SocketEvent.GAME_STARTED, (game: Game) => {
+    handleNavigation(`/games/${game.slug}`);
+  });
 };

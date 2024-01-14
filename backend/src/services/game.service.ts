@@ -1,8 +1,10 @@
 import { User } from '../entities/user.entity';
 import { GameMode } from '../enums/gameMode.enum';
 import { RedisKeys } from '../enums/redis.enum';
+import { SocketEvent } from '../enums/socket.enum';
 import { NotFoundException } from '../exceptions';
 import { generateSlug } from '../helpers/slug.helper';
+import { getUserSocketRoom } from '../helpers/socket.helper';
 import {
   CreateGameDto,
   JoinGameQueueDto,
@@ -10,6 +12,7 @@ import {
 } from '../interfaces/game.interface';
 import { redisClient } from '../redis.init';
 import { GameRepository } from '../repositories/game.repository';
+import { getSocketIO } from '../socket.init';
 
 /**
  * Create a new game
@@ -112,7 +115,11 @@ export async function handleJoinQueueByUser(
       mode: GameMode.PLAYER_VS_PLAYER,
     });
 
-    // TODO: emit event to existingUserInQueue as well
+    const io = getSocketIO();
+    io.to(getUserSocketRoom(existingUserInQueue)).emit(
+      SocketEvent.GAME_STARTED,
+      game
+    );
     return game;
   }
 
