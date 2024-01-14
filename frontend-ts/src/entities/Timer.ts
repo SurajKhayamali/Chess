@@ -63,8 +63,17 @@ export class Timer {
     const minutes = Math.floor(this.time / 60);
     const seconds = this.time % 60;
 
-    this.timerHtml.textContent = `${minutes}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
+    // this.timerHtml.textContent = `${minutes}:${seconds
+    //   .toString()
+    //   .padStart(2, '0')}`;
+    const minutesHtml = this.timerHtml.querySelector(
+      '[data-minutes]'
+    ) as HTMLElement;
+    const secondsHtml = this.timerHtml.querySelector(
+      '[data-seconds]'
+    ) as HTMLElement;
+
+    minutesHtml.style.setProperty('--value', minutes.toString());
+    secondsHtml.style.setProperty('--value', seconds.toString());
   }
 }

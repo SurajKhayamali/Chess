@@ -69,11 +69,19 @@ export const component = `
         <div class="game-info__players">
           <div class="game-info__player">
             <p class="game-info__player-name">Player 1</p>
-            <p class="game-info__player-time">10:00</p>
+            <!--p class="game-info__player-time">10:00</p-->
+            <span class="game-info__player-time countdown">
+              <span data-minutes style="--value:10;"></span>:
+              <span data-seconds style="--value:00;"></span>
+            </span>
           </div>
           <div class="game-info__player">
             <p class="game-info__player-name">Player 2</p>
-            <p class="game-info__player-time">10:00</p>
+            <!--p class="game-info__player-time">10:00</p-->
+            <span class="game-info__player-time countdown">
+              <span data-minutes style="--value:10;"></span>:
+              <span data-seconds style="--value:00;"></span>
+            </span>
           </div>
         </div>
 
