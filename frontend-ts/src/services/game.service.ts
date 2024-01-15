@@ -17,8 +17,12 @@ export async function getGameBySlug(slug: string): Promise<Game> {
   const isLoggedIn = getIsLoggedIn();
   if (!isLoggedIn) return getGameSpectateBySlug(slug);
 
-  const game = await fetchHelper(GAMES_ENDPOINTS.GET_BY_SLUG(slug));
-  return game;
+  try {
+    const game = await fetchHelper(GAMES_ENDPOINTS.GET_BY_SLUG(slug));
+    return game;
+  } catch (error) {
+    return getGameSpectateBySlug(slug);
+  }
 }
 
 export async function getGameSpectateBySlug(slug: string): Promise<Game> {
