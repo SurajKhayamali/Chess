@@ -22,7 +22,7 @@ ${
           <summary>
             ${userInfo?.username}
           </summary>
-          <ul class="p-2 bg-base-100 rounded-t-none">
+          <ul class="p-2 bg-base-100 rounded-t-none z-[1]">
             <li><a href="/profile">Profile</a></li>
             <li><a id="logoutBtn">Logout</a></li>
           </ul>
