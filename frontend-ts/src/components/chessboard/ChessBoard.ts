@@ -5,10 +5,18 @@ import {
   FILES_LENGTH,
   RANKS_LENGTH,
 } from 'constants/game.constant';
+import {
+  PieceHighlightModifiers,
+  SquareHighlightModifiers,
+} from 'enums/game.enum';
 import { getUserInfo } from 'helpers/auth.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { Game } from 'interfaces/game.interface';
-import { getSquareIndex } from 'scripts/utils';
+import {
+  getClassNameForPieceHigilight,
+  getClassNameForSquareHigilight,
+  getSquareIndex,
+} from 'scripts/utils';
 import { getGameBySlug } from 'services/game.service';
 
 interface IMove {
@@ -52,6 +60,7 @@ export class ChessBoard {
   // private isPlayerWhite?: boolean;
   // private userId?: number;
   private isPlaying: boolean;
+  private lastMove?: IMove;
 
   constructor(boardContainerId: string, slug: string) {
     const boardContainer = document.getElementById(
@@ -116,15 +125,23 @@ export class ChessBoard {
         const squareId = getSquareIndex(fileIndex, rankIndex);
         square.setAttribute(SQUARE_ATTRIBUTE_NAME, squareId);
         if ((rankIndex + fileIndex) % 2 === 0) {
-          square.classList.add('bg-[#b58863]');
+          square.classList.add('bg-dark');
         } else {
-          square.classList.add('bg-[#f0d9b5]');
+          square.classList.add('bg-light');
         }
 
-        const piece = this.chess.get(squareId as Square);
+        if (this.lastMove) {
+          const { oldSquareId, newSquareId } = this.lastMove;
+          if (oldSquareId === squareId || newSquareId === squareId) {
+            square.classList.add(
+              getClassNameForSquareHigilight(SquareHighlightModifiers.LAST_MOVE)
+            );
+          }
+        }
+
+        const piece = this.chess.get(squareId);
         if (piece) {
-          const pieceEl = this.renderPiece(piece);
-          pieceEl.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
+          const pieceEl = this.renderPiece(piece, squareId);
           square.appendChild(pieceEl);
         }
 
@@ -135,11 +152,24 @@ export class ChessBoard {
           // console.log('drag over', e);
           e.preventDefault(); // Necessary. Allows us to drop.
         };
+        square.ondragenter = () => {
+          // console.log('drag enter', e);
+          this.removeHighlightFromAllSquares(SquareHighlightModifiers.HOVER);
+
+          const isValidSquare = square.classList.contains(
+            getClassNameForSquareHigilight(SquareHighlightModifiers.VALID)
+          );
+          if (!isValidSquare) return;
+
+          square.classList.add(
+            getClassNameForSquareHigilight(SquareHighlightModifiers.HOVER)
+          );
+        };
         square.ondrop = (e) => {
-          console.log('drop', e);
+          // console.log('drop', e);
           e.preventDefault();
           const oldSquareId = e.dataTransfer?.getData('text/plain');
-          console.log('oldSquareId: ', oldSquareId);
+          // console.log('oldSquareId: ', oldSquareId);
           if (!oldSquareId) return;
           const piece = document.querySelector(
             `[${PIECE_ATTRIBUTE_NAME}="${oldSquareId}"]`
@@ -194,7 +224,7 @@ export class ChessBoard {
     this.boardContainer.appendChild(pgnDiv);
   }
 
-  private renderPiece(piece: Piece) {
+  private renderPiece(piece: Piece, squareId: Square) {
     const { color, type } = piece;
     const pieceEl = document.createElement('img');
     const fileName = `${color}${type.toUpperCase()}`;
@@ -202,9 +232,20 @@ export class ChessBoard {
     pieceEl.alt = `${color === 'w' ? 'White' : 'Black'} ${
       ABBREVIATION_TO_PIECE[type]
     }`;
+    pieceEl.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
     pieceEl.classList.add('h-full', 'w-full', 'cursor-grab');
-    // pieceEl.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
-    // squareDiv.appendChild(piece);
+
+    if (type === 'k') {
+      const isAttacked = this.chess.isAttacked(
+        squareId,
+        color === 'w' ? 'b' : 'w'
+      );
+      if (isAttacked) {
+        pieceEl.classList.add(
+          getClassNameForPieceHigilight(PieceHighlightModifiers.CHECKED)
+        );
+      }
+    }
 
     if (!this.allowMove) return pieceEl;
     if (this.turn !== color) {
@@ -215,14 +256,70 @@ export class ChessBoard {
     pieceEl.draggable = true;
     pieceEl.ondragstart = (e) => {
       // e.preventDefault();
-      console.log('drag start', e);
-      e.dataTransfer?.setData(
-        'text/plain',
-        pieceEl.getAttribute(PIECE_ATTRIBUTE_NAME) as string
-      );
+      // console.log('drag start', e);
+      const squareId = pieceEl.getAttribute(PIECE_ATTRIBUTE_NAME) as Square;
+      e.dataTransfer?.setData('text/plain', squareId);
+
+      this.handlePieceClickOrDrag(squareId);
+    };
+
+    pieceEl.onclick = () => {
+      // console.log('piece clicked', e);
+      const squareId = pieceEl.getAttribute(PIECE_ATTRIBUTE_NAME) as Square;
+      this.handlePieceClickOrDrag(squareId);
     };
 
     return pieceEl;
+  }
+
+  private highlightSquare(
+    squareId: Square,
+    modifier: SquareHighlightModifiers
+  ) {
+    const square = document.querySelector(
+      `[${SQUARE_ATTRIBUTE_NAME}="${squareId}"]`
+    );
+    if (!square) return;
+
+    square.classList.add(getClassNameForSquareHigilight(modifier));
+  }
+
+  private removeHighlightFromAllSquares(modifier: SquareHighlightModifiers) {
+    const className = getClassNameForSquareHigilight(modifier);
+    const squares = document.querySelectorAll(`.${className}`);
+
+    for (const square of squares) {
+      square.classList.remove(className);
+    }
+  }
+
+  private getPossibleMoves(squareId: Square) {
+    const moves = this.chess.moves({ square: squareId, verbose: true });
+    return moves;
+  }
+
+  private highlightPossibleMoves(squareId: Square) {
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.VALID);
+
+    const moves = this.getPossibleMoves(squareId);
+
+    for (const move of moves) {
+      const { to, captured } = move;
+      if (captured) {
+        this.highlightSquare(to, SquareHighlightModifiers.CAPTURABLE);
+        continue;
+      }
+      this.highlightSquare(move.to, SquareHighlightModifiers.VALID);
+    }
+  }
+
+  private handlePieceClickOrDrag(squareId: Square) {
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.SELECTED);
+    if (!this.allowMove) return;
+
+    this.highlightSquare(squareId, SquareHighlightModifiers.SELECTED);
+
+    this.highlightPossibleMoves(squareId);
   }
 
   private handleMove(props: IMove): boolean {
@@ -234,6 +331,8 @@ export class ChessBoard {
         promotion: 'q',
       });
       if (!move) return false;
+
+      this.lastMove = props;
       this.turn = this.chess.turn();
       this.render();
       return true;

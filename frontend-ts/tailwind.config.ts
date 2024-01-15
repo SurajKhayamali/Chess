@@ -24,6 +24,14 @@ export default {
         '1/8': '12.5%',
         '192': '48rem',
       },
+      colors: {
+        light: {
+          DEFAULT: '#f0d9b5',
+        },
+        dark: {
+          DEFAULT: '#b58863',
+        },
+      },
     },
   },
   plugins: [tailwindcssTypography, tailwindcssForms, daisyui],

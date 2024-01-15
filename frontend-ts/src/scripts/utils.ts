@@ -1,3 +1,4 @@
+import { Square } from 'chess.js';
 import {
   DEBUG,
   FILES,
@@ -5,7 +6,11 @@ import {
   MIN_INDEX,
   RANKS,
 } from 'constants/game.constant';
-import { SquareColor } from 'enums/game.enum';
+import {
+  PieceHighlightModifiers,
+  SquareColor,
+  SquareHighlightModifiers,
+} from 'enums/game.enum';
 import { SquareColorType } from 'interfaces/game.interface';
 
 /**
@@ -120,7 +125,7 @@ export function checkIfSameColor(color1: boolean, color2: boolean): boolean {
   return color1 === color2;
 }
 
-export function getSquareIndex(fileIndex: number, rankIndex: number): string {
+export function getSquareIndex(fileIndex: number, rankIndex: number): Square {
   if (
     checkFileIndexOutOfBounds(fileIndex) ||
     checkRankIndexOutOfBounds(rankIndex)
@@ -128,7 +133,19 @@ export function getSquareIndex(fileIndex: number, rankIndex: number): string {
     throw new Error('Invalid square index');
   }
 
-  return `${FILES[fileIndex]}${RANKS[rankIndex]}`;
+  return `${FILES[fileIndex]}${RANKS[rankIndex]}` as Square;
+}
+
+export function getClassNameForSquareHigilight(
+  modifier: SquareHighlightModifiers
+) {
+  return `chess-board__square--${modifier}`;
+}
+
+export function getClassNameForPieceHigilight(
+  modifier: PieceHighlightModifiers
+) {
+  return `chess-board__piece--${modifier}`;
 }
 
 /**
