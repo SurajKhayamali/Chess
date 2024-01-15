@@ -1,4 +1,3 @@
-import { Move } from 'chess.js';
 import { GAMES_ENDPOINTS } from 'constants/endpoint.constant';
 import { HttpMethods } from 'enums/http.enum';
 import { SocketEvent } from 'enums/socket.enum';
@@ -39,10 +38,11 @@ export async function recordMove(
 }
 
 // Socket related
-export async function joinGameStream(slug: string): Promise<void> {
+export async function joinGameStream(
+  slug: string,
+  handleMove: (recordMoveDto: RecordMoveDto) => void
+): Promise<void> {
   emit(socket, SocketEvent.JOIN_GAME_STREAM, slug);
 
-  socket.on(getGameStreamRoomName(slug), (move: Move) => {
-    console.log('Game received:', move);
-  });
+  socket.on(getGameStreamRoomName(slug), handleMove);
 }

@@ -1,4 +1,4 @@
-import { Square } from 'chess.js';
+import { PieceSymbol, Square } from 'chess.js';
 import { Game } from '../entities/game.entity';
 import { BaseColumnsToOmit } from './base.interface';
 
@@ -19,4 +19,5 @@ export interface QueryGameDto {
 export interface RecordMoveDto {
   from: Square;
   to: Square;
+  promotion?: PieceSymbol;
 }

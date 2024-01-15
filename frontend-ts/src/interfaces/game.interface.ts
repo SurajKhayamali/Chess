@@ -1,7 +1,7 @@
 import { Piece } from 'components/pieces';
 import { GameMode, SquareColor } from 'enums/game.enum';
 import { User } from './user.interface';
-import { Square } from 'chess.js';
+import { PieceSymbol, Square } from 'chess.js';
 
 export type SquareColorType = SquareColor.LIGHT | SquareColor.DARK;
 
@@ -37,4 +37,5 @@ export interface TimeVariant {
 export interface RecordMoveDto {
   from: Square;
   to: Square;
+  promotion?: PieceSymbol;
 }

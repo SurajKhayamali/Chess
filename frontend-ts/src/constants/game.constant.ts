@@ -3,6 +3,7 @@ import {
   SquareHighlightModifiers,
   PieceHighlightModifiers,
 } from '../enums/game.enum';
+import { PieceSymbol } from 'chess.js';
 
 export const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; // horizontal rows of squares
 export const RANKS = ['1', '2', '3', '4', '5', '6', '7', '8']; // vertical columns of squares
@@ -73,3 +74,5 @@ export const TIME_VARIANTS: TimeVariant[] = [
     value: 0,
   },
 ];
+
+export const AUTO_PROMOTE_PIECE_TO = 'q' as PieceSymbol;

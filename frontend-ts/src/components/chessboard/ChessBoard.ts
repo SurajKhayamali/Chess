@@ -2,6 +2,7 @@ import { Chess, Color, Square, Piece } from 'chess.js';
 
 import {
   ABBREVIATION_TO_PIECE,
+  AUTO_PROMOTE_PIECE_TO,
   FILES_LENGTH,
   RANKS_LENGTH,
 } from 'constants/game.constant';
@@ -76,36 +77,45 @@ export class ChessBoard {
     this.isPlaying = false;
     this.allowMove = false;
 
-    // console.log('slug: ', slug);
-    getGameBySlug(slug)
-      .then((game) => {
-        // console.log('game: ', game);
+    this.fetchGame(slug);
+  }
 
-        const chess = new Chess();
-        chess.loadPgn(game.pgn);
-        const turn = chess.turn();
-        const userId = getUserInfo()?.userId;
-        const isPlayerWhite = userId
-          ? game.whitePlayer?.id === userId
-          : undefined;
+  get gameId() {
+    return this.game?.id;
+  }
 
-        this.game = game;
-        this.chess = chess;
-        this.turn = turn;
-        // this.isPlayerWhite = isPlayerWhite;
-        // this.userId = userId;
-        this.isPlaying = getIsPlayerPlaying(game, userId);
-        this.allowMove = getIsPlayerAllowedToMove(turn === 'w', isPlayerWhite);
+  private async fetchGame(slug: string) {
+    try {
+      const game = await getGameBySlug(slug);
+      // console.log('game: ', game);
 
-        this.render();
+      const chess = new Chess();
+      chess.loadPgn(game.pgn);
+      const turn = chess.turn();
+      const userId = getUserInfo()?.userId;
+      const isPlayerWhite = userId
+        ? game.whitePlayer?.id === userId
+        : undefined;
 
-        joinGameStream(game.slug);
-      })
-      .catch((error) => {
-        console.log(error);
-        displayToast('Game not found', ToastType.ERROR);
-        renderNoGameFound(boardContainer);
+      this.game = game;
+      this.chess = chess;
+      this.turn = turn;
+      // this.isPlayerWhite = isPlayerWhite;
+      // this.userId = userId;
+      this.isPlaying = getIsPlayerPlaying(game, userId);
+      this.allowMove = getIsPlayerAllowedToMove(turn === 'w', isPlayerWhite);
+
+      this.render();
+
+      joinGameStream(game.slug, (recordMoveDto) => {
+        // console.log('Game received:', recordMoveDto);
+        this.handleMove(recordMoveDto);
       });
+    } catch (error) {
+      console.log(error);
+      displayToast('Game not found', ToastType.ERROR);
+      renderNoGameFound(this.boardContainer);
+    }
   }
 
   private renderSquareAndPieces() {
@@ -169,7 +179,7 @@ export class ChessBoard {
             getClassNameForSquareHigilight(SquareHighlightModifiers.HOVER)
           );
         };
-        square.ondrop = async (e) => {
+        square.ondrop = (e) => {
           // console.log('drop', e);
           e.preventDefault();
           const oldSquareId = e.dataTransfer?.getData('text/plain') as Square;
@@ -180,14 +190,15 @@ export class ChessBoard {
           );
           if (!piece) return;
 
-          const moveMade = await this.handleMove({
+          const move = {
             from: oldSquareId,
             to: squareId,
-          });
-          if (!moveMade) return;
+            promotion: AUTO_PROMOTE_PIECE_TO,
+          };
 
-          piece.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
-          square.appendChild(piece);
+          this.recordMove(move);
+          // piece.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
+          // square.appendChild(piece);
         };
       }
       boardDiv.appendChild(rank);
@@ -326,20 +337,33 @@ export class ChessBoard {
     this.highlightPossibleMoves(squareId);
   }
 
-  private async handleMove(props: RecordMoveDto): Promise<boolean> {
+  private async validateMove(props: RecordMoveDto): Promise<boolean> {
     const { from, to } = props;
-    try {
-      const move = this.chess.move({
-        from,
-        to,
-        promotion: 'q',
-      });
-      if (!move) return false;
+    const moves = this.getPossibleMoves(from);
+    const move = moves.find((move) => move.to === to);
+    return !!move;
+  }
 
-      if (this.game?.id) {
-        const game = await recordMove(this.game?.id, props);
-        console.log('game: ', game);
-      }
+  private async recordMove(props: RecordMoveDto): Promise<boolean> {
+    if (!this.validateMove(props) || !this.gameId) return false;
+
+    try {
+      await recordMove(this.gameId, props);
+      // const game = await recordMove(this.gameId, props);
+      // console.log('game: ', game);
+
+      return true;
+    } catch (error) {
+      // console.error(error);
+      displayToast('Invalid move', ToastType.ERROR);
+      return false;
+    }
+  }
+
+  private async handleMove(props: RecordMoveDto): Promise<boolean> {
+    try {
+      const move = this.chess.move(props);
+      if (!move) return false;
 
       this.lastMove = props;
       this.turn = this.chess.turn();

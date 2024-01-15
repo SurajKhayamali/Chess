@@ -97,4 +97,12 @@ export const recordMoveSchema = Joi.object({
       'string.pattern.base': 'To must be a valid chess board square',
       'any.required': 'To is required',
     }),
+  promotion: Joi.string()
+    .length(1)
+    .pattern(/[pnbrqk]/)
+    .messages({
+      'string.base': 'Promotion must be a string value',
+      'string.length': 'Promotion must be exactly 1 character long',
+      'string.pattern.base': 'Promotion must be a valid chess piece symbol',
+    }),
 });
