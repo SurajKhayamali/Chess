@@ -90,32 +90,47 @@ const renderPieces = (
   }
 };
 
+const renderNoGameFound = (boardContainer: HTMLElement) => {
+  const noGameFound = document.createElement('div');
+  noGameFound.classList.add('flex', 'flex-col', 'items-center', 'py-24');
+  noGameFound.innerHTML = /*html*/ `
+    <h1 class="text-3xl font-bold">No game found</h1>
+  `;
+  boardContainer.appendChild(noGameFound);
+};
+
 export const renderBoard = async (boardContainerId: string, slug: string) => {
-  const game = await getGameBySlug(slug);
-  // console.log('game: ', game);
-
-  const fen = game.initialBoardState;
-  const userId = getUserInfo()?.userId;
-  const allowMove =
-    Boolean(userId) &&
-    (game.whitePlayer?.id === userId || game.blackPlayer?.id === userId);
-
   const boardContainer = document.getElementById(boardContainerId);
   if (!boardContainer) return;
+  try {
+    const game = await getGameBySlug(slug);
+    // console.log('game: ', game);
 
-  const boardDiv = document.createElement('div');
-  boardDiv.classList.add(
-    'grid',
-    'grid-cols-8',
-    'min-h-96',
-    'min-w-96',
-    'aspect-square'
-  );
-  renderSquares(boardDiv, allowMove);
-  boardContainer.appendChild(boardDiv);
+    const fen = game.initialBoardState;
+    const userId = getUserInfo()?.userId;
+    const allowMove =
+      Boolean(userId) &&
+      (game.whitePlayer?.id === userId || game.blackPlayer?.id === userId);
 
-  const chess = new Chess(fen);
-  const board = chess.board();
+    const boardDiv = document.createElement('div');
+    boardDiv.classList.add(
+      'grid',
+      'grid-cols-8',
+      'min-h-96',
+      'min-w-96',
+      'aspect-square'
+    );
+    renderSquares(boardDiv, allowMove);
+    boardContainer.appendChild(boardDiv);
 
-  renderPieces(boardDiv, board, allowMove);
+    const chess = new Chess(fen);
+    const board = chess.board();
+
+    renderPieces(boardDiv, board, allowMove);
+  } catch (e) {
+    console.log(e);
+
+    if ((e as Error).message === 'Game not found')
+      renderNoGameFound(boardContainer);
+  }
 };
