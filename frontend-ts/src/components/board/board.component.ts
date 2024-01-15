@@ -1,4 +1,4 @@
-import { Chess } from 'chess.js';
+import { Chess, Color } from 'chess.js';
 
 import {
   ABBREVIATION_TO_PIECE,
@@ -52,7 +52,8 @@ const renderSquares = (boardDiv: HTMLDivElement, allowMove: boolean) => {
 const renderPieces = (
   boardDiv: HTMLDivElement,
   board: ReturnType<Chess['board']>,
-  allowMove = false
+  allowMove = false,
+  turn?: Color
 ) => {
   for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
     for (let rankIndex = 0; rankIndex < RANKS_LENGTH; rankIndex++) {
@@ -78,6 +79,11 @@ const renderPieces = (
       squareDiv.appendChild(piece);
 
       if (!allowMove) continue;
+      if (turn !== color) {
+        piece.draggable = false;
+        continue;
+      }
+
       piece.draggable = true;
       piece.ondragstart = (e) => {
         // e.preventDefault();
@@ -99,6 +105,14 @@ const renderNoGameFound = (boardContainer: HTMLElement) => {
   boardContainer.appendChild(noGameFound);
 };
 
+const getIsPlayerAllowedToMove = (
+  isWhitesTurn: boolean,
+  isPlayerWhite?: boolean
+) => {
+  if (isPlayerWhite === undefined) return false;
+  return isWhitesTurn === isPlayerWhite;
+};
+
 export const renderBoard = async (boardContainerId: string, slug: string) => {
   const boardContainer = document.getElementById(boardContainerId);
   if (!boardContainer) return;
@@ -107,10 +121,18 @@ export const renderBoard = async (boardContainerId: string, slug: string) => {
     // console.log('game: ', game);
 
     const fen = game.initialBoardState;
+
+    const chess = new Chess(fen);
+    const board = chess.board();
+
     const userId = getUserInfo()?.userId;
+    const turn = chess.turn();
+    const isWhitesTurn = turn === 'w';
+    const isPlayerWhite = userId ? game.whitePlayer?.id === userId : undefined;
+    // console.log('isPlayerWhite: ', isPlayerWhite);
     const allowMove =
-      Boolean(userId) &&
-      (game.whitePlayer?.id === userId || game.blackPlayer?.id === userId);
+      !game.isOver && getIsPlayerAllowedToMove(isWhitesTurn, isPlayerWhite);
+    // console.log('allowMove: ', allowMove);
 
     const boardDiv = document.createElement('div');
     boardDiv.classList.add(
@@ -123,10 +145,7 @@ export const renderBoard = async (boardContainerId: string, slug: string) => {
     renderSquares(boardDiv, allowMove);
     boardContainer.appendChild(boardDiv);
 
-    const chess = new Chess(fen);
-    const board = chess.board();
-
-    renderPieces(boardDiv, board, allowMove);
+    renderPieces(boardDiv, board, allowMove, turn);
   } catch (e) {
     console.log(e);
 
