@@ -15,6 +15,7 @@ import {
   getIsPlayerAllowedToMove,
   getIsPlayerPlaying,
   getIsPlayerWhite,
+  synchronizeGameWithChess,
 } from 'helpers/game.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { Game, RecordMoveDto } from 'interfaces/game.interface';
@@ -367,6 +368,7 @@ export class ChessBoard {
       this.turn = this.chess.turn();
       this.allowMove = !this.allowMove;
       // this.reEvaluatePlayerAllowedToMove();
+      synchronizeGameWithChess(this.game!, this.chess);
       this.render();
       return true;
     } catch (error) {

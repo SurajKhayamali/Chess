@@ -25,6 +25,7 @@ import {
   getIsPlayerAllowedToMove,
   getIsPlayerPlaying,
   getIsPlayerWhite,
+  synchronizeGameWithChess,
 } from '../helpers/game.helper';
 
 /**
@@ -233,7 +234,7 @@ export async function recordMove(
 
     if (!isValidMove) throw new BadRequestException('Invalid move');
 
-    game.pgn = chess.pgn();
+    synchronizeGameWithChess(game, chess);
 
     await GameRepository.save(game);
 

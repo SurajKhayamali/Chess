@@ -1,5 +1,6 @@
 import { Game } from 'interfaces/game.interface';
 import { SocketEvent } from '../enums/socket.enum';
+import { Chess } from 'chess.js';
 
 export function getGameStreamRoomName(slug: string) {
   return `${SocketEvent.GAME_STREAM}:${slug}`;
@@ -25,4 +26,16 @@ export const getIsPlayerAllowedToMove = (
 ) => {
   if (isPlayerWhite === undefined) return false;
   return isWhitesTurn === isPlayerWhite;
+};
+
+export const synchronizeGameWithChess = (game: Game, chess: Chess): Game => {
+  game.pgn = chess.pgn();
+
+  const isOver = chess.isGameOver();
+  if (!isOver) return game;
+
+  game.isOver = isOver;
+  game.hasWhitePlayerWon = isOver ? chess.turn() === 'b' : undefined;
+
+  return game;
 };

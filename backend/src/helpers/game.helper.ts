@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { Game } from '../entities/game.entity';
 import { SocketEvent } from '../enums/socket.enum';
 
@@ -25,4 +26,16 @@ export const getIsPlayerAllowedToMove = (
 ) => {
   if (isPlayerWhite === undefined) return false;
   return isWhitesTurn === isPlayerWhite;
+};
+
+export const synchronizeGameWithChess = (game: Game, chess: Chess): Game => {
+  game.pgn = chess.pgn();
+
+  const isOver = chess.isGameOver();
+  if (!isOver) return game;
+
+  game.isOver = isOver;
+  game.hasWhitePlayerWon = isOver ? chess.turn() === 'b' : undefined;
+
+  return game;
 };
