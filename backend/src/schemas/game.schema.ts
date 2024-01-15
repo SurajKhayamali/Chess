@@ -1,6 +1,7 @@
 import Joi from 'joi';
-import { validateFen } from 'chess.js';
+// import { validateFen } from 'chess.js';
 import { GameMode } from '../enums/gameMode.enum';
+import { Chess } from 'chess.js';
 
 export const createGameSchema = Joi.object({
   slug: Joi.string().min(3).max(30).required().messages({
@@ -25,18 +26,36 @@ export const createGameSchema = Joi.object({
   timeLimit: Joi.number().messages({
     'number.base': 'Time limit must be a numeric value',
   }),
-  initialBoardState: Joi.string()
-    .custom((value, helper) => {
-      if (!validateFen(value).ok) {
-        return helper.error('string.invalidFen');
-      }
+  // initialBoardState: Joi.string()
+  //   .custom((value, helper) => {
+  //     if (!validateFen(value).ok) {
+  //       return helper.error('string.invalidFen');
+  //     }
 
-      return value;
+  //     return value;
+  //   })
+  //   .messages({
+  //     'string.base': 'Initial board state must be a string value',
+  //     'string.invalidFen': 'Initial board state must be a valid FEN notation',
+  //   }),
+  pgn: Joi.string()
+    .custom((value, helper) => {
+      try {
+        const chess = new Chess();
+        chess.loadPgn(value);
+
+        return value;
+      } catch (error) {
+        return helper.error('string.invalidPgn');
+      }
     })
     .messages({
-      'string.base': 'Initial board state must be a string value',
-      'string.invalidFen': 'Initial board state must be a valid FEN notation',
+      'string.base': 'PGN must be a string value',
+      'string.invalidPgn': 'PGN must be a valid FEN notation',
     }),
+  // pgn: Joi.string().messages({
+  //   'string.base': 'PGN must be a string value',
+  // }),
   isGameOver: Joi.boolean().messages({
     'boolean.base': 'Is game over must be a boolean value',
   }),

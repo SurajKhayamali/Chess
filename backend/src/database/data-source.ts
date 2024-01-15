@@ -3,7 +3,7 @@ import { User } from '../entities/user.entity';
 import serverConfig from '../config';
 import { Game } from '../entities/game.entity';
 import { Move } from '../entities/move.entity';
-import { Chat } from '../entities/chat.entity';
+// import { Chat } from '../entities/chat.entity';
 import { SnakeNamingStrategy } from './snake-naming.strategy';
 
 // type DatabaseType =
@@ -39,7 +39,7 @@ export const AppDataSource = new DataSource({
   database: databaseName,
   synchronize: !isProduction,
   logging: !isProduction,
-  entities: [User, Game, Move, Chat],
+  entities: [User, Game, Move],
   subscribers: [],
   migrations: [],
   namingStrategy: new SnakeNamingStrategy(),

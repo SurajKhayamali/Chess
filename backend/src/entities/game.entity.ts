@@ -27,8 +27,7 @@ export class Game extends BaseEntity {
   timeLimit?: number; // in seconds
 
   @Column()
-  initialBoardState?: string =
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // FEN notation
+  pgn?: string = ''; // Portable Game Notation
 
   @Column()
   isOver?: boolean = false;

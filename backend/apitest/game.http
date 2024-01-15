@@ -12,7 +12,7 @@ Content-Type: application/json
     "slug": "abc-123",
     "whitePlayer": 1,
     "gameMode": "PvC",
-    "initialBoardState": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    "pgn": "[Variant \"From Position\"]\n[FEN \"rnbqkbnr/pppp1ppp/8/8/8/8/PP1P1PPP/RNBQKBNR w KQkq - 0 1\"]\n\n1. Qe2+"
 }
 
 ###
@@ -23,7 +23,7 @@ Content-Type: application/json
     "slug": "abc-123",
     "whitePlayer": 1,
     "gameMode": "PvC",
-    "initialBoardState": "invalid board state"
+    "pgn": "invalid board state"
 }
 
 ###

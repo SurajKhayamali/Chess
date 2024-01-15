@@ -71,6 +71,8 @@ export class ChessBoard {
     this.boardContainer = boardContainer;
 
     this.chess = new Chess();
+    // @ts-expect-error chess is not defined in window
+    window.chessboard = this;
     this.turn = 'w';
     this.isPlaying = false;
     this.allowMove = false;
