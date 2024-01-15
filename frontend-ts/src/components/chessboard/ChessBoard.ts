@@ -27,6 +27,11 @@ const getIsPlayerAllowedToMove = (
   return isWhitesTurn === isPlayerWhite;
 };
 
+const getIsPlayerPlaying = (game: Game, userId?: number) => {
+  if (!userId) return false;
+  return game.whitePlayer?.id === userId || game.blackPlayer?.id === userId;
+};
+
 const renderNoGameFound = (boardContainer: HTMLElement) => {
   boardContainer.innerHTML = '';
 
@@ -40,12 +45,13 @@ const renderNoGameFound = (boardContainer: HTMLElement) => {
 
 export class ChessBoard {
   private boardContainer: HTMLDivElement;
+  private game?: Game;
   private chess: Chess;
   private allowMove: boolean;
   private turn: Color;
-  private isPlayerWhite?: boolean;
-  private game?: Game;
-  private userId?: number;
+  // private isPlayerWhite?: boolean;
+  // private userId?: number;
+  private isPlaying: boolean;
 
   constructor(boardContainerId: string, slug: string) {
     const boardContainer = document.getElementById(
@@ -56,9 +62,9 @@ export class ChessBoard {
     this.boardContainer = boardContainer;
 
     this.chess = new Chess();
-    this.allowMove = false;
     this.turn = 'w';
-    this.isPlayerWhite = false;
+    this.isPlaying = false;
+    this.allowMove = false;
 
     // console.log('slug: ', slug);
     getGameBySlug(slug)
@@ -68,7 +74,6 @@ export class ChessBoard {
         const chess = new Chess(game.initialBoardState);
         const turn = chess.turn();
         const userId = getUserInfo()?.userId;
-        const isWhitesTurn = turn === 'w';
         const isPlayerWhite = userId
           ? game.whitePlayer?.id === userId
           : undefined;
@@ -76,10 +81,10 @@ export class ChessBoard {
         this.game = game;
         this.chess = chess;
         this.turn = turn;
-        this.allowMove =
-          !game.isOver && getIsPlayerAllowedToMove(isWhitesTurn, isPlayerWhite);
-        this.isPlayerWhite = isPlayerWhite;
-        this.userId = userId;
+        // this.isPlayerWhite = isPlayerWhite;
+        // this.userId = userId;
+        this.isPlaying = getIsPlayerPlaying(game, userId);
+        this.allowMove = getIsPlayerAllowedToMove(turn === 'w', isPlayerWhite);
 
         this.render();
       })
@@ -160,7 +165,13 @@ export class ChessBoard {
     statusDiv.classList.add('mt-4');
     statusDiv.innerHTML = /*html*/ `
       <label>Status:</label>
-      <div>${this.game?.isOver ? 'Game Over' : 'Playing'}</div>
+      <div>${
+        this.game?.isOver
+          ? 'Game Over'
+          : this.isPlaying
+          ? 'Playing'
+          : 'Spectating'
+      }</div>
     `;
     this.boardContainer.appendChild(statusDiv);
 
