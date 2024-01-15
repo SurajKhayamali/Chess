@@ -1,7 +1,14 @@
 import { config } from 'dotenv';
 
-const pathToEnv = __dirname + '/../.env';
-config({ path: pathToEnv });
+const isDevelopment =
+  !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
+if (!isDevelopment) {
+  const pathToEnv = __dirname + '/../.env';
+  config({ path: pathToEnv });
+} else {
+  config();
+}
 
 const serverConfig = {
   port: process.env.PORT || 5000,
