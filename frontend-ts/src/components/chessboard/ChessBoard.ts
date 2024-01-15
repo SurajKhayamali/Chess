@@ -57,7 +57,7 @@ export class ChessBoard {
   private chess: Chess;
   private allowMove: boolean;
   private turn: Color;
-  // private isPlayerWhite?: boolean;
+  private isPlayerWhite?: boolean;
   // private userId?: number;
   private isPlaying: boolean;
   private lastMove?: RecordMoveDto;
@@ -71,8 +71,6 @@ export class ChessBoard {
     this.boardContainer = boardContainer;
 
     this.chess = new Chess();
-    // @ts-expect-error chess is not defined in window
-    window.chessboard = this;
     this.turn = 'w';
     this.isPlaying = false;
     this.allowMove = false;
@@ -100,10 +98,10 @@ export class ChessBoard {
       this.game = game;
       this.chess = chess;
       this.turn = turn;
-      // this.isPlayerWhite = isPlayerWhite;
+      this.isPlayerWhite = isPlayerWhite;
       // this.userId = userId;
       this.isPlaying = getIsPlayerPlaying(game, userId);
-      this.allowMove = getIsPlayerAllowedToMove(turn === 'w', isPlayerWhite);
+      this.reEvaluatePlayerAllowedToMove();
 
       this.render();
 
@@ -116,6 +114,13 @@ export class ChessBoard {
       displayToast('Game not found', ToastType.ERROR);
       renderNoGameFound(this.boardContainer);
     }
+  }
+
+  private async reEvaluatePlayerAllowedToMove() {
+    this.allowMove = getIsPlayerAllowedToMove(
+      this.turn === 'w',
+      this.isPlayerWhite
+    );
   }
 
   private renderSquareAndPieces() {
@@ -367,6 +372,8 @@ export class ChessBoard {
 
       this.lastMove = props;
       this.turn = this.chess.turn();
+      this.allowMove = !this.allowMove;
+      // this.reEvaluatePlayerAllowedToMove();
       this.render();
       return true;
     } catch (error) {
