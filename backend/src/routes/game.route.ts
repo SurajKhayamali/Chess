@@ -8,6 +8,7 @@ import {
   // remove,
   getAllFilteredByUser,
 } from '../controllers/game.controller';
+import { asyncHandler } from '../helpers/async.helper';
 // import { validateReqBody } from '../middlewares/validator.middleware';
 // import { createGameSchema, updateGameSchema } from '../schemas/game.schema';
 
@@ -20,7 +21,7 @@ const router = Router();
 // router.delete('/:id', remove);
 
 // router.post('/', validateReqBody(createGameSchema), create);
-router.get('/', getAllFilteredByUser);
+router.get('/', asyncHandler(getAllFilteredByUser));
 // router.get('/:id', getById);
 // router.patch('/:id', validateReqBody(updateGameSchema), update);
 // router.delete('/:id', remove

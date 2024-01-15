@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { getBySlugOrFail } from '../services/game.service';
 
 /**
@@ -10,18 +10,10 @@ import { getBySlugOrFail } from '../services/game.service';
  * @returns
  * @throws NotFoundException
  */
-export async function getBySlug(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function getBySlug(req: Request, res: Response) {
   const { slug } = req.params;
 
-  try {
-    const game = await getBySlugOrFail(slug);
+  const game = await getBySlugOrFail(slug);
 
-    res.json(game);
-  } catch (error) {
-    next(error);
-  }
+  res.json(game);
 }

@@ -1,4 +1,5 @@
 @BASE_URL={{baseUrl}}/games
+@BASE_URL_FOR_SPECTATE={{baseUrl}}/games-spectate
 
 ###
 GET {{BASE_URL}}
@@ -46,3 +47,12 @@ GET {{BASE_URL}}
 
 ###
 GET {{BASE_URL}}?slug=RB8W0IyP-lrddmh63
+
+###
+GET {{BASE_URL}}?slug=sada
+
+###
+GET {{BASE_URL_FOR_SPECTATE}}/sada
+
+###
+GET {{BASE_URL_FOR_SPECTATE}}/RB8W0IyP-lrddmh63

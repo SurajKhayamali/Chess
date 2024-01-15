@@ -126,8 +126,10 @@ export async function getBySlug(slug: string, userId?: number) {
 
   return GameRepository.createQueryBuilder('game')
     .where('game.slug = :slug', { slug })
-    .where('game.white_player_id = :userId', { userId })
-    .orWhere('game.black_player_id = :userId', { userId })
+    .andWhere(
+      '(game.white_player_id = :userId OR game.black_player_id = :userId)',
+      { userId }
+    )
     .leftJoinAndSelect('game.whitePlayer', 'whitePlayer')
     .leftJoinAndSelect('game.blackPlayer', 'blackPlayer')
     .getOne();
