@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import * as gameService from '../services/game.service';
 import { HttpStatusCode } from '../enums/httpStatusCode.enum';
-import { QueryGameDto } from '../interfaces/game.interface';
+import { QueryGameDto, RecordMoveDto } from '../interfaces/game.interface';
 import { AuthenticatedRequest } from '../interfaces/jwt.interface';
 import { NotFoundException } from '../exceptions';
 
@@ -73,6 +73,32 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
+ * Get game by id by user
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function getByIdByUser(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = req.user?.userId;
+  if (!userId) throw new NotFoundException('User not found');
+
+  const { id } = req.params;
+
+  try {
+    const game = await gameService.getByIdOrFail(parseInt(id), userId);
+
+    res.json(game);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Update game
  *
  * @param req
@@ -85,6 +111,30 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
   try {
     const game = await gameService.update(parseInt(id), updateGameDto);
+
+    res.json(game);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Record move
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function recordMove(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  const move = req.body as RecordMoveDto;
+
+  try {
+    const game = await gameService.recordMove(parseInt(id), move);
 
     res.json(game);
   } catch (error) {

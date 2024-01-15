@@ -75,3 +75,26 @@ export const joinGameQueueSchema = Joi.object({
 });
 
 export const leaveGameQueueSchema = joinGameQueueSchema;
+
+export const recordMoveSchema = Joi.object({
+  from: Joi.string()
+    .length(2)
+    .pattern(/[a-h][1-8]/)
+    .required()
+    .messages({
+      'string.base': 'From must be a string value',
+      'string.length': 'From must be exactly 2 characters long',
+      'string.pattern.base': 'From must be a valid chess board square',
+      'any.required': 'From is required',
+    }),
+  to: Joi.string()
+    .length(2)
+    .pattern(/[a-h][1-8]/)
+    .required()
+    .messages({
+      'string.base': 'To must be a string value',
+      'string.length': 'To must be exactly 2 characters long',
+      'string.pattern.base': 'To must be a valid chess board square',
+      'any.required': 'To is required',
+    }),
+});

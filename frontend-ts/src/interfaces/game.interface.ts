@@ -20,7 +20,7 @@ export interface Game {
   blackPlayer?: User;
   mode: GameMode;
   timeLimit?: number;
-  initialBoardState: string; // FEN notation
+  pgn: string; // Portable Game Notation
   isOver?: boolean;
   hasWhitePlayerWon?: boolean;
   createdAt: Date;

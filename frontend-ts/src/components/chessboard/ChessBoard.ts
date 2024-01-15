@@ -82,7 +82,8 @@ export class ChessBoard {
       .then((game) => {
         // console.log('game: ', game);
 
-        const chess = new Chess(game.initialBoardState);
+        const chess = new Chess();
+        chess.loadPgn(game.pgn);
         const turn = chess.turn();
         const userId = getUserInfo()?.userId;
         const isPlayerWhite = userId

@@ -7,10 +7,13 @@ import {
   // update,
   // remove,
   getAllFilteredByUser,
+  getByIdByUser,
+  recordMove,
 } from '../controllers/game.controller';
 import { asyncHandler } from '../helpers/async.helper';
-// import { validateReqBody } from '../middlewares/validator.middleware';
+import { validateReqBody } from '../middlewares/validator.middleware';
 // import { createGameSchema, updateGameSchema } from '../schemas/game.schema';
+import { recordMoveSchema } from '../schemas/game.schema';
 
 const router = Router();
 
@@ -22,7 +25,8 @@ const router = Router();
 
 // router.post('/', validateReqBody(createGameSchema), create);
 router.get('/', asyncHandler(getAllFilteredByUser));
-// router.get('/:id', getById);
+router.get('/:id', getByIdByUser);
+router.post('/:id/move', validateReqBody(recordMoveSchema), recordMove);
 // router.patch('/:id', validateReqBody(updateGameSchema), update);
 // router.delete('/:id', remove
 

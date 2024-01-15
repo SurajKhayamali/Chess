@@ -1,14 +1,16 @@
+import { Chess } from 'chess.js';
 import { User } from '../entities/user.entity';
 import { GameMode } from '../enums/gameMode.enum';
 import { RedisKeys } from '../enums/redis.enum';
 import { SocketEvent } from '../enums/socket.enum';
-import { NotFoundException } from '../exceptions';
+import { BadRequestException, NotFoundException } from '../exceptions';
 import { generateSlug } from '../helpers/slug.helper';
 import { getUserSocketRoom } from '../helpers/socket.helper';
 import {
   CreateGameDto,
   JoinGameQueueDto,
   QueryGameDto,
+  RecordMoveDto,
   UpdateGameDto,
 } from '../interfaces/game.interface';
 import { redisClient } from '../redis.init';
@@ -89,23 +91,35 @@ export async function getAllFilteredByUser(
  * Get game by id
  *
  * @param id
+ * @param userId
  *
  * @returns game
  */
-export async function getById(id: number) {
-  return GameRepository.findOneBy({ id });
+export async function getById(id: number, userId?: number) {
+  if (!userId) return GameRepository.findOneBy({ id });
+
+  return GameRepository.createQueryBuilder('game')
+    .where('game.id = :id', { id })
+    .andWhere(
+      '(game.white_player_id = :userId OR game.black_player_id = :userId)',
+      { userId }
+    )
+    .leftJoinAndSelect('game.whitePlayer', 'whitePlayer')
+    .leftJoinAndSelect('game.blackPlayer', 'blackPlayer')
+    .getOne();
 }
 
 /**
  * Get game by id or fail
  *
  * @param id
+ * @param userId
  *
  * @returns game
  * @throws NotFoundException
  */
-export async function getByIdOrFail(id: number) {
-  const game = await getById(id);
+export async function getByIdOrFail(id: number, userId?: number) {
+  const game = await getById(id, userId);
 
   if (!game) {
     throw new NotFoundException('Game not found');
@@ -169,6 +183,34 @@ export async function update(id: number, updateGameDto: UpdateGameDto) {
   await GameRepository.save(game);
 
   return game;
+}
+
+/**
+ * Record move
+ *
+ * @param id
+ * @param move
+ *
+ * @returns game
+ */
+export async function recordMove(id: number, move: RecordMoveDto) {
+  const game = await getByIdOrFail(id);
+
+  try {
+    const chess = new Chess();
+    chess.loadPgn(game.pgn || '');
+    const isValidMove = chess.move(move);
+
+    if (!isValidMove) throw new BadRequestException('Invalid move');
+
+    game.pgn = chess.pgn();
+
+    await GameRepository.save(game);
+
+    return game;
+  } catch (error) {
+    throw new BadRequestException('Invalid move');
+  }
 }
 
 /**

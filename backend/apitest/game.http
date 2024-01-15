@@ -30,6 +30,15 @@ Content-Type: application/json
 GET {{BASE_URL}}/1
 
 ###
+POST {{BASE_URL}}/1/move
+Content-Type: application/json
+
+{
+    "from": "e2",
+    "to": "e4"
+}
+
+###
 PATCH {{BASE_URL}}/1
 Content-Type: application/json
 

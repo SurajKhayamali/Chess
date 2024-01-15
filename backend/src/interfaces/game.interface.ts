@@ -1,3 +1,4 @@
+import { Square } from 'chess.js';
 import { Game } from '../entities/game.entity';
 import { BaseColumnsToOmit } from './base.interface';
 
@@ -13,4 +14,9 @@ export interface LeaveGameQueueDto extends JoinGameQueueDto {}
 
 export interface QueryGameDto {
   slug?: string;
+}
+
+export interface RecordMoveDto {
+  from: Square;
+  to: Square;
 }
