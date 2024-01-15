@@ -135,6 +135,8 @@ export class ChessBoard {
       'lg:w-192',
       'aspect-square'
     );
+    if (!this.isPlayerWhite) boardDiv.classList.add('transform', 'rotate-180');
+
     for (let fileIndex = 0; fileIndex < FILES_LENGTH; fileIndex++) {
       const rank = document.createElement('div');
       rank.classList.add('h-1/8', 'w-full');
@@ -254,6 +256,7 @@ export class ChessBoard {
     }`;
     pieceEl.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
     pieceEl.classList.add('h-full', 'w-full', 'cursor-grab');
+    if (!this.isPlayerWhite) pieceEl.classList.add('transform', 'rotate-180');
 
     if (type === 'k') {
       const isAttacked = this.chess.isAttacked(
