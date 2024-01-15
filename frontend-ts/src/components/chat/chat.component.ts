@@ -30,6 +30,7 @@ export function renderChatListComponent(chats: Chat[]) {
   }
 
   chatContainer.innerHTML = chats.map(renderChatComponent).join('');
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 export function renderNewChat(chat: Chat) {
@@ -39,4 +40,5 @@ export function renderNewChat(chat: Chat) {
   }
 
   chatContainer.innerHTML += renderChatComponent(chat);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 }
