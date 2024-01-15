@@ -11,18 +11,17 @@ import {
 } from 'enums/game.enum';
 import { getUserInfo } from 'helpers/auth.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
-import { Game } from 'interfaces/game.interface';
+import { Game, RecordMoveDto } from 'interfaces/game.interface';
 import {
   getClassNameForPieceHigilight,
   getClassNameForSquareHigilight,
   getSquareIndex,
 } from 'scripts/utils';
-import { getGameBySlug } from 'services/game.service';
-
-interface IMove {
-  oldSquareId: string;
-  newSquareId: string;
-}
+import {
+  getGameBySlug,
+  joinGameStream,
+  recordMove,
+} from 'services/game.service';
 
 const SQUARE_ATTRIBUTE_NAME = 'data-square';
 const PIECE_ATTRIBUTE_NAME = 'data-piece-at-square';
@@ -60,7 +59,7 @@ export class ChessBoard {
   // private isPlayerWhite?: boolean;
   // private userId?: number;
   private isPlaying: boolean;
-  private lastMove?: IMove;
+  private lastMove?: RecordMoveDto;
 
   constructor(boardContainerId: string, slug: string) {
     const boardContainer = document.getElementById(
@@ -99,6 +98,8 @@ export class ChessBoard {
         this.allowMove = getIsPlayerAllowedToMove(turn === 'w', isPlayerWhite);
 
         this.render();
+
+        joinGameStream(game.slug);
       })
       .catch((error) => {
         console.log(error);
@@ -134,8 +135,8 @@ export class ChessBoard {
         }
 
         if (this.lastMove) {
-          const { oldSquareId, newSquareId } = this.lastMove;
-          if (oldSquareId === squareId || newSquareId === squareId) {
+          const { from, to } = this.lastMove;
+          if (from === squareId || to === squareId) {
             square.classList.add(
               getClassNameForSquareHigilight(SquareHighlightModifiers.LAST_MOVE)
             );
@@ -168,10 +169,10 @@ export class ChessBoard {
             getClassNameForSquareHigilight(SquareHighlightModifiers.HOVER)
           );
         };
-        square.ondrop = (e) => {
+        square.ondrop = async (e) => {
           // console.log('drop', e);
           e.preventDefault();
-          const oldSquareId = e.dataTransfer?.getData('text/plain');
+          const oldSquareId = e.dataTransfer?.getData('text/plain') as Square;
           // console.log('oldSquareId: ', oldSquareId);
           if (!oldSquareId) return;
           const piece = document.querySelector(
@@ -179,9 +180,9 @@ export class ChessBoard {
           );
           if (!piece) return;
 
-          const moveMade = this.handleMove({
-            oldSquareId: oldSquareId,
-            newSquareId: squareId,
+          const moveMade = await this.handleMove({
+            from: oldSquareId,
+            to: squareId,
           });
           if (!moveMade) return;
 
@@ -325,15 +326,20 @@ export class ChessBoard {
     this.highlightPossibleMoves(squareId);
   }
 
-  private handleMove(props: IMove): boolean {
-    const { oldSquareId, newSquareId } = props;
+  private async handleMove(props: RecordMoveDto): Promise<boolean> {
+    const { from, to } = props;
     try {
       const move = this.chess.move({
-        from: oldSquareId,
-        to: newSquareId,
+        from,
+        to,
         promotion: 'q',
       });
       if (!move) return false;
+
+      if (this.game?.id) {
+        const game = await recordMove(this.game?.id, props);
+        console.log('game: ', game);
+      }
 
       this.lastMove = props;
       this.turn = this.chess.turn();

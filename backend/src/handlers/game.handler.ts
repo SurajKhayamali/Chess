@@ -7,6 +7,7 @@ import {
 import {
   getUserDataFromSocket,
   handleAfterValidation,
+  handleWithAck,
 } from '../helpers/socket.helper';
 import {
   joinGameQueueSchema,
@@ -16,6 +17,7 @@ import {
   handleJoinQueueByUser,
   handleLeaveQueueByUser,
 } from '../services/game.service';
+import { getGameStreamRoomName } from '../helpers/game.helper';
 
 export function registerGameHandlers(_io: Server, socket: Socket) {
   socket.on(
@@ -35,6 +37,14 @@ export function registerGameHandlers(_io: Server, socket: Socket) {
 
       const userId = getUserDataFromSocket(socket)?.userId;
       return handleLeaveQueueByUser(userId, data);
+    })
+  );
+
+  socket.on(
+    SocketEvent.JOIN_GAME_STREAM,
+    handleWithAck((slug) => {
+      console.log(SocketEvent.JOIN_GAME_STREAM, slug);
+      socket.join(getGameStreamRoomName(slug));
     })
   );
 }

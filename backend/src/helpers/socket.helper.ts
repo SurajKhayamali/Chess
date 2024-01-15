@@ -16,14 +16,25 @@ export function getUserDataFromSocket(socket: Socket) {
   return socket.data.user;
 }
 
-export function handleWithAck<T>(
-  callback: (data: T) => void,
-  customAckRes?: unknown
-) {
-  return (data: T, ack: (response: unknown) => void) => {
-    callback(data);
-    console.log(ack, customAckRes);
-    ack && ack(customAckRes || { status: 'ok' });
+// export function handleWithAck<T>(
+//   callback: (data: T) => void,
+//   customAckRes?: unknown
+// ) {
+//   return (data: T, ack: (response: unknown) => void) => {
+//     callback(data);
+//     console.log(ack, customAckRes);
+//     ack && ack(customAckRes || { status: 'ok' });
+//   };
+// }
+
+export function handleWithAck<T>(callback: (data: T) => unknown) {
+  return async (data: T, ack: (response: unknown) => void) => {
+    try {
+      const response = await callback(data);
+      ack && ack(response);
+    } catch (error) {
+      ack && ack({ error: (error as Error).message });
+    }
   };
 }
 

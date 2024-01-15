@@ -16,6 +16,7 @@ import {
 import { redisClient } from '../redis.init';
 import { GameRepository } from '../repositories/game.repository';
 import { getSocketIO } from '../socket.init';
+import { getGameStreamRoomName } from '../helpers/game.helper';
 
 /**
  * Create a new game
@@ -206,6 +207,10 @@ export async function recordMove(id: number, move: RecordMoveDto) {
     game.pgn = chess.pgn();
 
     await GameRepository.save(game);
+
+    const io = getSocketIO();
+    const socketRoom = getGameStreamRoomName(game.slug);
+    io.to(socketRoom).emit(socketRoom, move);
 
     return game;
   } catch (error) {

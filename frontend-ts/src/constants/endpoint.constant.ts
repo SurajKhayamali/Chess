@@ -21,12 +21,13 @@ export const CHAT_ENDPOINTS = {
 };
 
 export const GAMES_ENDPOINTS = {
-  CREATE: '/games',
+  // CREATE: '/games',
   GET_ALL: '/games',
   GET_BY_ID: (id: number) => `/games/${id}`,
   GET_BY_SLUG: (slug: string) => `/games?slug=${slug}`,
-  UPDATE_BY_ID: (id: number) => `/games/${id}`,
-  DELETE_BY_ID: (id: number) => `/games/${id}`,
+  RECORD_MOVE: (id: number) => `/games/${id}/moves`,
+  // UPDATE_BY_ID: (id: number) => `/games/${id}`,
+  // DELETE_BY_ID: (id: number) => `/games/${id}`,
 
   GET_SPECTATE_BY_SLUG: (slug: string) => `/games-spectate/${slug}`,
 };

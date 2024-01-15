@@ -26,7 +26,7 @@ const router = Router();
 // router.post('/', validateReqBody(createGameSchema), create);
 router.get('/', asyncHandler(getAllFilteredByUser));
 router.get('/:id', getByIdByUser);
-router.post('/:id/move', validateReqBody(recordMoveSchema), recordMove);
+router.post('/:id/moves', validateReqBody(recordMoveSchema), recordMove);
 // router.patch('/:id', validateReqBody(updateGameSchema), update);
 // router.delete('/:id', remove
 

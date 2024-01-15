@@ -30,7 +30,7 @@ Content-Type: application/json
 GET {{BASE_URL}}/1
 
 ###
-POST {{BASE_URL}}/1/move
+POST {{BASE_URL}}/1/moves
 Content-Type: application/json
 
 {

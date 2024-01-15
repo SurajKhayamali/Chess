@@ -9,6 +9,8 @@ export enum SocketEvent {
   GAME_JOIN_QUEUE = 'game:join-queue',
   GAME_LEAVE_QUEUE = 'game:leave-queue',
   GAME_STARTED = 'game:started',
+  GAME_STREAM = 'game:stream',
+  JOIN_GAME_STREAM = 'game:join-stream',
 
   // From server to client
   USER_MESSAGE = 'user:message',
