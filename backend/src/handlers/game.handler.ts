@@ -8,6 +8,7 @@ import {
   getUserDataFromSocket,
   handleAfterValidation,
   handleWithAck,
+  respondUnauthorized,
 } from '../helpers/socket.helper';
 import {
   joinGameQueueSchema,
@@ -25,6 +26,7 @@ export function registerGameHandlers(_io: Server, socket: Socket) {
     handleAfterValidation<JoinGameQueueDto>(joinGameQueueSchema, (data) => {
       console.log(SocketEvent.GAME_JOIN_QUEUE, data);
       const userId = getUserDataFromSocket(socket)?.userId;
+      if (!userId) return respondUnauthorized();
 
       return handleJoinQueueByUser(userId, data);
     })
@@ -36,6 +38,8 @@ export function registerGameHandlers(_io: Server, socket: Socket) {
       console.log(SocketEvent.GAME_LEAVE_QUEUE, data);
 
       const userId = getUserDataFromSocket(socket)?.userId;
+      if (!userId) return respondUnauthorized();
+
       return handleLeaveQueueByUser(userId, data);
     })
   );

@@ -1,14 +1,23 @@
 import { CHAT_ENDPOINTS } from 'constants/endpoint.constant';
 import { Chat } from 'entities/Chat';
 import { HttpMethods } from 'enums/http.enum';
+import { SocketEvent } from 'enums/socket.enum';
 import { fetchHelper } from 'helpers/fetch.helper';
+import { emit } from 'helpers/socket.helper';
 import { CreateChatDto, UpdateChatDto } from 'interfaces/chat.interface';
+import { socket } from 'scripts/socket';
 
 export async function createChat(createChatDto: CreateChatDto): Promise<Chat> {
-  const response = await fetchHelper(CHAT_ENDPOINTS.CREATE, {
-    method: HttpMethods.POST,
-    body: JSON.stringify(createChatDto),
-  });
+  // const response = await fetchHelper(CHAT_ENDPOINTS.CREATE, {
+  //   method: HttpMethods.POST,
+  //   body: JSON.stringify(createChatDto),
+  // });
+
+  const response = (await emit(
+    socket,
+    SocketEvent.PUBLIC_MESSAGE,
+    createChatDto
+  )) as Chat;
 
   return response;
 }

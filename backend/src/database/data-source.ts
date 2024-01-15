@@ -2,8 +2,8 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 import serverConfig from '../config';
 import { Game } from '../entities/game.entity';
-import { Move } from '../entities/move.entity';
-// import { Chat } from '../entities/chat.entity';
+// import { Move } from '../entities/move.entity';
+import { Chat } from '../entities/chat.entity';
 import { SnakeNamingStrategy } from './snake-naming.strategy';
 
 // type DatabaseType =
@@ -39,7 +39,7 @@ export const AppDataSource = new DataSource({
   database: databaseName,
   synchronize: !isProduction,
   logging: !isProduction,
-  entities: [User, Game, Move],
+  entities: [User, Game, Chat],
   subscribers: [],
   migrations: [],
   namingStrategy: new SnakeNamingStrategy(),

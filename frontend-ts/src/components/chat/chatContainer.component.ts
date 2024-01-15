@@ -4,7 +4,6 @@ import {
 } from 'components/chat/chat.component';
 import { Chat } from 'entities/Chat';
 import { SocketEvent } from 'enums/socket.enum';
-import { emit } from 'helpers/socket.helper';
 import { chatRepository } from 'repositories/chat.repository';
 import { socket } from 'scripts/socket';
 
@@ -27,9 +26,9 @@ export async function renderChatContainer(
   await chatRepository.getChats();
   renderChatListComponent(await chatRepository.getAllChatByChannel(channelId));
 
-  socket.on(channelId, (message: unknown) => {
+  socket.on(channelId, (chatRes: Chat) => {
     // console.log('Message received:', message);
-    const chat = new Chat(message as Chat);
+    const chat = new Chat(chatRes);
     chatRepository.appendChat(chat);
 
     renderNewChat(chat);
@@ -39,7 +38,6 @@ export async function renderChatContainer(
   chatInput.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter') {
       const message = chatInput.value;
-      emit(socket, SocketEvent.PUBLIC_MESSAGE, message);
       const chat = await chatRepository.addChat({
         message,
         channel: channelId,
