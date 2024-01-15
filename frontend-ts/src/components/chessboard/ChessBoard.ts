@@ -122,8 +122,10 @@ export class ChessBoard {
       'grid-cols-8',
       'min-h-12',
       'min-w-12',
-      'lg:h-192',
-      'lg:w-192',
+      // 'lg:h-96',
+      // 'lg:w-96',
+      'max-h-[60vh]',
+      'max-w-[60vw]',
       'aspect-square'
     );
     if (!this.isPlayerWhite) boardDiv.classList.add('transform', 'rotate-180');
