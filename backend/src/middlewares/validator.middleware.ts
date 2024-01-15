@@ -8,10 +8,9 @@ export function validateReqQuery(schema: Schema) {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       req.query = validateSchema(schema, req.query);
+      next();
     } catch (error) {
       return next(new BadRequestException((error as Error).message));
-    } finally {
-      next();
     }
   };
 }
@@ -20,10 +19,9 @@ export function validateReqBody(schema: Schema) {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       req.body = validateSchema(schema, req.body);
+      next();
     } catch (error) {
       return next(new BadRequestException((error as Error).message));
-    } finally {
-      next();
     }
   };
 }
