@@ -7,8 +7,14 @@ export const gamesRoute: IRoute = {
       path: '',
       action: async (context) => {
         console.log('game route', context);
-        const { renderGames } = await import('./games.component');
-        return { component: renderGames(), authRequired: true };
+        const { component, afterInitialize } = await import(
+          './games.component'
+        );
+        return {
+          component,
+          afterInitialize,
+          authRequired: true,
+        };
       },
     },
     {
@@ -17,12 +23,12 @@ export const gamesRoute: IRoute = {
         const slug = context?.params.slug;
         if (!slug) return;
 
-        const { renderGame, afterInitializeGame } = await import(
-          './games.component'
+        const { component, afterInitialize } = await import(
+          './gameDetail.component'
         );
         return {
-          component: renderGame(),
-          afterInitialize: () => afterInitializeGame(slug as string),
+          component,
+          afterInitialize: () => afterInitialize(slug as string),
           // authRequired: true,
         };
       },

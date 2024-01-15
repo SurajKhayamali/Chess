@@ -19,7 +19,7 @@
         "indent": [
             "error",
             2,
-            {"ignoredNodes": ["SwitchCase", "CallExpression"]}
+            {"ignoredNodes": ["SwitchCase", "CallExpression", "ConditionalExpression", "TemplateElement"]}
         ],
         "linebreak-style": [
             "error",

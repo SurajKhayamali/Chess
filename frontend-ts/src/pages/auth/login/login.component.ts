@@ -7,7 +7,7 @@ import { handleNavigation } from 'scripts/router';
 import { handleLogin } from 'services/auth.service';
 
 export const component = /*html*/ `
-    <div class="container w-screen h-screen flex justify-center items-center">
+    <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Log in</h1>
             <form class="grid grid-cols-1 gap-6">
