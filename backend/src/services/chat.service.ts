@@ -3,6 +3,7 @@ import { NotFoundException } from '../exceptions';
 import {
   CreateChatByUserDto,
   CreateChatDto,
+  QueryChatDto,
   UpdateChatDto,
 } from '../interfaces/chat.interface';
 import { ChatRepository } from '../repositories/chat.repository';
@@ -57,14 +58,27 @@ export async function getAll() {
  *
  * @returns chats
  */
-export async function getAllByUserId(userId: number) {
-  const chats = await ChatRepository.createQueryBuilder('chat')
-    .where('chat.sender_id = :userId', { userId })
-    .orWhere('chat.receiver_id = :userId', { userId })
-    .leftJoinAndSelect('chat.sender', 'sender')
-    .leftJoinAndSelect('chat.receiver', 'receiver')
-    .getMany();
-  return chats;
+export async function getAllByUserId(
+  userId: number,
+  queryChatDto: QueryChatDto
+) {
+  const { channel } = queryChatDto;
+  if (!channel) {
+    const chats = await ChatRepository.createQueryBuilder('chat')
+      .where('chat.sender_id = :userId', { userId })
+      .orWhere('chat.receiver_id = :userId', { userId })
+      .leftJoinAndSelect('chat.sender', 'sender')
+      .leftJoinAndSelect('chat.receiver', 'receiver')
+      .getMany();
+    return chats;
+  }
+
+  return ChatRepository.find({
+    where: {
+      channel,
+    },
+    relations: ['sender', 'receiver'],
+  });
 }
 
 /**

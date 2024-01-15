@@ -21,7 +21,7 @@ export async function renderChatContainer(
     <input id="chat-input" class="input input-bordered w-full mt-4" type="text" placeholder="Type a message" />
   `;
 
-  await chatRepository.getChats();
+  await chatRepository.getChats({ channel: channelId });
   renderChatListComponent(await chatRepository.getAllChatByChannel(channelId));
 
   socket.on(channelId, (chatRes: Chat) => {

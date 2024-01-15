@@ -15,6 +15,7 @@ import {
 import { validateReqBody } from '../middlewares/validator.middleware';
 import {
   createChatByUserSchema,
+  queryChatSchema,
   updateChatByUserSchema,
   // createChatSchema,
   // updateChatSchema,
@@ -28,7 +29,7 @@ const router = Router();
 // router.patch('/:id', validateReqBody(updateChatSchema), update);
 // router.delete('/:id', remove);
 
-router.get('/', getAllByUserId);
+router.get('/', validateReqBody(queryChatSchema), getAllByUserId);
 router.post('/', validateReqBody(createChatByUserSchema), createByUser);
 router.get('/:id', getByIdByUserId);
 router.patch('/:id', validateReqBody(updateChatByUserSchema), updateByUser);

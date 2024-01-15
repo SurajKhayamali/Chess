@@ -12,3 +12,7 @@ export interface ChatResponse extends Omit<Chat, 'sender' | 'receiver'> {
   sender: UserResponse;
   receiver?: UserResponse;
 }
+
+export interface QueryChatDto {
+  channel?: string;
+}

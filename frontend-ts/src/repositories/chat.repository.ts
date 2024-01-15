@@ -1,22 +1,26 @@
 import { Chat } from 'entities/Chat';
 import { getIsLoggedIn } from 'helpers/auth.helper';
-import { CreateChatDto, UpdateChatDto } from 'interfaces/chat.interface';
+import {
+  CreateChatDto,
+  QueryChatDto,
+  UpdateChatDto,
+} from 'interfaces/chat.interface';
 import { createChat, getChats, updateChat } from 'services/chat.service';
 
 class ChatRepository {
   chats: Chat[] = [];
 
-  constructor() {
-    this.getChats();
+  constructor(channel?: string) {
+    this.getChats({ channel });
   }
 
-  async getChats(): Promise<Chat[]> {
+  async getChats(queryChatDto?: QueryChatDto): Promise<Chat[]> {
     const isLoggedIn = getIsLoggedIn();
     if (!isLoggedIn) {
       return [];
     }
 
-    const chats = await getChats();
+    const chats = await getChats(queryChatDto);
     this.chats = chats;
     return chats;
   }

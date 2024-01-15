@@ -16,3 +16,7 @@ export interface CreateChatDto extends Pick<Chat, 'message' | 'channel'> {}
 
 export interface UpdateChatDto
   extends Partial<Omit<CreateChatDto, 'channel'>> {}
+
+export interface QueryChatDto {
+  channel?: string;
+}

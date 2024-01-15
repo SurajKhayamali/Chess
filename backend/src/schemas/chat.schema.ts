@@ -42,3 +42,11 @@ export const updateChatByUserSchema = createChatByUserSchema
       'any.unknown': 'Channel is forbidden',
     })
   );
+
+export const queryChatSchema = Joi.object({
+  channel: Joi.string().min(3).max(30).messages({
+    'string.base': 'Channel must be a string value',
+    'string.min': 'Channel must be at least 3 characters long',
+    'string.max': 'Channel must be at most 30 characters long',
+  }),
+});

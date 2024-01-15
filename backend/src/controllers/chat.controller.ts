@@ -65,7 +65,7 @@ export async function getAllByUserId(req: AuthenticatedRequest, res: Response) {
 
   const { userId } = req.user;
 
-  const chats = await chatService.getAllByUserId(userId);
+  const chats = await chatService.getAllByUserId(userId, req.query);
   const adaptedChats = ChatAdapter.adaptAllForResponse(chats);
 
   res.json(adaptedChats);

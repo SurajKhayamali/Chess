@@ -4,7 +4,11 @@ import { HttpMethods } from 'enums/http.enum';
 import { SocketEvent } from 'enums/socket.enum';
 import { fetchHelper } from 'helpers/fetch.helper';
 import { emit } from 'helpers/socket.helper';
-import { CreateChatDto, UpdateChatDto } from 'interfaces/chat.interface';
+import {
+  CreateChatDto,
+  QueryChatDto,
+  UpdateChatDto,
+} from 'interfaces/chat.interface';
 import { socket } from 'scripts/socket';
 
 export async function createChat(createChatDto: CreateChatDto): Promise<Chat> {
@@ -22,8 +26,9 @@ export async function createChat(createChatDto: CreateChatDto): Promise<Chat> {
   return response;
 }
 
-export async function getChats(): Promise<Chat[]> {
-  const response = await fetchHelper(CHAT_ENDPOINTS.GET_ALL);
+export async function getChats(queryChatDto?: QueryChatDto): Promise<Chat[]> {
+  const query = new URLSearchParams(queryChatDto as Record<string, string>);
+  const response = await fetchHelper(CHAT_ENDPOINTS.GET_ALL + '?' + query);
 
   return response;
 }

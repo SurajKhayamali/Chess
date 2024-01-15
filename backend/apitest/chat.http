@@ -34,6 +34,9 @@ DELETE {{BASE_URL}}/1
 GET {{BASE_URL}}
 
 ###
+GET {{BASE_URL}}?channel=public-message
+
+###
 POST {{BASE_URL}}
 Content-Type: application/json
 
