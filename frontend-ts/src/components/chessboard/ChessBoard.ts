@@ -27,6 +27,15 @@ import {
 const SQUARE_ATTRIBUTE_NAME = 'data-square';
 const PIECE_ATTRIBUTE_NAME = 'data-piece-at-square';
 
+const getIsPlayerWhite = (game: Game, userId?: number) => {
+  if (!userId) return undefined;
+
+  if (game.whitePlayer?.id === userId) return true;
+  if (game.blackPlayer?.id === userId) return false;
+
+  return undefined;
+};
+
 const getIsPlayerAllowedToMove = (
   isWhitesTurn: boolean,
   isPlayerWhite?: boolean
@@ -91,9 +100,7 @@ export class ChessBoard {
       chess.loadPgn(game.pgn);
       const turn = chess.turn();
       const userId = getUserInfo()?.userId;
-      const isPlayerWhite = userId
-        ? game.whitePlayer?.id === userId
-        : undefined;
+      const isPlayerWhite = getIsPlayerWhite(game, userId);
 
       this.game = game;
       this.chess = chess;
