@@ -27,6 +27,17 @@ const getIsPlayerAllowedToMove = (
   return isWhitesTurn === isPlayerWhite;
 };
 
+const renderNoGameFound = (boardContainer: HTMLElement) => {
+  boardContainer.innerHTML = '';
+
+  const noGameFound = document.createElement('div');
+  noGameFound.classList.add('flex', 'flex-col', 'items-center', 'py-24');
+  noGameFound.innerHTML = /*html*/ `
+    <h1 class="text-3xl font-bold">No game found</h1>
+  `;
+  boardContainer.appendChild(noGameFound);
+};
+
 export class ChessBoard {
   private boardContainer: HTMLDivElement;
   private chess: Chess;
@@ -73,8 +84,9 @@ export class ChessBoard {
         this.render();
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         displayToast('Game not found', ToastType.ERROR);
+        renderNoGameFound(boardContainer);
       });
   }
 
@@ -222,6 +234,11 @@ export class ChessBoard {
   }
 
   render() {
+    if (!this.game) {
+      renderNoGameFound(this.boardContainer);
+      return;
+    }
+
     this.renderSquareAndPieces();
   }
 }

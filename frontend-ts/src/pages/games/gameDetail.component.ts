@@ -1,9 +1,11 @@
-import { renderBoard } from 'components/board/board.component';
+import { ChessBoard } from 'components/chessboard/ChessBoard';
+
+const boardContainerId = 'boardContainer';
 
 export const component = /*html*/ `
   <div id="boardContainer" class="container"></div>
 `;
 
 export const afterInitialize = async (slug: string) => {
-  renderBoard('boardContainer', slug);
+  new ChessBoard(boardContainerId, slug);
 };
