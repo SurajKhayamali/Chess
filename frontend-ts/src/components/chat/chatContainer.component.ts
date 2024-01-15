@@ -17,10 +17,8 @@ export async function renderChatContainer(
   }
 
   chatContainer.innerHTML = /*html*/ `
-    <div class="container">
-      <div id="chat-list-container" class="mt-32"></div>
-      <input id="chat-input" class="input input-bordered w-full mt-32" type="text" placeholder="Type a message" />
-    </div>
+    <div id="chat-list-container" class="mt-12 h-[60vh] overflow-y-scroll"></div>
+    <input id="chat-input" class="input input-bordered w-full mt-4" type="text" placeholder="Type a message" />
   `;
 
   await chatRepository.getChats();
