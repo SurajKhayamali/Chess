@@ -11,6 +11,11 @@ import {
   SquareHighlightModifiers,
 } from 'enums/game.enum';
 import { getUserInfo } from 'helpers/auth.helper';
+import {
+  getIsPlayerAllowedToMove,
+  getIsPlayerPlaying,
+  getIsPlayerWhite,
+} from 'helpers/game.helper';
 import { ToastType, displayToast } from 'helpers/toast.helper';
 import { Game, RecordMoveDto } from 'interfaces/game.interface';
 import {
@@ -26,28 +31,6 @@ import {
 
 const SQUARE_ATTRIBUTE_NAME = 'data-square';
 const PIECE_ATTRIBUTE_NAME = 'data-piece-at-square';
-
-const getIsPlayerWhite = (game: Game, userId?: number) => {
-  if (!userId) return undefined;
-
-  if (game.whitePlayer?.id === userId) return true;
-  if (game.blackPlayer?.id === userId) return false;
-
-  return undefined;
-};
-
-const getIsPlayerAllowedToMove = (
-  isWhitesTurn: boolean,
-  isPlayerWhite?: boolean
-) => {
-  if (isPlayerWhite === undefined) return false;
-  return isWhitesTurn === isPlayerWhite;
-};
-
-const getIsPlayerPlaying = (game: Game, userId?: number) => {
-  if (!userId) return false;
-  return game.whitePlayer?.id === userId || game.blackPlayer?.id === userId;
-};
 
 const renderNoGameFound = (boardContainer: HTMLElement) => {
   boardContainer.innerHTML = '';

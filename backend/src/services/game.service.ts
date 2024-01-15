@@ -3,7 +3,11 @@ import { User } from '../entities/user.entity';
 import { GameMode } from '../enums/gameMode.enum';
 import { RedisKeys } from '../enums/redis.enum';
 import { SocketEvent } from '../enums/socket.enum';
-import { BadRequestException, NotFoundException } from '../exceptions';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '../exceptions';
 import { generateSlug } from '../helpers/slug.helper';
 import { getUserSocketRoom } from '../helpers/socket.helper';
 import {
@@ -16,7 +20,12 @@ import {
 import { redisClient } from '../redis.init';
 import { GameRepository } from '../repositories/game.repository';
 import { getSocketIO } from '../socket.init';
-import { getGameStreamRoomName } from '../helpers/game.helper';
+import {
+  getGameStreamRoomName,
+  getIsPlayerAllowedToMove,
+  getIsPlayerPlaying,
+  getIsPlayerWhite,
+} from '../helpers/game.helper';
 
 /**
  * Create a new game
@@ -202,9 +211,24 @@ export async function recordMove(
 ) {
   const game = await getByIdOrFail(id, userId);
 
+  // NOTE: Possibly redundant as it is already checked while querying database
+  const isPlayerPlaying = getIsPlayerPlaying(game, userId);
+  if (!isPlayerPlaying) throw new ForbiddenException('Not allowed to move');
+
+  const isPlayerWhite = getIsPlayerWhite(game, userId);
+
   try {
     const chess = new Chess();
     chess.loadPgn(game.pgn || '');
+
+    const isWhitesTurn = chess.turn() === 'w';
+    const isPlayerAllowedToMove = getIsPlayerAllowedToMove(
+      isWhitesTurn,
+      isPlayerWhite
+    );
+    if (!isPlayerAllowedToMove)
+      throw new ForbiddenException('Not your turn to move');
+
     const isValidMove = chess.move(move);
 
     if (!isValidMove) throw new BadRequestException('Invalid move');
@@ -219,6 +243,8 @@ export async function recordMove(
 
     return game;
   } catch (error) {
+    if (error instanceof ForbiddenException) throw error;
+
     throw new BadRequestException('Invalid move');
   }
 }
