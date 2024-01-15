@@ -126,15 +126,17 @@ export async function update(req: Request, res: Response, next: NextFunction) {
  * @param next
  */
 export async function recordMove(
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) {
   const { id } = req.params;
   const move = req.body as RecordMoveDto;
+  const userId = req.user?.userId;
+  if (!userId) throw new NotFoundException('User not found');
 
   try {
-    const game = await gameService.recordMove(parseInt(id), move);
+    const game = await gameService.recordMove(parseInt(id), move, userId);
 
     res.json(game);
   } catch (error) {

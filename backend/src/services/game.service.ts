@@ -191,11 +191,16 @@ export async function update(id: number, updateGameDto: UpdateGameDto) {
  *
  * @param id
  * @param move
+ * @param userId
  *
  * @returns game
  */
-export async function recordMove(id: number, move: RecordMoveDto) {
-  const game = await getByIdOrFail(id);
+export async function recordMove(
+  id: number,
+  move: RecordMoveDto,
+  userId?: number
+) {
+  const game = await getByIdOrFail(id, userId);
 
   try {
     const chess = new Chess();
