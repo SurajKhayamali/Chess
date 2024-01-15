@@ -1,6 +1,6 @@
 # Comments are provided throughout this file to help you get started.
 # If you need more help, visit the Docker compose reference guide at
-# https://docs.docker.com/compose/compose-file/
+# https://docs.docker.com/go/compose-spec-reference/
 
 # Here the instructions define your application as a service called "server".
 # This service is built from the Dockerfile in the current directory.
@@ -8,22 +8,34 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  # server:
-  #   image: surajkhayamali/chess-backend
-  #   build:
-  #     context: .
-  #   environment:
-  #     NODE_ENV: production
-  #     PORT: ${PORT}
-  #     SALT_ROUNDS: ${SALT_ROUNDS}
-  #     JWT_SECRET: ${JWT_SECRET}
-  #     JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
-  #     JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
-  #     COOKIE_SECRET: ${COOKIE_SECRET}
-  #     COOKIE_MAX_AGE: ${COOKIE_MAX_AGE}
-  #     COOKIE_REFRESH_MAX_AGE: ${COOKIE_REFRESH_MAX_AGE}
-  #   ports:
-  #     - 5000:5000
+  server:
+    image: surajkhayamali/chess-backend
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}
+      SALT_ROUNDS: ${SALT_ROUNDS}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      COOKIE_MAX_AGE: ${COOKIE_MAX_AGE}
+      COOKIE_REFRESH_MAX_AGE: ${COOKIE_REFRESH_MAX_AGE}
+
+      # Database configuration
+      DB_TYPE: postgres
+      DB_NAME: ${DB_NAME}
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: 5432
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - 5000:5000
+
   # The commented out section below is an example of how to define a PostgreSQL
   # database that your application can use. `depends_on` tells Docker Compose to
   # start the database before your application. The `db-data` volume persists the
@@ -47,8 +59,8 @@ services:
     # Uncomment these lines for production use. and comment out the below ports
     # expose:
     #   - 5432
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
     healthcheck:
       test: ['CMD', 'pg_isready']
       interval: 10s
@@ -58,13 +70,13 @@ services:
   redis:
     image: redis/redis-stack:latest
     restart: unless-stopped
-    ports:
-      - 6379:6379
-      - 8001:8001
+    # ports:
+    #   - 6379:6379
+    #   - 8001:8001
     volumes:
       - redis_data:/data
-    networks:
-      - default
+    # networks:
+    #   - default
 
 volumes:
   db-data:
