@@ -48,14 +48,15 @@ services:
   db:
     image: postgres
     restart: always
-    user: postgres
+    user: ${DB_USER}
     secrets:
       - db-password
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=chess-backend
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     # Uncomment these lines for production use. and comment out the below ports
     # expose:
     #   - 5432
