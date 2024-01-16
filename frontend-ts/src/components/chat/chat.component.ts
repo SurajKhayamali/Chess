@@ -35,7 +35,13 @@ export function renderChatListComponent(chats: Chat[]) {
     return;
   }
 
-  chatContainer.innerHTML = chats.map(renderChatComponent).join('');
+  chatContainer.innerHTML = chats
+    .sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    )
+    .map(renderChatComponent)
+    .join('');
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
