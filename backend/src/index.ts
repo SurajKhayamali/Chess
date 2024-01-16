@@ -37,8 +37,12 @@ app.use(errorHandlerMiddleware);
 
 app.use(notFoundHandlerMiddleware);
 
-initializeDatabase().then(() => {
-  http.listen(config.port, () => {
-    console.log(`Server listening on port: ${config.port}`);
+initializeDatabase()
+  .then(() => {
+    http.listen(config.port, () => {
+      console.log(`Server listening on port: ${config.port}`);
+    });
+  })
+  .catch((error) => {
+    console.log('Database initialization failed:', error);
   });
-});

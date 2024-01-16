@@ -79,7 +79,7 @@ Then run the following command to start the server:
 npm run dev
 ```
 
-This command starts the development server. Once the server is running, you can open your browser and navigate to the URL that the server is running on (usually http://localhost:5173 or similar). The game should load in your browser.
+This command starts the development server. Once the server is running, you can open your browser and navigate to the URL that the server is running on (usually http://localhost:5173 or similar). The application should load in your browser.
 
 ## (Method 2) Running the application with Docker Compose
 
@@ -133,4 +133,26 @@ Then run the following command to start the server:
 docker-compose up -d
 ```
 
-These command starts the development server. Once the server is running, you can open your browser and navigate to the URL that the server is running on (usually http://localhost:5173 or similar). The game should load in your browser.
+These command starts the development server. Once the server is running, you can open your browser and navigate to the URL that the server is running on (usually http://localhost:5173 or similar). The application should load in your browser.
+
+## (Method 3) Running the application with single Docker Compose
+
+### Requirements
+
+To run the game, you need to have Docker and Docker Compose installed on your machine. You can download Docker from [here](https://www.docker.com/products/docker-desktop) and Docker Compose from [here](https://docs.docker.com/compose/install/)
+
+### Running the application
+
+Make sure you are at the root of the project directory. Then copy the .env.example file to .env:
+
+```sh
+cp .env.example .env
+```
+
+Then run the following command to start the server:
+
+```sh
+docker-compose up -d
+```
+
+These command starts the development server. Once the server is running, you can open your browser and navigate to the URL that the server is running on (usually http://localhost:5173 or similar). The application should load in your browser.
