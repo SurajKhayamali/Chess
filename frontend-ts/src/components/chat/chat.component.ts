@@ -29,6 +29,12 @@ export function renderChatListComponent(chats: Chat[]) {
     return;
   }
 
+  if (!chats.length) {
+    chatContainer.innerHTML =
+      '<div class="text-center text-gray-500">No chats yet</div>';
+    return;
+  }
+
   chatContainer.innerHTML = chats.map(renderChatComponent).join('');
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
