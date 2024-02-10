@@ -41,7 +41,8 @@ export const AppDataSource = new DataSource({
   logging: !isProduction,
   entities: [User, Game, Chat],
   subscribers: [],
-  migrations: [],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  migrationsTableName: 'migrations',
   namingStrategy: new SnakeNamingStrategy(),
 } as DataSourceOptions);
 

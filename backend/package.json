@@ -10,7 +10,13 @@
     "build": "tsc",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --fix --ext .ts src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "typeorm-ts-node-esm -d ./src/database/data-source.cli.ts",
+    "generate:migration": "npm run typeorm -- migration:generate ./src/database/migrations/chats",
+    "make:migration": "typeorm-ts-node-esm -- migration:create",
+    "migrate": "npm run typeorm -- migration:run",
+    "migration:show": "npm run typeorm -- migration:show",
+    "migration:revert": "npm run typeorm -- migration:revert"
   },
   "keywords": [],
   "author": "Suraj Khayamali",

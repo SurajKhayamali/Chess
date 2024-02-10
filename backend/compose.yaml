@@ -13,8 +13,7 @@ services:
     build:
       context: .
     environment:
-      # NODE_ENV: production
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: ${PORT}
       SALT_ROUNDS: ${SALT_ROUNDS}
       JWT_SECRET: ${JWT_SECRET}
