@@ -7,7 +7,7 @@ export const socket = io(API_URL, {
 });
 
 const onConnect = () => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
 
   if (socket.recovered) {
     // any event missed during the disconnection period will be received now

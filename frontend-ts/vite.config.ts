@@ -4,7 +4,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: './src',
-  base: './',
   publicDir: '../public',
   resolve: {
     alias: {
@@ -21,5 +20,9 @@ export default defineConfig({
       scripts: resolve(__dirname, 'src/scripts'),
       services: resolve(__dirname, 'src/services'),
     },
+  },
+  build: {
+    outDir: '../../backend/public',
+    emptyOutDir: true,
   },
 });
