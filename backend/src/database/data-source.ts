@@ -33,6 +33,7 @@ const { type, host, port, user, password, database: databaseName } = database;
 export const AppDataSource = new DataSource({
   type: type,
   host: host,
+  ssl: isProduction,
   port: port,
   username: user,
   password: password,
