@@ -1,4 +1,4 @@
-import{j as p,A as t,T as l,d as r,N as i,h as c}from"./index-W1RGcPbA.js";import{c as m,v as d,s as x}from"./auth.schema-d68LrvZQ.js";const w=`
+import{j as p,A as t,T as l,d as r,N as i,h as c}from"./index-EKO_HtEf.js";import{c as m,v as d,s as x}from"./auth.schema-d68LrvZQ.js";const w=`
     <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Register</h1>

@@ -1,4 +1,4 @@
-import{T as d}from"./game.constant-sV4GMeaH.js";import{e as i,S as n,s as a,h as o}from"./index-W1RGcPbA.js";const g=e=>d.find(s=>s.value===e),u=e=>{const s=g(e);return`
+import{T as d}from"./game.constant-sV4GMeaH.js";import{e as i,S as n,s as a,h as o}from"./index-EKO_HtEf.js";const g=e=>d.find(s=>s.value===e),u=e=>{const s=g(e);return`
 	<div class="card bg-base-300">
 		<div class="card-body">
 		<div class="flex flex-col items-center">
