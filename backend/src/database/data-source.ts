@@ -28,12 +28,20 @@ import { SnakeNamingStrategy } from './snake-naming.strategy';
 //   | 'spanner';
 
 const { database, isProduction } = serverConfig;
-const { type, host, port, user, password, database: databaseName } = database;
+const {
+  type,
+  host,
+  port,
+  user,
+  password,
+  database: databaseName,
+  ssl,
+} = database;
 
 export const AppDataSource = new DataSource({
   type: type,
   host: host,
-  ssl: isProduction,
+  ssl: ssl,
   port: port,
   username: user,
   password: password,
