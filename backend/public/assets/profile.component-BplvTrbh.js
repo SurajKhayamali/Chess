@@ -1,4 +1,4 @@
-import{e as b,c as f,a as w,v as y,b as v}from"./auth.schema-d68LrvZQ.js";import{f as c,a as P,U as m,d as u,T as p,c as h}from"./index-EKO_HtEf.js";async function g(){return await c(m.GET_USER_INFO)}async function E(e){return await c(m.UPDATE_USER_INFO,{method:P.PATCH,body:JSON.stringify(e)})}const U=`
+import{e as b,c as f,a as w,v as y,b as v}from"./auth.schema-d68LrvZQ.js";import{f as c,a as P,U as m,d as u,T as p,c as h}from"./index-iXdiA8If.js";async function g(){return await c(m.GET_USER_INFO)}async function E(e){return await c(m.UPDATE_USER_INFO,{method:P.PATCH,body:JSON.stringify(e)})}const U=`
 <div class="container mx-auto flex flex-col gap-8">
   <h1 class="text-3xl font-bold">User settings</h1>
 

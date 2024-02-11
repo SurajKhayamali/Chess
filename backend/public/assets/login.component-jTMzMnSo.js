@@ -1,4 +1,4 @@
-import{i,A as s,T as t,d as r,N as c,h as p}from"./index-EKO_HtEf.js";import{c as d,v as m,l as u}from"./auth.schema-d68LrvZQ.js";const v=`
+import{i,A as s,T as t,d as r,N as c,h as p}from"./index-iXdiA8If.js";import{c as d,v as m,l as u}from"./auth.schema-d68LrvZQ.js";const v=`
     <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Log in</h1>

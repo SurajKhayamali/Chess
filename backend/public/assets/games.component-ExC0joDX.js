@@ -1,4 +1,4 @@
-import{g as v}from"./index-EKO_HtEf.js";import{g as I}from"./game.service-mRr0hYVb.js";const B=`
+import{g as v}from"./index-iXdiA8If.js";import{g as I}from"./game.service-Tht0yGGS.js";const B=`
   <div class="container">
     <h1 class="text-3xl font-bold">Games</h1>
 

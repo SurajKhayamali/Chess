@@ -1,8 +1,8 @@
-import { API_URL } from 'constants/config.constant';
+import { SOCKET_URL } from 'constants/config.constant';
 // import { registerMessageHandlers } from 'handlers/message.handler';
 import { io } from 'socket.io-client';
 
-export const socket = io(API_URL, {
+export const socket = io(SOCKET_URL, {
   withCredentials: true,
 });
 

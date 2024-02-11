@@ -1,4 +1,4 @@
-import{T as t}from"./game.constant-sV4GMeaH.js";import{h as o}from"./index-EKO_HtEf.js";const r=({title:e,description:a,value:i})=>`
+import{T as t}from"./game.constant-sV4GMeaH.js";import{h as o}from"./index-iXdiA8If.js";const r=({title:e,description:a,value:i})=>`
   <div class="card card-compact cursor-pointer bg-base-300 transition-colors hover:bg-primary" data-value="${i}">
     <div class="card-body items-center">
       <p class="card-title">${e}</p>
