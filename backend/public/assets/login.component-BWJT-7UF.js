@@ -1,4 +1,4 @@
-import{i,A as s,T as t,d as r,N as c,h as p}from"./index-iXdiA8If.js";import{c as d,v as m,l as u}from"./auth.schema-d68LrvZQ.js";const v=`
+import{i,d as s,A as t,T as r,h as c,N as p}from"./index-Ckin8rOF.js";import{c as d,v as m,l as u}from"./auth.schema-Bdf96PwZ.js";const v=`
     <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Log in</h1>
@@ -38,4 +38,4 @@ import{i,A as s,T as t,d as r,N as c,h as p}from"./index-iXdiA8If.js";import{c a
             </div>
         </div>
     </div>
-`,g=()=>{const e=document.querySelector("form");d(e),e.addEventListener("submit",async l=>{l.preventDefault();const n=e.emailOrUsername.value,o=e.password.value;if(m(e,u))try{await i({emailOrUsername:n,password:o}),r(s.LOG_IN_SUCCESS,t.SUCCESS),p("/",c.REPLACE)}catch(a){a instanceof Error&&r(a.message||s.LOG_IN_FAILURE,t.ERROR)}})};export{g as afterInitialize,v as component};
+`,g=()=>{const e=document.querySelector("form");d(e),e.addEventListener("submit",async l=>{l.preventDefault();const n=e.emailOrUsername.value,o=e.password.value;if(m(e,u))try{await i({emailOrUsername:n,password:o}),s(t.LOG_IN_SUCCESS,r.SUCCESS),c("/",p.REPLACE)}catch(a){a instanceof Error&&s(a.message||t.LOG_IN_FAILURE,r.ERROR)}})};export{g as afterInitialize,v as component};

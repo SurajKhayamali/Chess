@@ -1,4 +1,4 @@
-import{j as p,A as t,T as l,d as r,N as i,h as c}from"./index-iXdiA8If.js";import{c as m,v as d,s as x}from"./auth.schema-d68LrvZQ.js";const w=`
+import{j as p,d as t,A as l,T as r,h as i,N as c}from"./index-Ckin8rOF.js";import{c as m,v as d,s as x}from"./auth.schema-Bdf96PwZ.js";const w=`
     <div class="container w-full h-full flex justify-center items-center">
         <div class="p-12 rounded-lg">
             <h1 class="text-3xl font-bold mb-8">Register</h1>
@@ -56,4 +56,4 @@ import{j as p,A as t,T as l,d as r,N as i,h as c}from"./index-iXdiA8If.js";impor
             </form>
         </div>
     </div>
-`,E=()=>{const e=document.querySelector("form");m(e),e.addEventListener("submit",async n=>{n.preventDefault();const o=new FormData(e),a=Object.fromEntries(o.entries());if(d(e,x)){a.middleName||delete a.middleName,delete a.agree;try{await p(a),r(t.REGISTER_SUCCESS,l.SUCCESS),c("/",i.REPLACE)}catch(s){s instanceof Error&&r(s.message||t.REGISTER_FAILURE,l.ERROR)}}})};export{E as afterInitialize,w as component};
+`,E=()=>{const e=document.querySelector("form");m(e),e.addEventListener("submit",async n=>{n.preventDefault();const o=new FormData(e),a=Object.fromEntries(o.entries());if(d(e,x)){a.middleName||delete a.middleName,delete a.agree;try{await p(a),t(l.REGISTER_SUCCESS,r.SUCCESS),i("/",c.REPLACE)}catch(s){s instanceof Error&&t(s.message||l.REGISTER_FAILURE,r.ERROR)}}})};export{E as afterInitialize,w as component};

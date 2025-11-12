@@ -1,4 +1,4 @@
-import { Chess, Color, Square, Piece } from 'chess.js';
+import { Chess, Color, Square, Piece, Move } from 'chess.js';
 
 import {
   ABBREVIATION_TO_PIECE,
@@ -54,6 +54,8 @@ export class ChessBoard {
   // private userId?: number;
   private isPlaying: boolean;
   private lastMove?: RecordMoveDto;
+  private selectedSquare?: Square;
+  private selectedMoves?: Move[];
 
   constructor(boardContainerId: string, slug: string) {
     const boardContainer = document.getElementById(
@@ -116,6 +118,8 @@ export class ChessBoard {
 
   private renderSquareAndPieces() {
     this.boardContainer.innerHTML = '';
+    this.selectedSquare = undefined;
+    this.selectedMoves = undefined;
     const boardDiv = document.createElement('div');
     boardDiv.classList.add(
       'grid',
@@ -161,7 +165,27 @@ export class ChessBoard {
 
         rank.appendChild(square);
 
-        if (!this.allowMove) continue;
+        if (!this.allowMove) {
+          square.onclick = () => {
+            if (!this.allowMove) return;
+            const pieceAtSquare = this.chess.get(squareId);
+            if (pieceAtSquare && pieceAtSquare.color === this.turn) {
+              this.handlePieceClickOrDrag(squareId);
+            }
+          };
+          continue;
+        }
+        square.onclick = () => {
+          this.handleSquareTap(squareId);
+        };
+        square.addEventListener(
+          'touchstart',
+          (event) => {
+            event.preventDefault();
+            this.handleSquareTap(squareId);
+          },
+          { passive: false }
+        );
         square.ondragover = (e) => {
           // console.log('drag over', e);
           e.preventDefault(); // Necessary. Allows us to drop.
@@ -197,6 +221,7 @@ export class ChessBoard {
           };
 
           this.recordMove(move);
+          this.clearSelection();
           // piece.setAttribute(PIECE_ATTRIBUTE_NAME, squareId);
           // square.appendChild(piece);
         };
@@ -279,11 +304,20 @@ export class ChessBoard {
       this.handlePieceClickOrDrag(squareId);
     };
 
-    pieceEl.onclick = () => {
+    pieceEl.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       // console.log('piece clicked', e);
       const squareId = pieceEl.getAttribute(PIECE_ATTRIBUTE_NAME) as Square;
       this.handlePieceClickOrDrag(squareId);
     };
+
+    pieceEl.addEventListener('touchstart', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const squareId = pieceEl.getAttribute(PIECE_ATTRIBUTE_NAME) as Square;
+      this.handlePieceClickOrDrag(squareId);
+    });
 
     return pieceEl;
   }
@@ -292,7 +326,7 @@ export class ChessBoard {
     squareId: Square,
     modifier: SquareHighlightModifiers
   ) {
-    const square = document.querySelector(
+    const square = this.boardContainer.querySelector(
       `[${SQUARE_ATTRIBUTE_NAME}="${squareId}"]`
     );
     if (!square) return;
@@ -302,7 +336,7 @@ export class ChessBoard {
 
   private removeHighlightFromAllSquares(modifier: SquareHighlightModifiers) {
     const className = getClassNameForSquareHigilight(modifier);
-    const squares = document.querySelectorAll(`.${className}`);
+    const squares = this.boardContainer.querySelectorAll(`.${className}`);
 
     for (const square of squares) {
       square.classList.remove(className);
@@ -316,8 +350,10 @@ export class ChessBoard {
 
   private highlightPossibleMoves(squareId: Square) {
     this.removeHighlightFromAllSquares(SquareHighlightModifiers.VALID);
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.CAPTURABLE);
 
     const moves = this.getPossibleMoves(squareId);
+    this.selectedMoves = moves;
 
     for (const move of moves) {
       const { to, captured } = move;
@@ -330,12 +366,63 @@ export class ChessBoard {
   }
 
   private handlePieceClickOrDrag(squareId: Square) {
+    if (this.selectedSquare === squareId) {
+      this.clearSelection();
+      return;
+    }
+
     this.removeHighlightFromAllSquares(SquareHighlightModifiers.SELECTED);
     if (!this.allowMove) return;
 
     this.highlightSquare(squareId, SquareHighlightModifiers.SELECTED);
 
     this.highlightPossibleMoves(squareId);
+    this.selectedSquare = squareId;
+  }
+
+  private clearSelection() {
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.SELECTED);
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.VALID);
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.CAPTURABLE);
+    this.removeHighlightFromAllSquares(SquareHighlightModifiers.HOVER);
+    this.selectedSquare = undefined;
+    this.selectedMoves = undefined;
+  }
+
+  private handleSquareTap(squareId: Square) {
+    if (!this.allowMove) return;
+
+    if (!this.selectedSquare) {
+      const piece = this.chess.get(squareId);
+      if (piece && piece.color === this.turn) {
+        this.handlePieceClickOrDrag(squareId);
+      }
+      return;
+    }
+
+    // Selecting another friendly piece switches focus
+    const pieceAtSquare = this.chess.get(squareId);
+    if (
+      pieceAtSquare &&
+      pieceAtSquare.color === this.turn &&
+      squareId !== this.selectedSquare
+    ) {
+      this.handlePieceClickOrDrag(squareId);
+      return;
+    }
+
+    const move = this.selectedMoves?.find(({ to }) => to === squareId);
+    if (!move) {
+      return;
+    }
+
+    const fromSquare = this.selectedSquare;
+    this.clearSelection();
+    this.recordMove({
+      from: fromSquare,
+      to: squareId,
+      promotion: AUTO_PROMOTE_PIECE_TO,
+    });
   }
 
   private async validateMove(props: RecordMoveDto): Promise<boolean> {
