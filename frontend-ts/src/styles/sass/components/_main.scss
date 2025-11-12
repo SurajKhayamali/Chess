@@ -1,24 +1,47 @@
 .main {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: $gap-default;
+    width: 100%;
+
+    @include respond-to("medium") {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: $gap-medium;
+    }
 
     .hidden {
         display: none !important;
     }
 
     .new-game {
-        flex: 1;
+        flex: initial;
         width: 100%;
         max-width: 600px;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         gap: $gap-large;
         font-size: $font-size-medium;
         font-weight: bold;
-        overflow-y: auto;
-        height: 100vh;
+        overflow-y: visible;
+        height: auto;
+        padding-bottom: $padding-large;
+
+        @include respond-to("medium") {
+            flex: 1;
+            align-items: center;
+            overflow-y: auto;
+            height: 100vh;
+            padding-bottom: 0;
+            gap: $gap-large;
+        }
+
+        form {
+            width: 100%;
+        }
 
         @include e("button") {
             width: 100%;
@@ -39,11 +62,11 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
             gap: $gap-default;
 
             label {
-                font-size: $font-size-medium;
+                font-size: clamp($font-size-default, 4vw, $font-size-medium);
                 font-weight: bold;
             }
         }
@@ -52,16 +75,22 @@
     .game-info {
         width: 100%;
         max-width: 600px;
-        flex: 1;
+        flex: initial;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         justify-content: flex-start;
         gap: $gap-default;
-        padding: $padding-default;
+        padding: $padding-default 0;
         border-radius: $border-radius-default;
         font-size: $font-size-medium;
         cursor: pointer;
+
+        @include respond-to("medium") {
+            flex: 1;
+            align-items: center;
+            padding: $padding-default;
+        }
 
         @include e("players") {
             width: 100%;

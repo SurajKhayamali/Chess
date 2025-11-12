@@ -19,7 +19,7 @@ export function signJWT(
   expiresIn: number | string = config.jwtExpiresIn
 ) {
   return sign(payload, config.jwtSecret, {
-    expiresIn,
+    expiresIn: expiresIn as number,
   });
 }
 
